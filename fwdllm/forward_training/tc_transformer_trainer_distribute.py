@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import copy
 from hashlib import shake_128
 import logging
 
@@ -159,6 +160,71 @@ class ForwardTextClassificationTrainer:
                 self.grad_pool.append(self.grad)
         return global_step, tr_loss / global_step
 
+    ## 增加 BP 训练
+    def train_model_bp(self, device=None):
+        if not device:
+            device = self.device
+
+        logging.info("train_model self.device: " + str(device))
+        self.model.to(device)
+
+        logging.info(get_parameter_number(self.model))
+        self.fmodel, self.params, self.buffers = fc.make_functional_with_buffers(self.model)
+
+        # training result
+        global_step = 0
+        tr_loss, logging_loss = 0.0, 0.0
+
+        if self.args.fl_algorithm == "FedProx":
+            global_model = copy.deepcopy(self.model)
+
+        self.grad = [torch.zeros_like(p) for p in self.params]
+
+        for epoch in range(0, self.args.epochs):
+
+            for batch_idx, batch in enumerate(self.train_dl):
+                self.model.train()
+                batch = tuple(t for t in batch)
+                # dataset = TensorDataset(all_guid, all_input_ids, all_input_mask, all_segment_ids, all_label_ids)
+                x = batch[1].to(device)
+                labels = batch[4].to(device)
+
+                output = self.model(x)
+                
+                logits = output[0]
+
+                loss_fct = CrossEntropyLoss()
+                loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+                
+
+                if self.args.fl_algorithm == "FedProx":
+                    fed_prox_reg = 0.0
+                    mu = self.args.fedprox_mu
+                    for (p, g_p) in zip(self.model.parameters(),
+                                        global_model.parameters()):
+                        fed_prox_reg += ((mu / 2) * torch.norm((p - g_p.data)) ** 2)
+                    loss += fed_prox_reg
+
+                current_loss = loss.item()
+                logging.info("Training with BP in the server: epoch = %d, batch_idx = %d/%d, loss = %s" % (epoch, batch_idx,
+                                                                           len(self.train_dl), current_loss))
+
+                if self.args.gradient_accumulation_steps > 1:
+                    loss = loss / self.args.gradient_accumulation_steps
+
+                loss.backward()
+                for i,p in enumerate(self.model.parameters()):
+                    if p.grad is not None:
+                        self.grad[i] += copy.deepcopy(p.grad.data)
+                self.model.zero_grad()
+
+                if self.args.is_debug_mode == 1 and global_step > 3:
+                    break
+        
+        return global_step, tr_loss
+        
+    
+    
     def eval_model(self, epoch=0, global_step=0, device=None):
         if not device:
             device = self.device

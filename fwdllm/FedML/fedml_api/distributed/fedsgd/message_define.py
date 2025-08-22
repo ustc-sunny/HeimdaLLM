@@ -24,6 +24,8 @@ class MyMessage(object):
     MSG_ARG_KEY_NUM_SAMPLES = "num_samples"
     MSG_ARG_KEY_MODEL_PARAMS = "model_params"
     MSG_ARG_KEY_CLIENT_INDEX = "client_idx"
+    ## 增加 BP 训练
+    MSG_ARG_KEY_ANCHOR_GRAD = "anchor_grad"
 
     MSG_ARG_KEY_TRAIN_CORRECT = "train_correct"
     MSG_ARG_KEY_TRAIN_ERROR = "train_error"

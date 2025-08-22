@@ -39,6 +39,9 @@ class FedSGDClientManager(ClientManager):
         global_model_params = msg_params.get(MyMessage.MSG_ARG_KEY_MODEL_PARAMS)
         client_index = msg_params.get(MyMessage.MSG_ARG_KEY_CLIENT_INDEX)
 
+        ## 增加 BP 训练
+        anchor_grad = msg_params.get(MyMessage.MSG_ARG_KEY_ANCHOR_GRAD)
+
         # ad_hoc
         # self.trainer.trainer.model_trainer.cur_v_num_index += 1
 

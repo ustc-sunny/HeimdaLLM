@@ -91,9 +91,12 @@ class FedSGDServerManager(ServerManager):
                 print('indexes of clients: ' + str(self.client_indexes))
                 print("size = %d" % self.size)
 
+                # 增加 BP 训练
+                anchor_grad = self.aggregator.get_anchor_grad(self.round_idx)
+
                 for receiver_id in range(1, self.size):
                     self.send_message_sync_model_to_client(receiver_id, global_model_params,
-                                                        self.client_indexes[receiver_id - 1])
+                                                        self.client_indexes[receiver_id - 1], anchor_grad)
                 
     def aggregate_tmp_grad(self, msg_params):
         sender_id = msg_params.get(MyMessage.MSG_ARG_KEY_SENDER)
@@ -125,11 +128,13 @@ class FedSGDServerManager(ServerManager):
         message.add_params(MyMessage.MSG_ARG_KEY_CLIENT_INDEX, client_index)
         self.send_message(message)
 
-    def send_message_sync_model_to_client(self, receive_id, global_model_params, client_index):
+    def send_message_sync_model_to_client(self, receive_id, global_model_params, client_index, anchor_grad):
         logging.info("send_message_sync_model_to_client. receive_id = %d" % receive_id)
         message = Message(MyMessage.MSG_TYPE_S2C_SYNC_MODEL_TO_CLIENT, self.get_sender_id(), receive_id)
         message.add_params(MyMessage.MSG_ARG_KEY_MODEL_PARAMS, global_model_params)
         message.add_params(MyMessage.MSG_ARG_KEY_CLIENT_INDEX, client_index)
+        ## 增加 BP 训练
+        message.add_params(MyMessage.MSG_ARG_KEY_ANCHOR_GRAD, anchor_grad)
         self.send_message(message)
 
     def send_message_aggregate_grad_to_client(self, receive_id, global_model_params, client_index):

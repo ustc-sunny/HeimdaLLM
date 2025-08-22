@@ -7,6 +7,7 @@ import math
 import numpy as np
 import torch
 import wandb
+from torch.utils.data import DataLoader, Subset
 
 class FedSGDAggregator(object):
 
@@ -222,3 +223,15 @@ class FedSGDAggregator(object):
             wandb.log({"Test/Loss": test_loss, "round": round_idx})
             stats = {'test_acc': test_acc, 'test_loss': test_loss}
             logging.info(stats)
+
+    ## 增加 BP 训练
+    def get_anchor_grad(self, round_idx = None):
+        self.trainer.train_bp(self.train_global, self.device, self.args)
+
+        # grads = self.trainer.get_grad()
+        weights = [para.detach().cpu() for para in self.trainer.model_trainer.grad]
+
+        return weights, self.train_global
+
+   
+    

@@ -15,6 +15,9 @@ class FedTransformerTrainer(ModelTrainer):
     
     def get_model(self):
         return self.model
+    
+    # def get_grad(self):
+    #     return self.model.grad if self.model.grad is not None else [torch.zeros_like(p) for p in self.model.parameters()]
 
     def set_model_params(self, model_parameters):
         self.model.load_state_dict(model_parameters)
@@ -23,6 +26,12 @@ class FedTransformerTrainer(ModelTrainer):
         logging.info("Client(%d)" % self.id + ":| Local Train Data Size = %d" % (len(train_data)))
         self.model_trainer.train_dl = train_data
         self.model_trainer.train_model(device=device)
+    
+    ## 增加 BP 训练
+    def train_bp(self, train_data, device, args):
+        logging.info("Server(%d)" % self.id + ":| Local Train Data Size = %d" % (len(train_data)))
+        self.model_trainer.train_dl = train_data
+        self.model_trainer.train_model_bp(device=device)
 
     def test(self, test_data, device, args=None):
         pass
