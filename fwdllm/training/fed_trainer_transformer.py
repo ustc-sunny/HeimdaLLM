@@ -29,9 +29,10 @@ class FedTransformerTrainer(ModelTrainer):
     
     ## 增加 BP 训练
     def train_bp(self, train_data, device, args):
-        logging.info("Server(%d)" % self.id + ":| Local Train Data Size = %d" % (len(train_data)))
+        logging.info("Cloud(%d)" % self.id + ":| Local Train Data Size = %d" % (len(train_data)))
         self.model_trainer.train_dl = train_data
         self.model_trainer.train_model_bp(device=device)
+        logging.info("Cloud(%d)" % self.id + ":| Train Model BP Done")
 
     def test(self, test_data, device, args=None):
         pass

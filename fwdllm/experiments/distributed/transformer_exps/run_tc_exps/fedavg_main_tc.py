@@ -85,6 +85,8 @@ if __name__ == "__main__":
         process_id, worker_number, args.gpu_mapping_file, args.gpu_mapping_key)
     logging.info("process_id = %d, size = %d, device=%s" %
                  (process_id, worker_number, str(device)))
+    
+    # size = worker_number: total number of processes
     logging.info("torch.cuda.current_device()=" + str(torch.cuda.current_device()))
     logging.info("torch.cuda.device_count()=" + str(torch.cuda.device_count()))
 
@@ -142,7 +144,11 @@ if __name__ == "__main__":
     else:
         client_trainer = TextClassificationTrainer(
             model_args, device, client_model, None, None)
+
+
     fed_trainer = FedTransformerTrainer(client_trainer, client_model)
+    
+
 
     # data manager
     preprocessor = TLMPreprocessor(
@@ -150,11 +156,23 @@ if __name__ == "__main__":
         tokenizer=tokenizer)
     dm = TextClassificationDataManager(args, model_args, preprocessor, process_id, args.client_num_per_round)
     train_data_num, train_data_global, test_data_global, train_data_local_num_dict, \
-    train_data_local_dict, test_data_local_dict, num_clients = dm.load_federated_data(process_id=process_id)
+    train_data_local_dict, test_data_local_dict, num_clients = dm.load_cloud_server_client_data(process_id=process_id)
+
+    
+
+    # 看一下数据集是否正常
+    
+    # logging.info("train_data_local_num_dict: " + str(train_data_local_num_dict))
+    # logging.info("train_data_local_dict: " + str(train_data_local_dict))
+    # logging.info("test_data_local_dict: " + str(test_data_local_dict))
+    # logging.info("train_data_num: " + str(train_data_num))
+    # logging.info("train_data_global: " + str(train_data_global))
+    # logging.info("test_data_global: " + str(test_data_global))
+
 
     # start FedAvg algorithm
     # for distributed algorithm, train_data_gloabl and test_data_global are required
-    if process_id == 0:
+    if process_id == 1:
         client_trainer.test_dl = test_data_global
     args.client_num_in_total = num_clients
     args.warmup_ratio = model_args.warmup_ratio
@@ -162,6 +180,6 @@ if __name__ == "__main__":
     # args.learning_rate = 0.01
 
     fl_algorithm = get_fl_algorithm_initializer(args.fl_algorithm)
-    fl_algorithm(process_id, worker_number, device, comm, client_model, train_data_num,
+    fl_algorithm(process_id, worker_number, device, comm, client_model, train_data_num, 
                  train_data_global, test_data_global, train_data_local_num_dict,
-                 train_data_local_dict, test_data_local_dict, args, fed_trainer)
+                 train_data_local_dict, test_data_local_dict, args, model_trainer=fed_trainer)

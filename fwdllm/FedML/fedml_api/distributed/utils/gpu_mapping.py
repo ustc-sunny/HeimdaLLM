@@ -36,3 +36,6 @@ def mapping_processes_to_gpu_device_from_yaml_file(process_id, worker_number, gp
         logging.info(device)
         # return gpu_util_map[process_id][1]
         return device
+
+
+

@@ -191,7 +191,7 @@ def add_federated_args(parser):
     parser.add_argument('--is_mobile', type=int, default=0,
                         help='whether the program is running on the FedML-Mobile server side')
 
-    parser.add_argument('--client_num_in_total', type=int, default=-1, metavar='NN',
+    parser.add_argument('--client_num_in_total', type=int, default=999, metavar='NN',
                         help='number of clients in a distributed cluster')
 
     parser.add_argument('--client_num_per_round', type=int,

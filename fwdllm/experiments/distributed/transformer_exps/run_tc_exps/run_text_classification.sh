@@ -7,7 +7,9 @@ S_LR=0.1
 ROUND=3000
 WORKER_NUM=1
 model_type=distilbert
-model_name=distilbert-base-uncased
+# model_name=distilbert-base-uncased
+model_name=/home/zzkevin/models/distilbert-base-uncased
+
 # model_type=bert
 # model_name=bert-base-uncased
 # model_type=bert
@@ -53,7 +55,8 @@ CI=0
 
 DATA_DIR=../../../../fednlp_data
 
-PROCESS_NUM=`expr $WORKER_NUM + 1`
+# 一个cloud进程，一个server进程，WORKER_NUM个client进程
+PROCESS_NUM=`expr $WORKER_NUM + 2`
 echo $PROCESS_NUM
 
 hostname > mpi_host_file
@@ -113,7 +116,7 @@ else
   mpirun -np $PROCESS_NUM -hostfile mpi_host_file \
   python -m fedavg_main_tc \
     --gpu_mapping_file "gpu_mapping.yaml" \
-    --gpu_mapping_key mapping_myMap \
+    --gpu_mapping_key mapping_cloud \
     --client_num_per_round $client_num_per_round \
     --comm_round $ROUND \
     --ci $CI \

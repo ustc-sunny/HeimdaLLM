@@ -1,7 +1,7 @@
 import logging
 
 
-class FedSGDTrainer(object):
+class FedSGDClient(object):
 
     def __init__(self, client_index, train_data_local_dict, train_data_local_num_dict, test_data_local_dict,
                  train_data_num, device, args, model_trainer):
@@ -22,6 +22,7 @@ class FedSGDTrainer(object):
 
     def update_model(self, weights):
         self.trainer.set_model_params(weights)
+
 
     def update_dataset(self, client_index):
         self.client_index = client_index

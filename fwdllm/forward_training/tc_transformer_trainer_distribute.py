@@ -45,27 +45,17 @@ class ForwardTextClassificationTrainer:
         self.freeze_layers = args.freeze_layers.split(",") if args.freeze_layers else []
 
         self.grad = None
-        if self.args.perturbation_sampling and self.args.var_control:
-            self.old_grad = None
-            self.grad_pool = []
 
-
-        # var control
-        self.grad_for_var_check_list = []
-        if self.args.model_type == "distilbert":
-            self.layer_id_for_check = 20
-        elif self.args.model_type == "bert":
-            self.layer_id_for_check = 12
-        elif self.args.model_type == "roberta-large":
-            self.layer_id_for_check = 12
-        elif self.args.model_type == "albert":
-            self.layer_id_for_check = 22
-        self.var = 0
+        self.update = False
 
     def set_data(self, train_dl=None, test_dl=None):
         # Used for fedtrainer
         self.train_dl = train_dl
         self.test_dl = test_dl
+    
+    def set_perturbation(self, perturbation):
+        self.pert = perturbation
+        logging.info("Set perturbation in client.")
 
     def train_model(self, device=None):
         if not device:
@@ -81,29 +71,8 @@ class ForwardTextClassificationTrainer:
         global_step = 0
         tr_loss, logging_loss = 0.0, 0.0
 
-        if self.args.perturbation_sampling:
-            v_num = len(self.train_dl)
-            v_buffer = {}
-            index = 0
-            if self.args.var_control:
-                self.grad = self.old_grad
-            for k,v in self.model.named_parameters():
-                # logging.info(index)
-                if self.grad != None and v.requires_grad:
-                    # logging.info("generate v")
-                    shape = v.shape
-                    candidate_v = torch.randn((v_num*10,*shape),device="cpu")
-                    target_grad = self.grad[index]
-
-                    # logging.info("flatten")
-                    target_grad = torch.flatten(target_grad)
-                    candidate_v = torch.flatten(candidate_v,start_dim=1)
-
-                    cos_sim = calculate_cos_sim(candidate_v,target_grad,device)
-                    sorted_values, sorted_indices = torch.sort(cos_sim, descending=True)
-
-                    v_buffer[index] = [candidate_v[i].reshape(v.shape) for i in sorted_indices[:v_num]]
-                index += 1
+        # 批次内扰动数量
+        v_num = 10
 
         self.grad = [torch.zeros_like(p) for p in self.params]
 
@@ -125,20 +94,23 @@ class ForwardTextClassificationTrainer:
                         t=labels,
                     )
 
-                    # 生成扰动
-                    if self.args.perturbation_sampling and v_buffer != {}:
-                        v_params = tuple([v_buffer[i][batch_idx].to(device) if p.requires_grad == True else torch.zeros_like(p) for i,p in enumerate(self.params)])
-                    else:
+                    grad_accum = [torch.zeros_like(p) for p in self.params]
+
+                    for _ in range(v_num):
                         v_params = tuple([torch.randn_like(p) if p.requires_grad == True else torch.zeros_like(p) for p in self.params])
+
+                        # Todo: 最终扰动的加权参数未定
+                        final_perturbation = self.pert + v_params if self.pert is not None else v_params
                     
-                    # 计算方向导数
-                    loss, jvp = calculate_jvp(f, self.params, v_params)
-                    
-                    # 计算梯度
-                    for j, fg in enumerate(self.grad):
-                        fg.add_(jvp*v_params[j])
-                        if self.args.var_control and j == self.layer_id_for_check:
-                            self.grad_for_var_check_list.append(jvp*v_params[j])
+                        # 计算方向导数
+                        loss, jvp = calculate_jvp(f, self.params, final_perturbation)
+                        
+                        # 计算梯度
+                        for j, fg in enumerate(grad_accum):
+                            fg.add_(jvp*v_params[j])
+
+                    for j in range(len(self.grad)):
+                        self.grad[j] = grad_accum[j] / v_num
 
 
                     current_loss = loss.item()
@@ -153,13 +125,11 @@ class ForwardTextClassificationTrainer:
                     if self.args.is_debug_mode == 1 and global_step > 3:
                         break
 
-        if self.args.var_control:
-            self.var = calculate_var(self.grad_for_var_check_list,)
-            logging.info(f"num of fwdgrad: {len(self.grad_for_var_check_list)}, var: {self.var}")
-            if self.args.perturbation_sampling:
-                self.grad_pool.append(self.grad)
+        
         return global_step, tr_loss / global_step
 
+    
+    
     ## 增加 BP 训练
     def train_model_bp(self, device=None):
         if not device:
@@ -206,7 +176,7 @@ class ForwardTextClassificationTrainer:
                     loss += fed_prox_reg
 
                 current_loss = loss.item()
-                logging.info("Training with BP in the server: epoch = %d, batch_idx = %d/%d, loss = %s" % (epoch, batch_idx,
+                logging.info("Training with BP in the cloud: epoch = %d, batch_idx = %d/%d, loss = %s" % (epoch, batch_idx,
                                                                            len(self.train_dl), current_loss))
 
                 if self.args.gradient_accumulation_steps > 1:

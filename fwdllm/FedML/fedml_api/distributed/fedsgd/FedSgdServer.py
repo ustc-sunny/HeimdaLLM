@@ -9,7 +9,7 @@ import torch
 import wandb
 from torch.utils.data import DataLoader, Subset
 
-class FedSGDAggregator(object):
+class FedSGDServer(object):
 
     def __init__(self, train_global, test_global, all_train_data_num,
                  train_data_local_dict, test_data_local_dict, train_data_local_num_dict, worker_num, device,
@@ -93,18 +93,7 @@ class FedSGDAggregator(object):
             model_list.append((self.sample_num_dict[idx], self.model_dict[idx]))
             training_num += self.sample_num_dict[idx]
         
-        # self.model_dict在聚合的过程中会被改变,很奇怪，这里先存一个deepcopy吧，用于后面cache_v
-        if self.args.var_control:
-            model_dict_cached = copy.deepcopy(self.model_dict)
-            origin_param = copy.deepcopy(self.get_global_model_params())
-
-            # cached_v:  (num, params)
-            logging.info(f"len of cached v: {len(self.cached_v)}")
-            for cached_v in self.cached_v:
-                model_list.append(cached_v)
-                training_num += cached_v[0]
-            logging.info(f"training_num : {training_num}")
-
+       
         logging.info("len of self.model_dict[idx] = " + str(len(self.model_dict)))
         
         # old_param = self.get_global_model_params()
@@ -121,17 +110,7 @@ class FedSGDAggregator(object):
                 else:
                     averaged_params[id] += local_model_params[id]
             next(old_param).detach().to("cpu").sub_(learning_rate * averaged_params[id] / training_num)       
-        if self.args.var_control:
-            if self.var <= self.var_threthod:
-                # 方差满足要求
-                self.cached_v = []
-            else:
-                logging.info("current model is not good enough, calculate more v")
-                # 当前模型不行，v不够，暂存起来，后面再计算更多的v
-                for idx in range(self.worker_num):
-                    self.cached_v.append((self.sample_num_dict[idx], model_dict_cached[idx]))
-                # 模型改回去
-                self.set_global_model_params(origin_param)
+        
 
         old_param = self.get_global_model_params()
 
@@ -224,14 +203,6 @@ class FedSGDAggregator(object):
             stats = {'test_acc': test_acc, 'test_loss': test_loss}
             logging.info(stats)
 
-    ## 增加 BP 训练
-    def get_anchor_grad(self, round_idx = None):
-        self.trainer.train_bp(self.train_global, self.device, self.args)
-
-        # grads = self.trainer.get_grad()
-        weights = [para.detach().cpu() for para in self.trainer.model_trainer.grad]
-
-        return weights, self.train_global
 
    
     

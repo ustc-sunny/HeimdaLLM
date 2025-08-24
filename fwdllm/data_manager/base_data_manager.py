@@ -33,8 +33,7 @@ class BaseDataManager(ABC):
         self.client_index_pointer = 0
         self.attributes = None
 
-        self.num_clients = self.load_num_clients(
-            self.args.partition_file_path, self.args.partition_method)
+        self.num_clients = self.args.client_num_in_total
         # TODO: sync to the same logic to sample index
         # self.client_index_list = self.sample_client_index(process_id, num_workers)
         # self.client_index_list = self.get_all_clients()
@@ -48,11 +47,11 @@ class BaseDataManager(ABC):
         return attributes
 
     @staticmethod
-    def load_num_clients(partition_file_path, partition_name):
-        data_file = h5py.File(partition_file_path, "r", swmr=True)
-        num_clients = int(data_file[partition_name]["n_clients"][()])
-        data_file.close()
-        return num_clients
+    # def load_num_clients(partition_file_path, partition_name):
+    #     data_file = h5py.File(partition_file_path, "r", swmr=True)
+    #     num_clients = int(data_file[partition_name]["n_clients"][()])
+    #     data_file.close()
+    #     return num_clients - 1 # partition_file 中的 n_clients 应该是 client + cloud 的数量
 
     @abstractmethod
     def read_instance_from_h5(self, data_file, index_list, desc):
@@ -63,7 +62,7 @@ class BaseDataManager(ABC):
         Sample client indices according to process_id
         '''
         # process_id = 0 means this process is the server process
-        if process_id == 0:
+        if process_id == 0 or process_id == 1:
             return None
         else:
             return self._simulated_sampling(process_id)
@@ -136,9 +135,65 @@ class BaseDataManager(ABC):
 
     def load_federated_data(self, process_id, test_cut_off=None):
         if process_id == 0:
-            return self._load_federated_data_server(test_cut_off=test_cut_off)
+            return self._load_federated_data_server(test_cut_off=test_cut_off, test_only=False)
         else:
             return self._load_federated_data_local()
+    
+    def load_cloud_server_client_data(self, process_id, test_cut_off=None):
+        if process_id == 1:
+            return self._load_federated_data_server(test_cut_off=test_cut_off, test_only=True)
+        elif process_id == 0:
+            return self._load_federated_data_cloud(test_cut_off=test_cut_off, test_only=False)
+        else:
+            return self._load_federated_data_local()
+        
+    def _load_federated_data_cloud(self, test_cut_off, test_only=False):
+
+        state, res = self._load_data_loader_from_cache(self.args.client_num_in_total)  # 用最后一个“client” id 来缓存 cloud data
+        train_data_local_dict = None
+        train_data_local_num_dict = None
+        test_data_global = None
+        test_data_local_dict = None
+        
+        if state:
+            train_examples, train_features, train_dataset, _, _, _ = res
+            logging.info("cloud train data size " + str(len(train_examples)))
+        else:
+            # 读取 HDF5 文件
+            data_file = h5py.File(self.args.data_file_path, "r", swmr=True)
+            partition_file = h5py.File(self.args.partition_file_path, "r", swmr=True)
+            partition_method = self.args.partition_method
+
+            train_index_list = partition_file[partition_method][
+                        "partition_data"][
+                        str(self.args.client_num_in_total)]["train"][
+                        ()]
+            
+            train_data = self.read_instance_from_h5(data_file, train_index_list)
+
+
+            data_file.close()
+            partition_file.close()
+
+            train_examples, train_features, train_dataset = self.preprocessor.transform(
+                **train_data, index_list=train_index_list)
+
+            logging.info("cloud caching train data size " + str(len(train_examples)))
+
+            with open(res, "wb") as handle:
+                pickle.dump((train_examples, train_features, train_dataset), handle)
+
+       
+        train_data_global = BaseDataLoader(train_examples, train_features, train_dataset,
+                                        batch_size=self.train_batch_size,
+                                        num_workers=0,
+                                        pin_memory=True,
+                                        drop_last=False)
+        train_data_num = len(train_examples)
+
+        return (train_data_num, train_data_global, test_data_global,
+                train_data_local_num_dict, train_data_local_dict, test_data_local_dict, self.num_clients)
+
 
     def _load_federated_data_server(self, test_only=True, test_cut_off=None):
         state, res = self._load_data_loader_from_cache(-1)
@@ -152,6 +207,7 @@ class BaseDataManager(ABC):
                 train_data_num = 0
             else:
                 train_data_num = len(train_dataset)
+            logging.info("train data size "+ str(train_data_num))
         else:
             data_file = h5py.File(self.args.data_file_path, "r", swmr=True)
             partition_file = h5py.File(

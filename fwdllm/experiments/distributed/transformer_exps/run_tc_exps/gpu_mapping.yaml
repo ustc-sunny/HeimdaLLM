@@ -43,4 +43,12 @@ mapping_a100:
 mapping_a100_2:
     g1lmd2: [2, 2, 2, 1, 1, 1, 1, 1]
 mapping_myMap:
-    host: [0, 0, 0, 0, 0, 0, 2, 0]
+    host: [0, 0, 0, 2]
+
+mapping_cloud:
+    cloud: [0, 1, 1, 1]
+
+mapping_three_roles:
+    server: [1, 0, 0, 0]   # server 用 GPU0
+    client: [0, 1, 1, 0]   # client 可以分配到 GPU1、GPU2
+    cloud:  [0, 0, 0, 1]   # cloud 用 GPU3
