@@ -81,4 +81,4 @@ experiments/distributed/transformer_exps/run_tc_exps/log/new/test_fedFwd_distilb
 
 *.var0.1
 ./figs/*
-./all_figures/*
+./all_figures/*.DS_Store
