@@ -8,20 +8,10 @@ S_LR=0.1
 ROUND=1500
 WORKER_NUM=1
 model_type=distilbert
-model_name=/home/zzkevin/models/distilbert-base-uncased
+model_name=/YOUR_ADDRESS/models/distilbert-base-uncased
 
-# model_type=bert
-# model_name=bert-base-uncased
-# model_type=bert
-# model_name=bert-large-uncased
-# model_type=albert
-# model_name=/home/zzkevin/models/albert-base-v2
-# model_type=roberta-large
-# model_name=/home/zzkevin/models/roberta-large
-# model_type=deberta
-# model_name=microsoft/deberta-xlarge
 train_batch_size=8
-DATA_NAME=sst_2
+DATA_NAME = agnews
 # fold_name=${model_type}_${DATA_NAME}
 
 if [ $model_type = "distilbert" ];then
