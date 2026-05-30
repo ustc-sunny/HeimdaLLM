@@ -47,7 +47,7 @@ conda activate HeimdaLLM
 cd experiments/distributed/transformer_exps/run_tc_exps
 sh run_text_classification.sh 100 0.01 FedFwd
 ```
-You can modify the run_text_classification.sh file to configure the experiment settings
+You can modify the run_text_classification.sh and gpu_mapping.yaml files to configure the experiment settings
 
 ## Results
 The training log will be saved in `FwdFL/experiments/distributed/transformer_exps/run_tc_exps/log/new/`
