@@ -1,7 +1,7 @@
-import ctypes
 import logging
 import threading
-import traceback
+
+from mpi4py import MPI
 
 from ..message import Message
 
@@ -15,17 +15,31 @@ class MPIReceiveThread(threading.Thread):
         self.size = size
         self.name = name
         self.q = q
+        self.daemon = True
 
     def run(self):
         logging.debug("Starting Thread:" + self.name + ". Process ID = " + str(self.rank))
-        while True:
+        # A blocking recv cannot observe the stop event.  Probe with a short
+        # event wait instead so the owning manager can join this thread during
+        # an orderly MPI shutdown.
+        while not self.stopped():
             try:
-                msg_str = self.comm.recv()
-                msg = Message()
-                msg.init(msg_str)
-                self.q.put(msg)
+                if self.comm.Iprobe(source=MPI.ANY_SOURCE, tag=MPI.ANY_TAG):
+                    msg_str = self.comm.recv(source=MPI.ANY_SOURCE, tag=MPI.ANY_TAG)
+                    msg = Message()
+                    msg.init(msg_str)
+                    logging.info(
+                        "MPI receive rank=%s type=%s source=%s", self.rank,
+                        msg.get(Message.MSG_ARG_KEY_TYPE),
+                        msg.get(Message.MSG_ARG_KEY_SENDER),
+                    )
+                    self.q.put(msg)
+                else:
+                    self._stop_event.wait(0.01)
             except Exception:
-                traceback.print_exc()
+                if not self.stopped():
+                    logging.exception("MPI receive failed on rank %s", self.rank)
+                    self._stop_event.wait(0.05)
 
     def stop(self):
         self._stop_event.set()
@@ -42,9 +56,5 @@ class MPIReceiveThread(threading.Thread):
                 return id
 
     def raise_exception(self):
-        thread_id = self.get_id()
-        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
-                                                         ctypes.py_object(SystemExit))
-        if res > 1:
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
-            print('Exception raise failure')
+        """Backward-compatible alias for the old unsafe thread shutdown."""
+        self.stop()

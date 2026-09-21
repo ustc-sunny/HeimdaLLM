@@ -1,0 +1,6 @@
+# Separate Python 3.8 / torch 1.13.1+cu116 environment for generation/DP tools.
+transformers==4.35.0
+peft==0.6.1
+accelerate==0.24.1
+huggingface-hub==0.17.3
+opacus==1.4.0

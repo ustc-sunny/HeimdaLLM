@@ -18,11 +18,9 @@ class MpiCommunicationManager(BaseCommunicationManager):
 
         self._observers: List[Observer] = []
 
-        if node_type == "client":
-            self.q_sender, self.q_receiver = self.init_client_communication()
-        elif node_type == "server":
-            self.q_sender, self.q_receiver = self.init_server_communication()
-
+        # Initialise the references before creating the threads.  Initialising
+        # them afterwards used to discard the live thread references, making
+        # stop_receive_message unable to stop or join either MPI thread.
         self.server_send_thread = None
         self.server_receive_thread = None
         self.server_collective_thread = None
@@ -30,6 +28,13 @@ class MpiCommunicationManager(BaseCommunicationManager):
         self.client_send_thread = None
         self.client_receive_thread = None
         self.client_collective_thread = None
+
+        if node_type == "client":
+            self.q_sender, self.q_receiver = self.init_client_communication()
+        elif node_type == "server":
+            self.q_sender, self.q_receiver = self.init_server_communication()
+        else:
+            raise ValueError("Unsupported MPI node type: %s" % node_type)
 
         self.is_running = True
 
@@ -73,19 +78,35 @@ class MpiCommunicationManager(BaseCommunicationManager):
         while self.is_running:
             if self.q_receiver.qsize() > 0:
                 msg_params = self.q_receiver.get()
-                self.notify(msg_params)
+                msg_type = msg_params.get_type()
+                logging.info("MPI dispatch begin rank=%s type=%s", self.rank, msg_type)
+                try:
+                    self.notify(msg_params)
+                except BaseException:
+                    logging.exception(
+                        "MPI dispatch failed rank=%s type=%s", self.rank,
+                        msg_type,
+                    )
+                    raise
+                logging.info("MPI dispatch done rank=%s type=%s", self.rank, msg_type)
 
             time.sleep(0.3)
         logging.info("!!!!!!handle_receive_message stopped!!!")
 
     def stop_receive_message(self):
         self.is_running = False
-        self.__stop_thread(self.server_send_thread)
-        self.__stop_thread(self.server_receive_thread)
-        self.__stop_thread(self.server_collective_thread)
-        self.__stop_thread(self.client_send_thread)
-        self.__stop_thread(self.client_receive_thread)
-        self.__stop_thread(self.client_collective_thread)
+
+        send_threads = [self.server_send_thread, self.client_send_thread]
+        receive_threads = [self.server_receive_thread, self.client_receive_thread]
+
+        # A STOP message is sent through the same asynchronous queue as model
+        # traffic.  Wait for that queue to drain before stopping the sender.
+        for thread in send_threads:
+            if thread:
+                thread.q.join()
+
+        for thread in send_threads + receive_threads:
+            self.__stop_thread(thread)
 
     def notify(self, msg_params):
         msg_type = msg_params.get_type()
@@ -94,5 +115,5 @@ class MpiCommunicationManager(BaseCommunicationManager):
 
     def __stop_thread(self, thread):
         if thread:
-            thread.raise_exception()
+            thread.stop()
             thread.join()

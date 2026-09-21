@@ -1,8 +1,6 @@
-import ctypes
 import logging
+import queue
 import threading
-import time
-import traceback
 
 from ..message import Message
 
@@ -16,19 +14,38 @@ class MPISendThread(threading.Thread):
         self.size = size
         self.name = name
         self.q = q
+        # A fatal exception in the manager's dispatch loop must be allowed to
+        # terminate the MPI rank instead of hanging forever while Python joins
+        # an idle transport thread.
+        self.daemon = True
 
     def run(self):
         logging.debug("Starting " + self.name + ". Process ID = " + str(self.rank))
-        while True:
+        # Keep sending messages that were queued before shutdown.  In
+        # particular, a FedSGD server queues STOP messages immediately before
+        # asking the communication manager to stop.
+        while not self.stopped() or not self.q.empty():
             try:
-                if not self.q.empty():
-                    msg = self.q.get()
-                    dest_id = msg.get(Message.MSG_ARG_KEY_RECEIVER)
-                    self.comm.send(msg.to_string(), dest=dest_id)
-                else:
-                    time.sleep(0.003)
+                msg = self.q.get(timeout=0.05)
+            except queue.Empty:
+                continue
+
+            try:
+                dest_id = msg.get(Message.MSG_ARG_KEY_RECEIVER)
+                msg_type = msg.get(Message.MSG_ARG_KEY_TYPE)
+                logging.info(
+                    "MPI send begin rank=%s type=%s dest=%s", self.rank,
+                    msg_type, dest_id,
+                )
+                self.comm.send(msg.to_string(), dest=dest_id)
+                logging.info(
+                    "MPI send done rank=%s type=%s dest=%s", self.rank,
+                    msg_type, dest_id,
+                )
             except Exception:
-                traceback.print_exc()
+                logging.exception("MPI send failed on rank %s", self.rank)
+            finally:
+                self.q.task_done()
 
     def stop(self):
         self._stop_event.set()
@@ -45,9 +62,5 @@ class MPISendThread(threading.Thread):
                 return id
 
     def raise_exception(self):
-        thread_id = self.get_id()
-        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
-                                                         ctypes.py_object(SystemExit))
-        if res > 1:
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
-            print('Exception raise failure')
+        """Backward-compatible alias for the old unsafe thread shutdown."""
+        self.stop()

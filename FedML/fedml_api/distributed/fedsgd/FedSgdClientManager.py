@@ -1,4 +1,5 @@
 import logging
+import math
 import os
 from sre_parse import GLOBAL_FLAGS
 import sys
@@ -14,7 +15,7 @@ except ImportError:
     from FedML.fedml_core.distributed.client.client_manager import ClientManager
     from FedML.fedml_core.distributed.communication.message import Message
 from .message_define import MyMessage
-from .utils import post_complete_message_to_sweep_process, grad_aggregete
+from .utils import grad_aggregete
 
 class FedSGDClientManager(ClientManager):
     def __init__(self, args, client, comm=None, rank=0, size=0, backend="MPI"):
@@ -44,9 +45,11 @@ class FedSGDClientManager(ClientManager):
         ## new:
         self.register_message_receive_handler(MyMessage.MSG_TYPE_S2C_SEND_PERT_TO_CLIENT,
                                               self.handle_message_receive_pert_from_server)
+        self.register_message_receive_handler(MyMessage.MSG_TYPE_S2ALL_STOP,
+                                              self.handle_message_stop)
         logging.info(f"Client finished registering handlers.")
 
-    
+
 
     def handle_message_init(self, msg_params):
         global_model_params = msg_params.get(MyMessage.MSG_ARG_KEY_MODEL_PARAMS)
@@ -55,19 +58,32 @@ class FedSGDClientManager(ClientManager):
         # ad_hoc
         # self.trainer.trainer.model_trainer.cur_v_num_index += 1
 
+        self.round_idx = 0
         self.client.update_model(global_model_params)
         self.client.update_dataset(client_index)
-        self.round_idx = 0
-        # self.__train()
+        logging.info(
+            "HEIMDALLM_LOGICAL_CLIENTS round=%d ids=%s",
+            self.round_idx,
+            ",".join(str(int(value)) for value in client_index),
+        )
         self.data_id = 0
-        self.train_with_data_id()
+        # Round 0 must use the same model/perturbation barrier as every later
+        # round.  Starting here used to race the cloud message and made the
+        # first guided update silently use a stale or absent perturbation.
+        self.model_received = True
+        self.try_start_training()
 
     def handle_message_receive_pert_from_server(self, msg_params):
         logging.info("handle_message_receive_pert_from_server")
-        perturbation = msg_params.get(MyMessage.MSG_ARG_KEY_GRAD_PERT)
         client_index = msg_params.get(MyMessage.MSG_ARG_KEY_CLIENT_INDEX)
 
-        self.client.trainer.client_trainer.set_perturbation(perturbation)
+        if float(self.args.alpha) == 1.0:
+            # The message is still the round barrier, but the pure-random arm
+            # deliberately does not read its cloud tensor payload.
+            self.client.trainer.client_trainer.set_perturbation(None)
+        else:
+            perturbation = msg_params.get(MyMessage.MSG_ARG_KEY_GRAD_PERT)
+            self.client.trainer.client_trainer.set_perturbation(perturbation)
 
         self.perturbation_received = True
         self.try_start_training()
@@ -94,7 +110,13 @@ class FedSGDClientManager(ClientManager):
 
         self.client.update_model(model_params)
         self.client.update_dataset(client_index)
-        
+
+        self.round_idx += 1
+        logging.info(
+            "HEIMDALLM_LOGICAL_CLIENTS round=%d ids=%s",
+            self.round_idx,
+            ",".join(str(int(value)) for value in client_index),
+        )
         self.model_received = True
         
         self.try_start_training()
@@ -134,6 +156,8 @@ class FedSGDClientManager(ClientManager):
         self.data_id += 1
         if self.data_id == len(self.client.train_local_list[0]):
             self.send_model_to_server(1, weights, client_num)
+            # Rank 1 evaluates the aggregate and owns MPI job termination.
+            # This worker stays in its receive loop until then.
         else:
             self.send_grad_to_server(1, weights, client_num)
 
@@ -143,7 +167,6 @@ class FedSGDClientManager(ClientManager):
         """当模型和扰动都收到后才开始训练"""
         if self.model_received and self.perturbation_received:
             logging.info("Both model and perturbation received. Start training.")
-            self.round_idx += 1
             self.data_id = 0
             self.train_with_data_id()
             # self.__train()
@@ -151,10 +174,6 @@ class FedSGDClientManager(ClientManager):
             # 清空状态，准备下一轮
             self.model_received = False
             self.perturbation_received = False
-
-            if self.round_idx == self.num_rounds - 1:
-                post_complete_message_to_sweep_process(self.args)
-                self.finish()
 
     # 方差太大，计算更多v
     def calculate_more_v(self,msg_params):
@@ -177,8 +196,26 @@ class FedSGDClientManager(ClientManager):
     def send_var_to_server(self, receive_id, var):
         logging.info("send_var_to_server")
         message = Message(MyMessage.MSG_TYPE_C2S_SEND_VAR_TO_SERVER, self.get_sender_id(), receive_id)
+        # Never pickle a CUDA tensor into an MPI control message.  Besides
+        # being much larger than necessary, unpickling it creates a CUDA
+        # context for the client's device in the server process.
+        if torch.is_tensor(var):
+            var = float(var.detach().cpu().item())
+        else:
+            var = float(var)
+        if not math.isfinite(var):
+            raise FloatingPointError("client variance is not finite: %r" % var)
         message.add_params("var", var)
         self.send_message(message)
+
+    def handle_message_stop(self, msg_params):
+        logging.info("Client received graceful-stop message")
+        self.finish()
+
+    def finish(self):
+        """Stop only this FedSGD manager without aborting the MPI world."""
+        logging.info("FedSGD client is shutting down gracefully")
+        self.com_manager.stop_receive_message()
 
     # def __train(self):
     #     logging.info("#######training########### round_id = %d" % self.round_idx)
@@ -186,6 +223,4 @@ class FedSGDClientManager(ClientManager):
     #     logging.info("start send gard to server")
     #     self.send_model_to_server(1, weights, client_num)#local_sample_num)
 
-    
 
-    

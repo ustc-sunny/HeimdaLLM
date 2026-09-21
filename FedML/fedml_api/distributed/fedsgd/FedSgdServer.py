@@ -39,7 +39,9 @@ class FedSGDServer(object):
         self.cached_v = []
         # 方差控制：重试计数器，防止无限循环
         self.retry_count = 0
-        self.max_retries = 10  
+        self.max_retries = int(getattr(args, "max_var_retries", 10))
+        if self.max_retries < 0:
+            raise ValueError("max_var_retries must be non-negative")
 
         if self.args.model_type == "distilbert":
             # self.var_threthod = 0.25
@@ -201,12 +203,17 @@ class FedSGDServer(object):
         else:
             return self.test_global
 
-    def test_on_server_for_all_clients(self, round_idx):
-        if round_idx % self.args.frequency_of_the_test == 0 or round_idx == self.args.comm_round - 1:
+    def test_on_server_for_all_clients(self, round_idx, force=False):
+        should_evaluate = (
+            force
+            or round_idx % self.args.frequency_of_the_test == 0
+            or round_idx == self.args.comm_round - 1
+        )
+        if should_evaluate:
             if self.trainer.test_on_the_server(self.device):
                 return
 
-        if round_idx % self.args.frequency_of_the_test == 0 or round_idx == self.args.comm_round - 1:
+        if should_evaluate:
             logging.info("################test_on_server_for_all_clients : {}".format(round_idx))
             train_num_samples = []
             train_tot_corrects = []

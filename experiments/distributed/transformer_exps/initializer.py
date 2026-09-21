@@ -239,6 +239,8 @@ def add_federated_args(parser):
 
     parser.add_argument('--frequency_of_the_test', type=int, default=1,
                         help='the frequency of the algorithms')
+    parser.add_argument('--evaluate_before_training', action='store_true',
+                        help='evaluate the initialized model once at logical round -1')
 
     # GPU device management
     parser.add_argument('--gpu_mapping_file', type=str, default="gpu_mapping.yaml",
@@ -274,16 +276,28 @@ def add_federated_args(parser):
 
     parser.add_argument('--var_control', action='store_true',
                         help='whether var_control')
+
+    parser.add_argument('--max_var_retries', type=int, default=10,
+                        help='maximum adaptive extra-direction retries; 0 keeps variance measurement with a fixed query budget')
     
     parser.add_argument('--perturbation_sampling', action='store_true',
                         help='whether perturbation_sampling')
 
-    # Domain Mismatch: cloud uses a different dataset
+    # Cloud guidance data. The data and partition paths are explicit so a
+    # synthetic buffer cannot be selected through filename substitution.
     parser.add_argument('--cloud_dataset', type=str, default=None,
-                        help='dataset for cloud (domain mismatch). If None, cloud uses --dataset')
-    parser.add_argument('--cloud_max_seq_length', type=int, default=256,
-                        help='max seq length for cloud dataset (default: 256)')
+                        help='logical dataset name for cloud guidance data')
+    parser.add_argument('--cloud_data_file_path', type=str, default=None,
+                        help='explicit data h5 path used only by the cloud process')
+    parser.add_argument('--cloud_partition_file_path', type=str, default=None,
+                        help='explicit partition h5 path used only by the cloud process')
+    parser.add_argument('--cloud_max_seq_length', type=int, default=None,
+                        help='optional max sequence length used only by the cloud process')
     parser.add_argument('--cloud_partition_method', type=str, default=None,
                         help='partition method for cloud dataset. If None, use --partition_method')
+    parser.add_argument('--cloud_client_ids', type=str, default=None,
+                        help='comma-separated cloud partition client IDs; takes precedence over --cloud_client_count')
+    parser.add_argument('--cloud_client_count', type=int, default=None,
+                        help='number of clients from the end of the cloud partition; default uses all clients')
 
     return parser

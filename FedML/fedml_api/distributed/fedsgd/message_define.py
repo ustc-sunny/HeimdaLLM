@@ -6,6 +6,9 @@ class MyMessage(object):
     # cloud to server (new)
     MSG_TYPE_CLOUD2S_SEND_PERT_TO_SERVER = 10
 
+    # server to cloud and clients: the final aggregate and evaluation are done
+    MSG_TYPE_S2ALL_STOP = 11
+
     # server to cloud (new)
     MSG_TYPE_S2CLOUD_INIT_CONFIG = 0
     MSG_TYPE_S2CLOUD_SEND_GARD_TO_CLOUD = 4
@@ -47,5 +50,4 @@ class MyMessage(object):
     MSG_ARG_KEY_TEST_CORRECT = "test_correct"
     MSG_ARG_KEY_TEST_ERROR = "test_error"
     MSG_ARG_KEY_TEST_NUM = "test_num_sample"
-
 

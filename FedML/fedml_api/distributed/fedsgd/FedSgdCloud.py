@@ -1,4 +1,5 @@
 import logging
+import math
 import torch
 
 
@@ -23,9 +24,18 @@ class FedSGDCloud(object):
 
         self.pool_size = args.pool_size
         self.model_pool = []
+        self.direction_counter = 0
 
     def update_model(self, weights):
         self.trainer.cloud_trainer.set_model_params(weights)
+
+    @staticmethod
+    def create_sync_placeholder():
+        """Return a non-None, zero-payload round barrier for alpha=1."""
+        logging.info(
+            "[ZGR] alpha=1: send an empty synchronization sentinel (no cloud tensors)"
+        )
+        return []
 
     # def update_dataset(self, client_index):
         # self.client_index = client_index
@@ -35,7 +45,7 @@ class FedSGDCloud(object):
 
         # self.train_local_list = [[data for data in self.train_local[i]] for i in range(len(self.train_local))]
 
-    
+
     
     def train_model_bp(self):
         self.trainer.train_bp(self.train_global, self.device, self.args)
@@ -68,52 +78,94 @@ class FedSGDCloud(object):
     #     return perturbation
     
     def create_perturbation(self):
-        scale = 10000.0
-        # print("DEBUG: create_perturbation called", flush=True)
-        alpha = torch.randn(len(self.model_pool), device=self.device)
-        alpha = alpha / (alpha.norm() + 1e-8)
-        # print("DEBUG: alpha=" + str(alpha), flush=True)
-        logging.info("Cloud: sample alpha." + str(alpha))
-        perturbation = [torch.zeros_like(p, device=self.device) for p in self.model_pool[0]]
-        
-        for i, grad_list in enumerate(self.model_pool):
-            # print("DEBUG: grad_list=" + str(grad_list), flush=True)
-            for j, g in enumerate(grad_list):
-                perturbation[j] += alpha[i].item() * g.to(self.device)
-                # print("DEBUG: perturbation=" + str(perturbation[j]), flush=True)
-        logging.info("Cloud: create perturbation.")
-        
-        # === 采样 100 个非零值 ===
-        flat_v = torch.cat([p.flatten() for p in perturbation])
-        flat_nonzero = flat_v[flat_v != 0].abs()          # 过滤 0
-        sample_cnt = min(100, flat_nonzero.numel())
-        sample_vals = flat_nonzero[torch.randperm(flat_nonzero.numel())[:sample_cnt]]
-        mean_val = sample_vals.mean().item() if sample_cnt > 0 else 0.0
+        # The wire format contains one direction rather than an orthonormal
+        # basis. Supporting m > 1 without transmitting that basis would not
+        # implement Eq. (8), so reject it instead of silently mis-scaling it.
+        if self.pool_size != 1:
+            raise NotImplementedError(
+                "the current GGD wire format supports only pool_size=1; "
+                "an orthonormal basis is required for pool_size>1"
+            )
+        if not self.model_pool:
+            raise ValueError("cannot create cloud perturbation from an empty gradient pool")
+        if len(self.model_pool) != 1:
+            raise ValueError(
+                "pool_size=1 requires exactly one cloud gradient, got %d"
+                % len(self.model_pool)
+            )
 
-        logging.info(f"[Cloud] perturbation NONZERO sample(100): {sample_vals.cpu().tolist()}")
-        logging.info(f"[Cloud] perturbation NONZERO mean(100):  {mean_val:.6f}")
+        gradient = self.model_pool[0]
+        if not gradient:
+            raise ValueError("cannot create cloud perturbation from an empty gradient list")
 
-        perturbation = [p * scale for p in perturbation]
-        
-        # 1. 非零绝对值
-        flat_nonzero_abs = torch.cat([p.flatten() for p in perturbation]).abs()
-        flat_nonzero_abs = flat_nonzero_abs[flat_nonzero_abs != 0]
+        squared_norms = []
+        for tensor_index, tensor in enumerate(gradient):
+            if tensor.numel() == 0:
+                continue
+            if not torch.isfinite(tensor).all().item():
+                raise FloatingPointError(
+                    "cloud gradient tensor %d contains non-finite values"
+                    % tensor_index
+                )
+            tensor_norm = tensor.detach().float().norm().item()
+            if not math.isfinite(tensor_norm):
+                raise FloatingPointError(
+                    "cloud gradient tensor %d has non-finite norm"
+                    % tensor_index
+                )
+            squared_norms.append(tensor_norm * tensor_norm)
 
-        cloud_nonzero_mean = flat_nonzero_abs.mean().item() if flat_nonzero_abs.numel() > 0 else 0.0
-        logging.info(f"[Cloud] after align, non-zero abs mean={cloud_nonzero_mean:.4f}")
+        gradient_norm = math.sqrt(math.fsum(squared_norms))
+        if not math.isfinite(gradient_norm) or gradient_norm <= 0.0:
+            raise FloatingPointError(
+                "cloud gradient global L2 norm must be positive and finite, got %r"
+                % gradient_norm
+            )
 
-        # if torch.isnan(torch.tensor(cloud_nonzero_mean)):
-        #     perturbation = [0.4 for p in perturbation]
-        # else:
-        scale = 0.01/cloud_nonzero_mean
-        perturbation = [p * scale for p in perturbation]
+        basis_direction = [tensor.to(self.device) / gradient_norm for tensor in gradient]
+        unit_squared_norms = [
+            tensor.detach().float().norm().item() ** 2
+            for tensor in basis_direction
+        ]
+        unit_norm = math.sqrt(math.fsum(unit_squared_norms))
+        if not math.isfinite(unit_norm) or not math.isclose(
+                unit_norm, 1.0, rel_tol=1e-5, abs_tol=1e-6):
+            raise FloatingPointError(
+                "normalized cloud direction must have global L2 norm 1, got %r"
+                % unit_norm
+            )
+        if not all(torch.isfinite(tensor).all().item() for tensor in basis_direction):
+            raise FloatingPointError("normalized cloud direction contains non-finite values")
 
-        # # 1. 非零绝对值
-        # flat_nonzero_abs = torch.cat([p.flatten() for p in perturbation]).abs()
-        # flat_nonzero_abs = flat_nonzero_abs[flat_nonzero_abs != 0]
+        # Use a dedicated seed for the one-dimensional Rademacher coefficient.
+        # Its sequence depends only on the experiment seed and round counter,
+        # so paired cloud-data arms receive identical relative signs.
+        direction_seed = int(self.args.manual_seed) + self.direction_counter
+        direction_generator = torch.Generator(device="cpu")
+        direction_generator.manual_seed(direction_seed)
+        direction_bit = torch.randint(
+            0, 2, (1,), generator=direction_generator, device="cpu"
+        ).item()
+        direction_sign = 1.0 if direction_bit else -1.0
+        perturbation = [direction_sign * tensor for tensor in basis_direction]
+        ggd_squared_norms = [
+            tensor.detach().float().norm().item() ** 2
+            for tensor in perturbation
+        ]
+        ggd_norm = math.sqrt(math.fsum(ggd_squared_norms))
+        if not math.isfinite(ggd_norm) or ggd_norm <= 0.0:
+            raise FloatingPointError(
+                "sampled cloud direction must have positive finite global L2 norm"
+            )
 
-        # cloud_nonzero_mean = flat_nonzero_abs.mean().item() if flat_nonzero_abs.numel() > 0 else 0.0
-        # logging.info(f"[Cloud1] after align, non-zero abs mean={cloud_nonzero_mean:.4f}")
-
+        logging.info(
+            "[ZGR] cloud basis m=1: raw_L2=%.8g basis_L2=%.8g "
+            "rademacher_seed=%d sign=%+.0f Vz_g_L2=%.8g",
+            gradient_norm,
+            unit_norm,
+            direction_seed,
+            direction_sign,
+            ggd_norm,
+        )
+        self.direction_counter += 1
         return perturbation
-    

@@ -64,17 +64,27 @@ def functional_get_loss(
     y = model(params,buffers, x)[0]
     return _get_loss(y, t, num_classes)
 
-def calculate_jvp(func, params, v):
+def calculate_jvp(func, params, v, h=0.01):
     """
     Calculations Jacobian-vector product using numerical differentiation
     """
-    h = 0.01
-    with autocast():
-        loss = func(tuple([params[i]-h*v[i] for i in range(len(params))]))
-        terbulence_loss = func(tuple([params[i]+h*v[i] for i in range(len(params))]))
-    avg_loss = (terbulence_loss + loss)/2
-    jvp = (terbulence_loss - loss)/(2*h)
-    return avg_loss, jvp
+    if not math.isfinite(h) or h <= 0.0:
+        raise ValueError("finite-difference step h must be positive and finite")
+    # Parameter perturbations can be much smaller than FP16 resolution. Keep
+    # these two model evaluations in full precision even when the run uses AMP.
+    with autocast(enabled=False):
+        loss_minus = func(tuple([params[i] - h * v[i] for i in range(len(params))]))
+        loss_plus = func(tuple([params[i] + h * v[i] for i in range(len(params))]))
+    loss_delta = loss_plus - loss_minus
+    if not torch.isfinite(loss_minus).all().item():
+        raise FloatingPointError("negative finite-difference loss is non-finite")
+    if not torch.isfinite(loss_plus).all().item():
+        raise FloatingPointError("positive finite-difference loss is non-finite")
+    if not torch.isfinite(loss_delta).all().item():
+        raise FloatingPointError("finite-difference loss delta is non-finite")
+    avg_loss = (loss_plus + loss_minus) / 2
+    jvp = loss_delta / (2 * h)
+    return avg_loss, jvp, loss_delta
 
 def calculate_var(fwdgrad_list):
     n = len(fwdgrad_list)

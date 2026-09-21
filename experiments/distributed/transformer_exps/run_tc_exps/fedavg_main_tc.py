@@ -31,17 +31,15 @@ from experiments.distributed.transformer_exps.initializer import add_federated_a
     get_fl_algorithm_initializer
 
 import argparse
+import faulthandler
 import logging
+import signal
 
 
 def post_complete_message(tc_args):
-    pipe_path = "/tmp/fednlp_tc"
-    if not os.path.exists(pipe_path):
-        os.mkfifo(pipe_path)
-    pipe_fd = os.open(pipe_path, os.O_WRONLY)
-
-    with os.fdopen(pipe_fd, 'w') as pipe:
-        pipe.write("training is finished! \n%s" % (str(tc_args)))
+    # The original blocking FIFO notification can hang standalone runs when
+    # no sweep-process reader is attached. Logging is sufficient for MPI jobs.
+    logging.info("training is finished")
 
 
 if __name__ == "__main__":
@@ -55,6 +53,10 @@ if __name__ == "__main__":
         level=logging.INFO,
         format='%(process)s %(asctime)s.%(msecs)03d - {%(module)s.py (%(lineno)d)} - %(funcName)s(): %(message)s',
         datefmt='%Y-%m-%d,%H:%M:%S')
+    if os.environ.get("HEIMDALLM_FAULTHANDLER") == "1":
+        faulthandler.enable(all_threads=True)
+        if hasattr(signal, "SIGUSR1"):
+            faulthandler.register(signal.SIGUSR1, all_threads=True)
     logging.info(args)
 
     set_seed(args.manual_seed)
@@ -92,6 +94,7 @@ if __name__ == "__main__":
     # dataset attributes
     attributes = BaseDataManager.load_attributes(
         args.data_file_path)
+    real_label_vocab = attributes["label_vocab"]
     num_labels = len(attributes["label_vocab"])
 
     # create the model
@@ -121,6 +124,7 @@ if __name__ == "__main__":
                                  "partition_method": args.partition_method,
                                  "dataset": args.dataset,
                                  "output_dir": args.output_dir,
+                                 "cache_dir": os.path.join(args.output_dir, "cache_dir"),
                                  "is_debug_mode": args.is_debug_mode,
                                  "fedprox_mu": args.fedprox_mu,
                                  "use_adapter": args.use_adapter,
@@ -128,6 +132,10 @@ if __name__ == "__main__":
                                  "peft_method":args.peft_method,
                                  "var_control":args.var_control,
                                  "perturbation_sampling":args.perturbation_sampling,
+                                 # set_perturbation runs before train_model, so
+                                 # the trainer's ClassificationArgs must carry
+                                 # the guidance coefficient as well.
+                                 "alpha":args.alpha,
                                  })
     model_args.config["num_labels"] = num_labels
 
@@ -149,32 +157,75 @@ if __name__ == "__main__":
     else:
         client_trainer = TextClassificationTrainer(
             model_args, device, training_model, None, None)
-    
+
 
     # fed_trainer = FedTransformerTrainer(client_trainer, client_model)
     fed_trainer = FedTransformerTrainer(client_trainer, server_trainer, cloud_trainer, training_model)
 
-    # --- Domain Mismatch: Cloud process loads a different dataset ---
-    if process_id == 0 and getattr(args, 'cloud_dataset', None) is not None:
-        logging.info("[Domain Mismatch] Cloud uses dataset '%s' (max_seq_length=%d) instead of '%s'",
-                     args.cloud_dataset, args.cloud_max_seq_length, args.dataset)
-        args.data_file_path = args.data_file_path.replace(
-            "%s_data.h5" % args.dataset, "%s_data.h5" % args.cloud_dataset)
-        args.partition_file_path = args.partition_file_path.replace(
-            "%s_partition.h5" % args.dataset, "%s_partition.h5" % args.cloud_dataset)
+    # Only rank 0 switches to cloud guidance data. Rank 1 and all clients retain
+    # the real data/partition arguments and therefore share the real evaluation.
+    if process_id == 0:
+        has_cloud_data_path = args.cloud_data_file_path is not None
+        has_cloud_partition_path = args.cloud_partition_file_path is not None
+        if has_cloud_data_path != has_cloud_partition_path:
+            raise ValueError(
+                "--cloud_data_file_path and --cloud_partition_file_path must be provided together"
+            )
+        if args.cloud_dataset is not None and not has_cloud_data_path:
+            raise ValueError(
+                "--cloud_dataset no longer derives paths from filenames; provide both explicit cloud paths"
+            )
+        if args.cloud_client_count is not None and args.cloud_client_count <= 0:
+            raise ValueError("--cloud_client_count must be a positive integer")
+
+        real_data_file_path = args.data_file_path
+        real_partition_file_path = args.partition_file_path
+        if has_cloud_data_path:
+            if not os.path.isfile(args.cloud_data_file_path):
+                raise FileNotFoundError(
+                    "cloud data h5 does not exist: %s" % args.cloud_data_file_path
+                )
+            if not os.path.isfile(args.cloud_partition_file_path):
+                raise FileNotFoundError(
+                    "cloud partition h5 does not exist: %s" % args.cloud_partition_file_path
+                )
+            if os.path.realpath(args.cloud_data_file_path) == os.path.realpath(args.cloud_partition_file_path):
+                raise ValueError("cloud data h5 and cloud partition h5 must be distinct files")
+            if os.path.realpath(args.cloud_data_file_path) == os.path.realpath(real_data_file_path):
+                raise ValueError("explicit cloud data h5 must be distinct from the real data h5")
+            if os.path.realpath(args.cloud_partition_file_path) == os.path.realpath(real_partition_file_path):
+                raise ValueError("explicit cloud partition h5 must be distinct from the real partition h5")
+            args.data_file_path = args.cloud_data_file_path
+            args.partition_file_path = args.cloud_partition_file_path
+
         args.partition_method = args.cloud_partition_method or args.partition_method
-        args.dataset = args.cloud_dataset
-        args.max_seq_length = args.cloud_max_seq_length
-        model_args.max_seq_length = args.cloud_max_seq_length
+        args.dataset = args.cloud_dataset or args.dataset
+        if args.cloud_max_seq_length is not None:
+            args.max_seq_length = args.cloud_max_seq_length
+            model_args.max_seq_length = args.cloud_max_seq_length
+
         model_args.update_from_dict({
-            "max_seq_length": args.cloud_max_seq_length,
+            "max_seq_length": args.max_seq_length,
             "data_file_path": args.data_file_path,
             "partition_file_path": args.partition_file_path,
-            "dataset": args.cloud_dataset,
+            "dataset": args.dataset,
             "partition_method": args.partition_method,
         })
-        # reload label_vocab from cloud dataset
-        attributes = BaseDataManager.load_attributes(args.data_file_path)
+        cloud_attributes = BaseDataManager.load_attributes(args.data_file_path)
+        if cloud_attributes["label_vocab"] != real_label_vocab:
+            raise ValueError(
+                "cloud label_vocab must exactly match the real dataset label_vocab"
+            )
+        attributes = cloud_attributes
+        logging.info(
+            "Cloud guidance source: dataset=%s data=%s partition=%s method=%s client_ids=%s client_count=%s",
+            args.dataset,
+            args.data_file_path,
+            args.partition_file_path,
+            args.partition_method,
+            args.cloud_client_ids,
+            args.cloud_client_count,
+        )
 
     # data manager
     preprocessor = TLMPreprocessor(
@@ -195,11 +246,10 @@ if __name__ == "__main__":
     # args.client_num_per_round = 500
     # args.learning_rate = 0.01
 
-    
+
 
     fl_algorithm = get_fl_algorithm_initializer(args.fl_algorithm)
-    
-    fl_algorithm(process_id, worker_number, device, comm, training_model, train_data_num, 
+
+    fl_algorithm(process_id, worker_number, device, comm, training_model, train_data_num,
                  train_data_global, test_data_global, train_data_local_num_dict,
                  train_data_local_dict, test_data_local_dict, args, model_trainer=fed_trainer)
-    

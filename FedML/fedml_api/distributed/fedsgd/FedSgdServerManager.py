@@ -34,6 +34,11 @@ class FedSGDServerManager(ServerManager):
         super().run()
 
     def send_init_msg(self):
+        if getattr(self.args, "evaluate_before_training", False):
+            logging.info("HEIMDALLM_PRETRAIN_EVAL begin round=-1")
+            self.server.test_on_server_for_all_clients(-1, force=True)
+            logging.info("HEIMDALLM_PRETRAIN_EVAL complete round=-1")
+
         # sampling clients
         self.client_indexes = self.server.client_sampling(self.round_idx, self.args.client_num_in_total,
                                                          self.args.client_num_per_round)
@@ -90,8 +95,9 @@ class FedSGDServerManager(ServerManager):
 
                 # start the next round
                 self.round_idx += 1
-                if self.round_idx == self.round_num-1:
+                if self.round_idx >= self.round_num:
                     post_complete_message_to_sweep_process(self.args)
+                    self.send_stop_to_all_participants()
                     self.finish()
                     return
                 if self.is_preprocessed:
@@ -203,3 +209,16 @@ class FedSGDServerManager(ServerManager):
         message = Message(MyMessage.MSG_TYPE_S2CLOUD_SEND_GARD_TO_CLOUD, self.get_sender_id(), receive_id)
         message.add_params(MyMessage.MSG_ARG_KEY_MODEL_PARAMS, global_model_params)
         self.send_message(message)
+
+    def send_stop_to_all_participants(self):
+        """Tell the cloud and every client that the final evaluation is done."""
+        participant_ids = [0] + list(range(2, self.size))
+        for receiver_id in participant_ids:
+            message = Message(MyMessage.MSG_TYPE_S2ALL_STOP, self.get_sender_id(), receiver_id)
+            self.send_message(message)
+        logging.info("Queued graceful-stop messages for ranks %s", participant_ids)
+
+    def finish(self):
+        """Stop only this FedSGD manager without aborting the MPI world."""
+        logging.info("FedSGD server is shutting down gracefully")
+        self.com_manager.stop_receive_message()

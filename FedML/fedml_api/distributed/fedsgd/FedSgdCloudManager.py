@@ -13,7 +13,7 @@ except ImportError:
     from FedML.fedml_core.distributed.client.client_manager import ClientManager
     from FedML.fedml_core.distributed.communication.message import Message
 from .message_define import MyMessage
-from .utils import post_complete_message_to_sweep_process, grad_aggregete
+from .utils import grad_aggregete
 
 
 ## 接收
@@ -39,6 +39,8 @@ class FedSGDCloudManager(ClientManager):
                                               self.handle_message_receive_aggregated_grad_from_server)
         self.register_message_receive_handler(MyMessage.MSG_TYPE_S2CLOUD_INIT_CONFIG,
                                               self.handle_message_init)
+        self.register_message_receive_handler(MyMessage.MSG_TYPE_S2ALL_STOP,
+                                              self.handle_message_stop)
         logging.info(f"Cloud finished registering handlers.")
         
     
@@ -75,18 +77,31 @@ class FedSGDCloudManager(ClientManager):
 
     def train_bp(self):
         logging.info("####### cloud training ########### round_id = %d" % self.round_idx)
-        self.cloud.train_model_bp()
+        if float(self.args.alpha) == 1.0:
+            logging.info(
+                "[ZGR] alpha=1: skip cloud BP; cloud data and gradients do not affect this round"
+            )
+        else:
+            self.cloud.train_model_bp()
         self.round_idx += 1
-
-        if self.round_idx == self.num_rounds - 2:
-            post_complete_message_to_sweep_process(self.args)
-            self.finish()
 
     def create_perturbation_and_send_to_server(self):
         logging.info("create_perturbation_and_send_to_server")
 
-        perturbation = self.cloud.create_perturbation()
+        if float(self.args.alpha) == 1.0:
+            perturbation = self.cloud.create_sync_placeholder()
+        else:
+            perturbation = self.cloud.create_perturbation()
         self.send_pert_to_server(1, perturbation)
         logging.info("finish send perturbation to server")
-            
-        
+        # Rank 1 evaluates the aggregate and owns MPI job termination. The
+        # cloud remains in its receive loop so it cannot abort the final round.
+
+    def handle_message_stop(self, msg_params):
+        logging.info("Cloud received graceful-stop message")
+        self.finish()
+
+    def finish(self):
+        """Stop only this FedSGD manager without aborting the MPI world."""
+        logging.info("FedSGD cloud is shutting down gracefully")
+        self.com_manager.stop_receive_message()

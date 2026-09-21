@@ -25,13 +25,9 @@ def transform_tensor_to_list(model_params):
 
 
 def post_complete_message_to_sweep_process(args):
-    pipe_path = "./tmp/fedml"
-    if not os.path.exists(pipe_path):
-        os.mkfifo(pipe_path)
-    pipe_fd = os.open(pipe_path, os.O_WRONLY)
-
-    with os.fdopen(pipe_fd, 'w') as pipe:
-        pipe.write("training is finished! \n%s\n" % (str(args)))
+    # A standalone MPI run may not have a sweep-process reader. Opening the
+    # FIFO for writing would then block after training has already finished.
+    logging.info("training is finished")
 
 
 def grad_aggregete(grad_list):

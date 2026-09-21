@@ -37,6 +37,12 @@ cifar-10-batches-py
 *.json
 *.png
 
+# Curated HeimdaLLM+ result artifacts. Raw logs, H5 files, checkpoints and
+# archives remain excluded by the existing rules above.
+!journal_extension/results/agnews_nondp_v3/summary.json
+!journal_extension/results/agnews_nondp_v3/curves.csv
+!journal_extension/results/agnews_nondp_v3/v3_training_curves.png
+
 data/cifar10/*-python
 data/cifar100/*-python
 data/cinic10/
