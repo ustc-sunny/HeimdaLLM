@@ -391,7 +391,6 @@ def main():
         if device.type == "cuda":
             torch.cuda.manual_seed_all(args.adapter_init_seed)
             torch.cuda.empty_cache()
-            torch.cuda.reset_peak_memory_stats(device)
         common.guard_cuda_memory(
             torch, device, args.min_free_mib, args.memory_fraction
         )
