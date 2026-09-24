@@ -48,6 +48,12 @@ The two environments must remain separate because the KDD training stack uses
 `adapter-transformers==3.1.0`, while the generator uses newer Transformers and
 PEFT versions.
 
+If Google Drive is unreachable, the script can restore the two AG News H5 files
+from the persistent Matpool archive recorded in `HEIMDALLM_DATA_FALLBACK_ARCHIVE`.
+If Hugging Face is unreachable, it downloads the same DistilBERT and DistilGPT2
+repositories from ModelScope, then verifies that the required Transformers
+files are complete.
+
 The public FedNLP archive is downloaded from the FwdLLM link supplied for these
 experiments. It contains AG News, Yelp, and Yahoo. It does not contain the
 original SST-2 H5 partition.
