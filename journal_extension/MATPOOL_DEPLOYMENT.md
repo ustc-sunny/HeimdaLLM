@@ -107,6 +107,12 @@ The formal pipeline needs separate client adapters, a public fixed label table,
 compatible LoRA targets, validated sampling/clipping/noise/accounting, and
 release metadata that does not expose unaccounted private statistics.
 
+The new `dp_client_synthetic.py` implements that formal record-level pipeline:
+fresh per-client adapters, public fixed labels and quotas, Poisson sampling,
+per-example global clipping, Gaussian noise, and Opacus RDP accounting.  Its
+release is checked by `validate_dp_release.py`.  The old prototype remains only
+for historical context and must still not be used as evidence.
+
 The server has about 350 GB of local disk but `/mnt` has only 5 GB of network
 storage. Keep model caches on local disk and back up code, environment records
 and essential results separately before releasing the instance.

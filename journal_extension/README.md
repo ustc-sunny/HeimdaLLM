@@ -28,6 +28,12 @@ records, credentials, and server-specific logs are never committed.
 
 The validated v3 result is Non-DP. It does not establish a privacy guarantee.
 
+The record-level DP v1 pipeline is now isolated in
+`dp_client_synthetic.py`; its design is fixed in `AGNEWS_DP_V1_PLAN.md`.
+`validate_dp_release.py` rejects incomplete accountant metadata and private
+diagnostic fields before downstream training.  No DP utility result is claimed
+until the locked epsilon grid finishes.
+
 ## Fresh Matpool A40 setup
 
 The tested image was Ubuntu 20.04, Python 3.8, PyTorch 1.13.1, CUDA 11.6,
@@ -94,3 +100,22 @@ generation and downstream training need to be scheduled separately.
 - `AGNEWS_NONDP_V3_PLAN.md`: analysis plan fixed before reading v3 outcomes.
 
 See `MATPOOL_DEPLOYMENT.md` for additional deployment history and limitations.
+
+## Run the AG News DP pipeline
+
+Use a reduced new run ID for deployment validation first.  This example keeps
+the two client adapters but reduces their private record count, generation
+budget, epochs, and downstream rounds:
+
+```bash
+bash journal_extension/run_matpool_agnews_dp_v1.sh \
+  --run-id matpool_agnews_dp_runtime_smoke \
+  --seeds 57 --rounds 1 --eval-every 1 \
+  --sample-limit-per-client 8 --generator-epochs 1 \
+  --target-per-label 4
+```
+
+The fixed full condition defaults to epsilon 8.  Set
+`HEIMDALLM_DP_EPSILON` and a matching `HEIMDALLM_DP_RUN_ID` for the other
+locked values 1, 2, and 4.  Each run contains only the DP synthetic arm; it
+does not copy same-source private real controls into the result directory.

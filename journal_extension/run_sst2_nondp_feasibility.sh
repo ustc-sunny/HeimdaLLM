@@ -42,6 +42,11 @@ GENERATOR_EPOCHS=""
 GENERATOR_MAX_LENGTH=64
 GENERATOR_MAX_NEW_TOKENS=48
 LABEL_NAMES_JSON="{}"
+GENERATOR_MODE="non_dp"
+DP_TARGET_EPSILON=""
+DP_NOISE_MULTIPLIER=""
+DP_DELTA="1e-5"
+DP_MAX_GRAD_NORM="1.0"
 INCLUDE_PUBLIC_SYNTHETIC=0
 ADAPTER_INIT_SEED=57
 PROMPT_TEMPLATE=$'Sentiment: {label}\nMovie review:\n'
@@ -119,6 +124,11 @@ Runtime options:
   --generator-max-length N
   --generator-max-new-tokens N
   --label-names-json JSON      Public raw-label to category-name mapping
+  --generator-mode non_dp|dp  Client-local generator training mechanism
+  --dp-target-epsilon FLOAT   Calibrate DP noise to this per-client epsilon
+  --dp-noise-multiplier FLOAT Use an explicit DP noise multiplier instead
+  --dp-delta FLOAT            Per-client delta (default 1e-5)
+  --dp-max-grad-norm FLOAT    Per-example global clipping norm (default 1.0)
   --target-per-label N         Total generated quota per class across clients
   --adapter-init-seed N        Shared fresh LoRA initialization seed (default 57)
   --prompt-template TEXT       Must contain {label}; SST-2 template is the default
@@ -186,6 +196,11 @@ while [[ $# -gt 0 ]]; do
         --generator-max-length) need_value "$@"; GENERATOR_MAX_LENGTH="$2"; shift 2 ;;
         --generator-max-new-tokens) need_value "$@"; GENERATOR_MAX_NEW_TOKENS="$2"; shift 2 ;;
         --label-names-json) need_value "$@"; LABEL_NAMES_JSON="$2"; shift 2 ;;
+        --generator-mode) need_value "$@"; GENERATOR_MODE="$2"; shift 2 ;;
+        --dp-target-epsilon) need_value "$@"; DP_TARGET_EPSILON="$2"; shift 2 ;;
+        --dp-noise-multiplier) need_value "$@"; DP_NOISE_MULTIPLIER="$2"; shift 2 ;;
+        --dp-delta) need_value "$@"; DP_DELTA="$2"; shift 2 ;;
+        --dp-max-grad-norm) need_value "$@"; DP_MAX_GRAD_NORM="$2"; shift 2 ;;
         --include-public-synthetic) INCLUDE_PUBLIC_SYNTHETIC=1; shift ;;
         --generator-epochs) need_value "$@"; GENERATOR_EPOCHS="$2"; shift 2 ;;
         --adapter-init-seed) need_value "$@"; ADAPTER_INIT_SEED="$2"; shift 2 ;;
@@ -238,9 +253,28 @@ if [[ "$DATASET" == "agnews" ]]; then
     SHUFFLE_MAX_LABEL_AGREEMENT=0.35
 fi
 case "$PHASE" in all|prepare|train) ;; *) die "--phase must be all, prepare, or train" ;; esac
+case "$GENERATOR_MODE" in non_dp|dp) ;; *) die "--generator-mode must be non_dp or dp" ;; esac
+if [[ "$GENERATOR_MODE" == "dp" ]]; then
+    [[ -n "$SAMPLE_LIMIT_PER_CLIENT" ]] || die "DP mode requires --sample-limit-per-client"
+    [[ "$LABEL_NAMES_JSON" != "{}" ]] || die "DP mode requires a fixed public --label-names-json table"
+    if [[ -n "$DP_TARGET_EPSILON" && -n "$DP_NOISE_MULTIPLIER" ]]; then
+        die "choose only one of --dp-target-epsilon and --dp-noise-multiplier"
+    fi
+    if [[ -z "$DP_TARGET_EPSILON" && -z "$DP_NOISE_MULTIPLIER" ]]; then
+        die "DP mode requires --dp-target-epsilon or --dp-noise-multiplier"
+    fi
+fi
+if [[ "$GENERATOR_MODE" == "dp" ]]; then
+    GENERATOR_SCRIPT="${SCRIPT_DIR}/dp_client_synthetic.py"
+else
+    GENERATOR_SCRIPT="${SCRIPT_DIR}/non_dp_client_synthetic.py"
+fi
 case "$CONDITION" in paired|no-cloud|client-syn|public-syn|same-source-real-matched|real-matched|shuffled-label) ;; *) die "invalid --condition" ;; esac
 if [[ "$CONDITION" == "public-syn" ]]; then
     INCLUDE_PUBLIC_SYNTHETIC=1
+fi
+if [[ "$GENERATOR_MODE" == "dp" && "$INCLUDE_PUBLIC_SYNTHETIC" -eq 1 ]]; then
+    die "DP mode currently supports the client-syn/no-cloud arms only"
 fi
 case "$EVALUATION_MODE" in dev|final-test) ;; *) die "--evaluation must be dev or final-test" ;; esac
 if [[ "$EVALUATION_MODE" == "final-test" && "$LOCKED_CONFIG" -ne 1 ]]; then
@@ -336,7 +370,12 @@ max_var_retries=${MAX_VAR_RETRIES}
 fixed_zo_query_budget=${FIXED_ZO_QUERY_BUDGET}
 real_eval_data=${REAL_DATA}
 fixed_real_partition=${PILOT_PARTITION}:${PILOT_METHOD}
+generator_mode=${GENERATOR_MODE}
 generator_quota=${GENERATOR_QUOTA_FLAG} ${GENERATOR_QUOTA_VALUE}
+dp_target_epsilon=${DP_TARGET_EPSILON:-none}
+dp_noise_multiplier=${DP_NOISE_MULTIPLIER:-calibrated}
+dp_delta=${DP_DELTA}
+dp_max_grad_norm=${DP_MAX_GRAD_NORM}
 adapter_init_seed=${ADAPTER_INIT_SEED}
 results=${RUN_DIR}
 private_staging=${PRIVATE_STAGING_RUN}
@@ -377,13 +416,21 @@ preflight_dependencies() {
     require_file "${SCRIPT_DIR}/export_client_train_jsonl.py"
     require_file "${SCRIPT_DIR}/build_matched_real_control.py"
     require_file "${SCRIPT_DIR}/non_dp_client_synthetic.py"
+    if [[ "$GENERATOR_MODE" == "dp" ]]; then
+        require_file "${SCRIPT_DIR}/dp_client_synthetic.py"
+        require_file "${SCRIPT_DIR}/validate_dp_release.py"
+    fi
     require_file "${SCRIPT_DIR}/pack_synthetic_h5.py"
     require_file "${RUN_TC_DIR}/fedavg_main_tc.py"
     require_executable "$H5_PYTHON"
     "$H5_PYTHON" -c 'import h5py, numpy' >/dev/null
     if [[ "$PHASE" != "train" ]]; then
         require_executable "$GENERATOR_PYTHON"
-        "$GENERATOR_PYTHON" -c 'import torch, transformers, peft' >/dev/null
+        if [[ "$GENERATOR_MODE" == "dp" ]]; then
+            "$GENERATOR_PYTHON" -c 'import opacus, torch, transformers, peft' >/dev/null
+        else
+            "$GENERATOR_PYTHON" -c 'import torch, transformers, peft' >/dev/null
+        fi
     fi
     if [[ "$PHASE" != "prepare" ]]; then
         require_executable "$FED_PYTHON"
@@ -427,6 +474,11 @@ write_or_check_run_spec() {
         --value "generator_quota_value=${GENERATOR_QUOTA_VALUE}"
         --value "generator_sample_limit_per_client=${sample_limit_value}"
         --value "generator_epochs=${GENERATOR_EPOCHS}"
+        --value "generator_mode=${GENERATOR_MODE}"
+        --value "dp_target_epsilon=${DP_TARGET_EPSILON:-none}"
+        --value "dp_noise_multiplier=${DP_NOISE_MULTIPLIER:-calibrated}"
+        --value "dp_delta=${DP_DELTA}"
+        --value "dp_max_grad_norm=${DP_MAX_GRAD_NORM}"
         --value "adapter_init_seed=${ADAPTER_INIT_SEED}"
         --value "prompt_template=${PROMPT_TEMPLATE}"
         --value "generator_learning_rate=5e-4"
@@ -481,7 +533,7 @@ write_or_check_run_spec() {
         --file "partition_builder=${SCRIPT_DIR}/prepare_sst2_pilot_partition.py"
         --file "exporter=${SCRIPT_DIR}/export_client_train_jsonl.py"
         --file "same_source_real_builder=${SCRIPT_DIR}/build_matched_real_control.py"
-        --file "generator=${SCRIPT_DIR}/non_dp_client_synthetic.py"
+        --file "generator=${GENERATOR_SCRIPT}"
         --file "packer=${SCRIPT_DIR}/pack_synthetic_h5.py"
         --file "label_shuffler=${SCRIPT_DIR}/shuffle_synthetic_labels.py"
         --file "control_validator=${SCRIPT_DIR}/validate_guidance_controls.py"
@@ -709,39 +761,91 @@ prepare_seed_synthetic() {
     fi
 
     if [[ ! -f "${generated_dir}/manifest.json" ]]; then
-        local -a generator_command=(
-            "$GENERATOR_PYTHON" "${SCRIPT_DIR}/non_dp_client_synthetic.py"
-            --client-json-dir "$staging_dir"
-            --model-path "$GENERATOR_MODEL"
-            --output-dir "$generated_dir"
-            --seed "$seed"
-            --adapter-init-seed "$ADAPTER_INIT_SEED"
-            --prompt-template "$PROMPT_TEMPLATE"
-            "$GENERATOR_QUOTA_FLAG" "$GENERATOR_QUOTA_VALUE"
-            --require-all-labels
-            --epochs "$GENERATOR_EPOCHS"
-            --batch-size 4
-            --learning-rate 5e-4
-            --weight-decay 0.01
-            --max-length "$GENERATOR_MAX_LENGTH"
-            --label-names-json "$LABEL_NAMES_JSON"
-            --lora-r 8
-            --lora-alpha 16
-            --lora-dropout 0.05
-            --generation-batch-size 4
-            --max-new-tokens "$GENERATOR_MAX_NEW_TOKENS"
-            --temperature 0.8
-            --top-p 0.9
-            --top-k 0
-            --repetition-penalty 1.05
-            --device "$GENERATOR_DEVICE"
-            --min-free-mib "$MIN_GENERATOR_FREE_MIB"
-            --memory-fraction 0.90
-        )
+        local -a generator_command
+        if [[ "$GENERATOR_MODE" == "dp" ]]; then
+            generator_command=(
+                "$GENERATOR_PYTHON" "${SCRIPT_DIR}/dp_client_synthetic.py"
+                --client-json-dir "$staging_dir"
+                --model-path "$GENERATOR_MODEL"
+                --output-dir "$generated_dir"
+                --records-per-client "$SAMPLE_LIMIT_PER_CLIENT"
+                --seed "$seed"
+                --adapter-init-seed "$ADAPTER_INIT_SEED"
+                --prompt-template "$PROMPT_TEMPLATE"
+                "$GENERATOR_QUOTA_FLAG" "$GENERATOR_QUOTA_VALUE"
+                --epochs "$GENERATOR_EPOCHS"
+                --batch-size 4
+                --learning-rate 5e-4
+                --weight-decay 0.01
+                --max-length "$GENERATOR_MAX_LENGTH"
+                --label-names-json "$LABEL_NAMES_JSON"
+                --delta "$DP_DELTA"
+                --max-grad-norm "$DP_MAX_GRAD_NORM"
+                --lora-r 8
+                --lora-alpha 16
+                --lora-dropout 0.05
+                --generation-batch-size 4
+                --max-new-tokens "$GENERATOR_MAX_NEW_TOKENS"
+                --temperature 0.8
+                --top-p 0.9
+                --top-k 0
+                --repetition-penalty 1.05
+                --device "$GENERATOR_DEVICE"
+                --dtype float32
+                --min-free-mib "$MIN_GENERATOR_FREE_MIB"
+                --memory-fraction 0.90
+            )
+            if [[ -n "$DP_TARGET_EPSILON" ]]; then
+                generator_command+=(--target-epsilon "$DP_TARGET_EPSILON")
+            else
+                generator_command+=(--noise-multiplier "$DP_NOISE_MULTIPLIER")
+            fi
+        else
+            generator_command=(
+                "$GENERATOR_PYTHON" "${SCRIPT_DIR}/non_dp_client_synthetic.py"
+                --client-json-dir "$staging_dir"
+                --model-path "$GENERATOR_MODEL"
+                --output-dir "$generated_dir"
+                --seed "$seed"
+                --adapter-init-seed "$ADAPTER_INIT_SEED"
+                --prompt-template "$PROMPT_TEMPLATE"
+                "$GENERATOR_QUOTA_FLAG" "$GENERATOR_QUOTA_VALUE"
+                --require-all-labels
+                --epochs "$GENERATOR_EPOCHS"
+                --batch-size 4
+                --learning-rate 5e-4
+                --weight-decay 0.01
+                --max-length "$GENERATOR_MAX_LENGTH"
+                --label-names-json "$LABEL_NAMES_JSON"
+                --lora-r 8
+                --lora-alpha 16
+                --lora-dropout 0.05
+                --generation-batch-size 4
+                --max-new-tokens "$GENERATOR_MAX_NEW_TOKENS"
+                --temperature 0.8
+                --top-p 0.9
+                --top-k 0
+                --repetition-penalty 1.05
+                --device "$GENERATOR_DEVICE"
+                --min-free-mib "$MIN_GENERATOR_FREE_MIB"
+                --memory-fraction 0.90
+            )
+        fi
         run_logged_command "${synthetic_dir}/generate.command.txt" \
             "${synthetic_dir}/generate.log" "${generator_command[@]}"
     elif [[ "$RESUME" -ne 1 ]]; then
         die "synthetic generation already exists: $generated_dir"
+    fi
+
+    if [[ "$GENERATOR_MODE" == "dp" ]]; then
+        local dp_validation="${generated_dir}/validation_manifest.json"
+        local -a dp_validate_command=(
+            "$GENERATOR_PYTHON" "${SCRIPT_DIR}/validate_dp_release.py"
+            --manifest "${generated_dir}/manifest.json"
+            --output "$dp_validation"
+        )
+        run_logged_command "${synthetic_dir}/validate_dp.command.txt" \
+            "${synthetic_dir}/validate_dp.log" "${dp_validate_command[@]}"
     fi
 
     if [[ ! -f "$cloud_manifest" ]]; then
@@ -760,6 +864,12 @@ prepare_seed_synthetic() {
             "${synthetic_dir}/pack.log" "${pack_command[@]}"
     elif [[ "$RESUME" -ne 1 ]]; then
         die "packed synthetic data already exists: $cloud_manifest"
+    fi
+
+    # A single synthetic/no-cloud arm needs no real-text oracle controls.  This
+    # keeps DP result directories free of the private same-source control data.
+    if [[ "$CONDITION" == "client-syn" || "$CONDITION" == "no-cloud" ]]; then
+        return 0
     fi
 
     if [[ "$INCLUDE_PUBLIC_SYNTHETIC" -eq 1 ]]; then
@@ -981,7 +1091,11 @@ run_arm() {
             cloud_data="${synthetic_dir}/${DATASET}_client_synthetic_data.h5"
             cloud_partition="${synthetic_dir}/${DATASET}_client_synthetic_partition.h5"
             cloud_partition_method="synthetic_cloud"
-            cloud_source="client_synthetic_nondp"
+            if [[ "$GENERATOR_MODE" == "dp" ]]; then
+                cloud_source="client_synthetic_record_dp"
+            else
+                cloud_source="client_synthetic_nondp"
+            fi
             ;;
         public_syn)
             cloud_data="${seed_dir}/public_synthetic/${DATASET}_public_synthetic_data.h5"
@@ -1120,15 +1234,28 @@ run_arm() {
         --artifact "fixed_real_partition=${PILOT_PARTITION}"
         --artifact "synthetic_jsonl=${synthetic_dir}/generated/synthetic.jsonl"
         --artifact "synthetic_manifest=${synthetic_dir}/generated/manifest.json"
-        --artifact "same_source_real_build_manifest=${seed_dir}/controls/same_source_real_matched/build_manifest.json"
         --artifact "arm_cloud_data=${cloud_data}"
         --artifact "arm_cloud_partition=${cloud_partition}"
-        --artifact "control_validation=${seed_dir}/controls/validation_manifest.json"
         --artifact "run_spec=${RUN_SPEC_FILE}"
         --artifact "gpu_mapping=${GPU_MAPPING_FILE}"
         --artifact "fed_entrypoint=${RUN_TC_DIR}/fedavg_main_tc.py"
         --require-complete
     )
+    if [[ -f "${seed_dir}/controls/same_source_real_matched/build_manifest.json" ]]; then
+        summary_command+=(
+            --artifact "same_source_real_build_manifest=${seed_dir}/controls/same_source_real_matched/build_manifest.json"
+        )
+    fi
+    if [[ -f "${seed_dir}/controls/validation_manifest.json" ]]; then
+        summary_command+=(
+            --artifact "control_validation=${seed_dir}/controls/validation_manifest.json"
+        )
+    fi
+    if [[ -f "${synthetic_dir}/generated/validation_manifest.json" ]]; then
+        summary_command+=(
+            --artifact "dp_validation=${synthetic_dir}/generated/validation_manifest.json"
+        )
+    fi
     if [[ "$INCLUDE_PUBLIC_SYNTHETIC" -eq 1 ]]; then
         summary_command+=(
             --artifact "public_synthetic_jsonl=${seed_dir}/public_synthetic/generated/synthetic.jsonl"
