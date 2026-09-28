@@ -83,6 +83,9 @@ def main():
             "Gaussian noise is not declared")
     require(privacy.get("accountant") == "opacus_rdp",
             "unexpected accountant")
+    require(privacy.get("dp_randomness") ==
+            "fresh_private_entropy_not_derived_from_public_seed",
+            "DP randomness must not be derived from the public run seed")
     require(privacy.get("composition_across_clients") == "parallel_disjoint_partitions",
             "parallel composition is not declared")
     delta = float(privacy["delta"])
