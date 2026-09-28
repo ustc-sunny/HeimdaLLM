@@ -9,6 +9,16 @@ DATA_ROOT="${HEIMDALLM_SOURCE_DATA_ROOT:-/home/zzkevin/HeimdaLLM/xiexiu-final/fe
 export PYTHONNOUSERSITE=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 mkdir -p "${WORK_ROOT}/envs" "${WORK_ROOT}/models" "${WORK_ROOT}/data" \
     "${WORK_ROOT}/logs" "${WORK_ROOT}/results" "${WORK_ROOT}/backups"
+# Mirror download must match the SHA256 from the official PyTorch index.
+TORCH_WHEEL="${WORK_ROOT}/backups/torch-1.13.1+cu116-cp39-cp39-linux_x86_64.whl"
+TORCH_SHA256=db457a822d736013b6ffe509053001bc918bdd78fe68967b605f53984a9afac5
+if ! echo "${TORCH_SHA256}  ${TORCH_WHEEL}" | sha256sum -c - >/dev/null 2>&1; then
+    curl -fL --retry 3 \
+        "${HEIMDALLM_TORCH_URL:-https://mirrors.aliyun.com/pytorch-wheels/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl}" \
+        -o "${TORCH_WHEEL}.partial"
+    echo "${TORCH_SHA256}  ${TORCH_WHEEL}.partial" | sha256sum -c -
+    mv "${TORCH_WHEEL}.partial" "$TORCH_WHEEL"
+fi
 for name in kdd ton; do
     env_dir="${WORK_ROOT}/envs/${name}"
     if [[ ! -x "${env_dir}/bin/python" ]]; then
@@ -17,8 +27,7 @@ for name in kdd ton; do
     "${env_dir}/bin/python" -m pip install --index-url "$PIP_INDEX" \
         'pip<26' 'setuptools<70' wheel
     "${env_dir}/bin/python" -m pip install --index-url "$PIP_INDEX" \
-        --extra-index-url https://download.pytorch.org/whl/cu116 \
-        'torch==1.13.1+cu116' 'numpy==1.24.4' 'scipy==1.10.1' \
+        "$TORCH_WHEEL" 'numpy==1.24.4' 'scipy==1.10.1' \
         'h5py==3.8.0' 'pandas==1.5.3' 'scikit-learn==1.2.2' \
         psutil tqdm regex
 done
