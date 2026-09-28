@@ -1,0 +1,78 @@
+{
+  "aggregate": {},
+  "comparison_limitations": [
+    "Three seeds do not establish statistical significance.",
+    "DP generation uses float32 and private randomness; v3 comparisons are descriptive.",
+    "Shared GPU timing is excluded from method performance claims."
+  ],
+  "hardware": "USTC shared physical GPU 1, NVIDIA A40",
+  "missing": [
+    {
+      "epsilon": "8",
+      "run_id": "ustc_agnews_dp_eps8_20260928",
+      "seed": 57
+    },
+    {
+      "epsilon": "8",
+      "run_id": "ustc_agnews_dp_eps8_20260928",
+      "seed": 58
+    },
+    {
+      "epsilon": "8",
+      "run_id": "ustc_agnews_dp_eps8_20260928",
+      "seed": 59
+    },
+    {
+      "epsilon": "4",
+      "run_id": "ustc_agnews_dp_eps4_20260928",
+      "seed": 57
+    },
+    {
+      "epsilon": "4",
+      "run_id": "ustc_agnews_dp_eps4_20260928",
+      "seed": 58
+    },
+    {
+      "epsilon": "4",
+      "run_id": "ustc_agnews_dp_eps4_20260928",
+      "seed": 59
+    },
+    {
+      "epsilon": "2",
+      "run_id": "ustc_agnews_dp_eps2_20260928",
+      "seed": 57
+    },
+    {
+      "epsilon": "2",
+      "run_id": "ustc_agnews_dp_eps2_20260928",
+      "seed": 58
+    },
+    {
+      "epsilon": "2",
+      "run_id": "ustc_agnews_dp_eps2_20260928",
+      "seed": 59
+    },
+    {
+      "epsilon": "1",
+      "run_id": "ustc_agnews_dp_eps1_20260928",
+      "seed": 57
+    },
+    {
+      "epsilon": "1",
+      "run_id": "ustc_agnews_dp_eps1_20260928",
+      "seed": 58
+    },
+    {
+      "epsilon": "1",
+      "run_id": "ustc_agnews_dp_eps1_20260928",
+      "seed": 59
+    }
+  ],
+  "runs": [],
+  "runs_completed": 0,
+  "runs_expected": 12,
+  "schema_version": 1,
+  "scope": "Record-level DP generator output; downstream FL updates are Non-DP.",
+  "status": "partial",
+  "updated_at_utc": "2026-09-28T09:18:10.435455+00:00"
+}
