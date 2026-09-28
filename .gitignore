@@ -42,6 +42,9 @@ cifar-10-batches-py
 !journal_extension/results/agnews_nondp_v3/summary.json
 !journal_extension/results/agnews_nondp_v3/curves.csv
 !journal_extension/results/agnews_nondp_v3/v3_training_curves.png
+!journal_extension/results/agnews_dp_v1_ustc/summary.json
+!journal_extension/results/agnews_dp_v1_ustc/curves.csv
+!journal_extension/results/agnews_dp_v1_ustc/*.png
 
 data/cifar10/*-python
 data/cifar100/*-python

@@ -104,10 +104,12 @@ def dp_train_adapter(
     )
     collate = common.make_collate(torch, tokenizer.pad_token_id)
     sampling_generator = torch.Generator(device="cpu")
-    sampling_generator.manual_seed(training_seed)
+    # Sampling and Gaussian noise must not be determined by the public run seed.
+    # Fresh entropy stays private; only initialization/generation remain seeded.
+    sampling_generator.seed()
     noise_device = str(device) if device.type == "cuda" else "cpu"
     noise_generator = torch.Generator(device=noise_device)
-    noise_generator.manual_seed(common.derived_seed(training_seed, "gaussian_noise"))
+    noise_generator.seed()
     accumulators = [
         torch.zeros_like(parameter, dtype=torch.float32, device=device)
         for parameter in trainable
@@ -502,6 +504,7 @@ def main():
             "composition_across_clients": "parallel_disjoint_partitions",
             "release_is_postprocessing_of_dp_adapters": True,
             "secure_rng": False,
+            "dp_randomness": "fresh_private_entropy_not_derived_from_public_seed",
             "secure_rng_scope": "research measurement; not cryptographic deployment",
         },
         "is_record_level_dp": True,

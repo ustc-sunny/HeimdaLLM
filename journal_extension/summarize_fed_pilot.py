@@ -189,8 +189,10 @@ def main():
                 "synchronization barrier remains matched, while cloud BP is skipped."
             ),
             "client_syn": (
-                "alpha=0.5 mixes client ZOO directions with true-NonDP "
-                "client-synthetic guidance."
+                "alpha=0.5 mixes client ZOO directions with "
+                + ("record-level DP" if args.cloud_source == "client_synthetic_record_dp"
+                   else "true-NonDP")
+                + " client-synthetic guidance."
             ),
             "public_syn": (
                 "alpha=0.5 uses synthetic guidance generated directly by the "

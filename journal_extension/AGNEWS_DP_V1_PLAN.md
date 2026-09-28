@@ -24,9 +24,16 @@ The target epsilon grid is `{1, 2, 4, 8}`.  Each client has fixed public
 `N = 120`, target batch size 4, five epochs, 30 steps per epoch, and 150 DP
 steps.  The generator uses float32 for all DP conditions.
 
-The implementation uses seeded PyTorch pseudorandom generators to make the
-research measurement repeatable.  The accountant assumes ideal Poisson and
-Gaussian randomness; the run is not presented as a cryptographic deployment.
+The public seed controls model initialization and generation.  Poisson sampling
+and Gaussian noise use separate generators with fresh private entropy; their
+seeds are neither derived from nor published with the public run seed.  Thus
+rerunning a seed does not reproduce the exact DP noise.  The accountant assumes
+ideal Poisson and Gaussian randomness; the implementation uses PyTorch PRNGs
+and is not presented as a cryptographic deployment.
+
+The privacy accounting covers the released synthetic samples from DP generator
+training.  Downstream client FL updates remain Non-DP and this plan does not
+claim an end-to-end privacy guarantee for all FL communications.
 
 ## Release boundary
 

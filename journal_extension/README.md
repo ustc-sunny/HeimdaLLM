@@ -119,3 +119,21 @@ The fixed full condition defaults to epsilon 8.  Set
 `HEIMDALLM_DP_EPSILON` and a matching `HEIMDALLM_DP_RUN_ID` for the other
 locked values 1, 2, and 4.  Each run contains only the DP synthetic arm; it
 does not copy same-source private real controls into the result directory.
+
+## USTC GPU 1 continuation (2026-09-28)
+
+The continuation starts from GitHub commit `ff4af05`. Rental DP outputs were
+not uploaded before the instance was released, so new run IDs restart the
+four-condition grid. The AG News source files on the USTC host have the same
+SHA-256 values as the rental experiment.
+
+`setup_ustc_a40.sh` creates isolated Python 3.9 environments with PyTorch
+1.13.1+cu116. `run_ustc_agnews_dp_v1.sh` maps generation and all three MPI
+ranks to physical GPU 1. `run_ustc_agnews_dp_grid.sh` runs epsilons 8/4/2/1
+sequentially, archives each completed condition with SHA-256, and updates a
+compact report and full evaluation CSV using `summarize_agnews_dp.py`.
+
+The continuation corrects the earlier DP prototype's public-seed-derived
+sampling/noise RNG. DP sampling and noise now use fresh private entropy, while
+model initialization and generation retain the public run seed. Only synthetic
+generator release privacy is accounted; downstream FL updates remain Non-DP.
