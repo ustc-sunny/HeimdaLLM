@@ -25,14 +25,14 @@ for name in kdd ton; do
         "$BASE_PYTHON" -m venv "$env_dir"
     fi
     "${env_dir}/bin/python" -m pip install --index-url "$PIP_INDEX" \
-        'pip<26' 'setuptools<70' wheel
+        'pip<26' 'setuptools==68.2.2' 'wheel==0.41.3'
     "${env_dir}/bin/python" -m pip install --index-url "$PIP_INDEX" \
         "$TORCH_WHEEL" 'numpy==1.24.4' 'scipy==1.10.1' \
         'h5py==3.8.0' 'pandas==1.5.3' 'scikit-learn==1.2.2' \
         psutil tqdm regex
 done
 "${WORK_ROOT}/envs/kdd/bin/python" -m pip install --index-url "$PIP_INDEX" \
-    -r "${SCRIPT_DIR}/requirements-kdd-matpool.txt"
+    --no-build-isolation -r "${SCRIPT_DIR}/requirements-kdd-matpool.txt"
 "${WORK_ROOT}/envs/ton/bin/python" -m pip install --index-url "$PIP_INDEX" \
     -r "${SCRIPT_DIR}/requirements-ton-matpool.txt" 'modelscope==1.18.0'
 
