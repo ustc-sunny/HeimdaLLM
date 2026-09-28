@@ -137,3 +137,11 @@ The continuation corrects the earlier DP prototype's public-seed-derived
 sampling/noise RNG. DP sampling and noise now use fresh private entropy, while
 model initialization and generation retain the public run seed. Only synthetic
 generator release privacy is accounted; downstream FL updates remain Non-DP.
+
+On the local computer, `sync_ustc_agnews_results.py --publish --watch` uses an
+already authenticated SSH ControlMaster connection to verify and copy completed
+condition archives into `../local_backups/agnews_dp_v1_ustc_20260928/`. It pushes
+only `REPORT.md`, `summary.json`, and `curves.csv` to the `HeimdaLLM+` branch.
+The local computer must remain awake with the VPN connected. Interrupted syncs
+retry, and a later invocation can collect archives that finished while offline.
+No SSH password or private staging record is included in the published files.

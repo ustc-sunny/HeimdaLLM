@@ -13,4 +13,6 @@ gdown==5.2.0
 sentencepiece==0.2.0
 paho-mqtt==1.6.1
 grpcio==1.60.1
+# FedML's checked-in gRPC stubs use the pre-4.x descriptor API.
+protobuf==3.20.3
 nltk==3.8.1
