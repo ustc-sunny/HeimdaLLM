@@ -1,5 +1,10 @@
 {
   "aggregate": {
+    "isotropic_lr00001": {
+      "accuracy_mean": 0.26953125,
+      "accuracy_sample_sd": null,
+      "n": 1
+    },
     "isotropic_lr0001": {
       "accuracy_mean": 0.2890625,
       "accuracy_sample_sd": null,
@@ -21,12 +26,7 @@
       "n": 1
     }
   },
-  "missing": [
-    {
-      "arm": "isotropic_lr00001",
-      "seed": 57
-    }
-  ],
+  "missing": [],
   "privacy_scope": "All newly trained generators and FL updates are NON-DP.",
   "private_diagnostics_included": false,
   "protocol": {
@@ -137,10 +137,22 @@
       "final_macro_f1": 0.20312392470953428,
       "metrics_sha256": "5e109883c1c3ce7382674e42dfab2295178bb91cc9e2df6d1d2a2c13e2fe83ba",
       "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_matched_probes_v2_20260929_isotropic_lr00001_seed57.tar.gz",
+        "sha256": "4a761f7b3b33ebbc98fb12eda016fe806a30e24b1556dbc29f64b37363593394"
+      },
+      "arm": "isotropic_lr00001",
+      "final_accuracy": 0.26953125,
+      "final_loss": 1.3847383987158537,
+      "final_macro_f1": 0.21795834229081193,
+      "metrics_sha256": "5650e0021eff640381276898fe1616237a5cbc68a5f246e68bdba1d64a92b31d",
+      "seed": 57
     }
   ],
-  "runs_completed": 4,
+  "runs_completed": 5,
   "runs_expected": 5,
-  "status": "partial",
-  "updated_at": "2026-09-29T07:28:25.331914+00:00"
+  "status": "complete",
+  "updated_at": "2026-09-29T07:34:13.177485+00:00"
 }

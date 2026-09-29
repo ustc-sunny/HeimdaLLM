@@ -1,0 +1,13 @@
+{
+  "all_update_audits_passed": true,
+  "extra_objective_queries": 1500,
+  "interpretation": "exploratory calibration; no final utility claim",
+  "official_test_used": false,
+  "probe_summary_sha256": "4475cb6c446a57424bd75f8f2b8c1dd5fdd3f8723f991c8e5dcd018a19f5eeeb",
+  "rule": "max probe final dev accuracy, then min final dev loss, then smallest LR",
+  "selected_arm": "isotropic_lr0001",
+  "selected_at": "2026-09-29T07:34:18.270511+00:00",
+  "selected_learning_rate": 0.001,
+  "selection_split": "development_only",
+  "status": "complete"
+}
