@@ -39,6 +39,8 @@ def synchronize(args):
         summary = REMOTE + "/results/" + identifier + "/summary"
         existence = subprocess.run([*ssh, "test -f " + shlex.quote(summary + "/summary.json")],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if existence.returncode not in (0, 1):
+            raise subprocess.CalledProcessError(existence.returncode, ssh)
         if existence.returncode:
             continue
         with tempfile.TemporaryDirectory(prefix="incoming-", dir=backup) as temporary:

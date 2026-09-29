@@ -5,10 +5,12 @@ Existing v3 and DP v1 artifacts are immutable. No new DP grid is launched here.
 
 ## Stage 0: no-guidance update audit
 
-The historical direction is `u=beta*z/sqrt(d)` for `alpha=1`, with Gaussian z.
-Its covariance is `beta²/d I`. The historical estimator `(directional derivative)*u`
-therefore has expected scale `beta²/d` times the smoothed gradient. For the
-450,340-dimensional adapter at beta=1, this is an important scale confound.
+The historical direction has the form `u=beta*z/sqrt(d)` for `alpha=1`.
+For an independent Gaussian z, its covariance is `beta²/d I`, so the estimator
+`(directional derivative)*u` has expected scale `beta²/d` times the smoothed
+gradient. Historical-gradient candidate selection changes that distribution;
+the raw/corrected Gaussian pair isolates this scale issue experimentally. For the
+450,340-dimensional adapter at beta=1, this is an important potential confound.
 The historical hybrid estimator is deliberately preserved; no claim of an
 implementation bug or a successful corrected baseline is assumed from algebra.
 
