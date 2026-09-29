@@ -1,12 +1,13 @@
 # AG News matched Non-DP ablations
 
-Status: 1/5 runs completed.
+Status: 2/5 runs completed.
 
 All new generator training is Non-DP. Historical DP comparisons are descriptive.
 Official test untouched; only the fixed 512-record dev set is evaluated.
 
 | Arm | n | Final accuracy (%) | Sample SD (pp) |
 |---|---:|---:|---:|
+| isotropic_raw_lr001 | 1 | 27.7344 | — |
 | legacy_lr001 | 1 | 27.7344 | — |
 
 Generator arms use the historical guided estimator and learning rate 0.01.
