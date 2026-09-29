@@ -1,0 +1,92 @@
+{
+  "aggregate": {},
+  "missing": [
+    {
+      "arm": "legacy_lr001",
+      "seed": 57
+    },
+    {
+      "arm": "isotropic_raw_lr001",
+      "seed": 57
+    },
+    {
+      "arm": "isotropic_lr001",
+      "seed": 57
+    },
+    {
+      "arm": "isotropic_lr0001",
+      "seed": 57
+    },
+    {
+      "arm": "isotropic_lr00001",
+      "seed": 57
+    }
+  ],
+  "privacy_scope": "All newly trained generators and FL updates are NON-DP.",
+  "private_diagnostics_included": false,
+  "protocol": {
+    "baseline_selection": "max probe final dev accuracy, then min final dev loss, then smallest LR",
+    "cases": [
+      {
+        "arm": "legacy_lr001",
+        "seed": 57
+      },
+      {
+        "arm": "isotropic_raw_lr001",
+        "seed": 57
+      },
+      {
+        "arm": "isotropic_lr001",
+        "seed": 57
+      },
+      {
+        "arm": "isotropic_lr0001",
+        "seed": 57
+      },
+      {
+        "arm": "isotropic_lr00001",
+        "seed": 57
+      }
+    ],
+    "code_revision": "e6c973edd65394975ebec62bffd4ad5c167230cb",
+    "dev_records": 512,
+    "downstream_guided_estimator": "legacy",
+    "downstream_guided_learning_rate": 0.01,
+    "fixed_partition_sha256": "e16e8551a87ba702cc23b4d56d57b9762b77c4fea8bf341b96d5759be7996a6c",
+    "formal_no_guidance_estimator": "isotropic_dimension_over_beta_squared",
+    "generation_dtype": "float32",
+    "generation_filter": "public_only_no_private_match",
+    "generator_modes": {
+      "clipped": "same Poisson draws/dropout as poisson, per-record global clipping C=1",
+      "fixed_example": "same shuffled batches, record-mean objective",
+      "ordinary": "shuffled batches, token-mean objective",
+      "poisson": "Poisson sampling, record mean, expected batch denominator",
+      "public": "no LoRA or private generator access"
+    },
+    "gpu": 1,
+    "logical_clients": [
+      1,
+      21
+    ],
+    "new_dp_training": false,
+    "new_privacy_guarantee": "none",
+    "objective_queries_per_run": 300,
+    "official_test_used": false,
+    "phase": "probes",
+    "probe_extra_objective_queries": null,
+    "probe_summary_sha256": null,
+    "rounds": 5,
+    "schema_version": 1,
+    "seeds": [
+      57
+    ],
+    "selected_baseline_learning_rate": null,
+    "source_data_sha256": "1474dd264d535b50ad2a7b1cf714bf11e182c2fe5b07f5e982feb31a9b114616",
+    "source_partition_sha256": "fd6196bc2518457856365ec8f8207b1eb4b278d165a829320fc5b9fdd0a67f12"
+  },
+  "runs": [],
+  "runs_completed": 0,
+  "runs_expected": 5,
+  "status": "partial",
+  "updated_at": "2026-09-29T07:04:47.090760+00:00"
+}
