@@ -16,12 +16,21 @@ An opt-in pure-isotropic estimator multiplies the *outer estimator* by `d/beta²
 It does not change the finite-difference query radius, h=0.01, or query count.
 It is rejected for alpha<1; the hybrid covariance is not isotropic.
 
-On seed 57, run four five-round probes: historical alpha=1 at LR=.01, and the
+On seed 57, run five five-round probes: historical alpha=1 at LR=.01, pure
+Gaussian alpha=1 without scale correction at LR=.01, and the
 corrected alpha=1 estimator at LR=.01/.001/.0001. Log actual parameter updates
 locally. Select the corrected baseline LR by highest final dev accuracy, then
 lowest final dev loss, then smallest LR. Report all probes and their extra
-1,200 objective queries. Selection is exploratory development, not test evidence.
+1,500 objective queries. Selection is exploratory development, not test evidence.
 If any numerical/completion validation fails, stop and diagnose before formal runs.
+
+Both isotropic modes bypass historical-gradient candidate selection, which changes
+the direction distribution in the legacy path. The raw and corrected isotropic
+LR=.01 controls thus isolate the scale change under the same Gaussian sampler.
+The original four-probe deployment was stopped after its historical arm completed
+and during its first corrected arm, before formal training. Its completed legacy
+result and incomplete corrected logs are retained separately, not counted in the
+replacement's evidence. The replacement has a distinct v2 run ID.
 
 ## Stage 1: matched generator controls
 

@@ -27,6 +27,7 @@ SCRIPT = Path(__file__).resolve().parent
 REPO = SCRIPT.parent
 ARMS = ("public", "ordinary", "fixed_example", "poisson", "clipped", "no_guidance")
 PROBES = {"legacy_lr001": ("legacy", 0.01),
+          "isotropic_raw_lr001": ("isotropic_raw", 0.01),
           "isotropic_lr001": ("isotropic", 0.01),
           "isotropic_lr0001": ("isotropic", 0.001),
           "isotropic_lr00001": ("isotropic", 0.0001)}
@@ -207,7 +208,7 @@ def main():
             "clipped": "same Poisson draws/dropout as poisson, per-record global clipping C=1",
             "public": "no LoRA or private generator access"},
         "objective_queries_per_run": args.rounds * 60,
-        "probe_extra_objective_queries": 4 * 5 * 60 if args.phase == "formal" else None}
+        "probe_extra_objective_queries": 5 * 5 * 60 if args.phase == "formal" else None}
     if root.exists():
         if not args.resume or json.loads((root / "protocol.json").read_text()) != protocol:
             raise ValueError("existing result directory or protocol mismatch")

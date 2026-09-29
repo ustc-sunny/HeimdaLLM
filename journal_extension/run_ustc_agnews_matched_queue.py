@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work-root", type=Path,
                         default=Path("/home/zzkevin/heimdallm-journal-20260928"))
-    parser.add_argument("--probe-run-id", default="ustc_agnews_matched_probes_20260929")
+    parser.add_argument("--probe-run-id", default="ustc_agnews_matched_probes_v2_20260929")
     parser.add_argument("--formal-run-id", default="ustc_agnews_matched_formal_20260929")
     args = parser.parse_args()
     base = args.work_root
@@ -38,7 +38,7 @@ def main():
         time.sleep(30)
     summary_path = root / "summary/summary.json"
     summary = json.loads(summary_path.read_text())
-    if summary["status"] != "complete" or summary["runs_completed"] != 4:
+    if summary["status"] != "complete" or summary["runs_completed"] != len(PROBES):
         raise ValueError("probe summary is incomplete")
     private = base / "private_staging" / args.probe_run_id
     audit = {}
@@ -63,7 +63,7 @@ def main():
     selection = {"status": "complete", "selected_arm": selected["arm"],
         "selected_learning_rate": lr, "rule": summary["protocol"]["baseline_selection"],
         "probe_summary_sha256": common.sha256_file(summary_path), "all_update_audits_passed": True,
-        "extra_objective_queries": 1200, "selected_at": now(),
+        "extra_objective_queries": 1500, "selected_at": now(),
         "selection_split": "development_only", "official_test_used": False,
         "interpretation": "exploratory calibration; no final utility claim"}
     common.atomic_write_json(root / "summary/baseline_selection.json", selection)

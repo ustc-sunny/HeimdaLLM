@@ -134,7 +134,7 @@ def add_federated_args(parser):
                         help='magnitude of perturbations')
     parser.add_argument('--pool_size', type=int, default=1,
                         help='pool size of perturbations')
-    parser.add_argument('--zo_estimator', choices=['legacy', 'isotropic'], default='legacy',
+    parser.add_argument('--zo_estimator', choices=['legacy', 'isotropic_raw', 'isotropic'], default='legacy',
                         help='Opt-in dimension correction for alpha=1; preserves query radius')
     parser.add_argument('--fd_step', type=float, default=0.01,
                         help='Central finite-difference query step')

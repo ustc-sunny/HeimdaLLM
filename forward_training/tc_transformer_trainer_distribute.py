@@ -392,9 +392,12 @@ class ForwardTextClassificationTrainer:
         self._component_norms_logged = False
         logging.info(
             "[ZGR] parameterization=normalized_z_h; trainable dimension n=%d; "
-            "beta=%.8g; estimator=central_fd_times_z_h; outer_n_multiplier=none",
+            "beta=%.8g; estimator=central_fd_times_z_h; mode=%s; outer_multiplier=%.8g",
             self.trainable_params_number,
             float(args.beta),
+            getattr(args, "zo_estimator", "legacy"),
+            zo_estimator_multiplier(getattr(args, "zo_estimator", "legacy"),
+                                    float(args.alpha), float(args.beta), self.trainable_params_number),
         )
 
         # training result
@@ -405,7 +408,10 @@ class ForwardTextClassificationTrainer:
         finite_difference_abs_sum = 0.0
         finite_difference_abs_max = 0.0
 
-        if self.args.perturbation_sampling:
+        # History-based candidate selection changes the direction covariance.
+        # The isotropic audit modes must use fresh independent Gaussian draws.
+        v_buffer = {}
+        if self.args.perturbation_sampling and getattr(args, "zo_estimator", "legacy") == "legacy":
             v_num = len(self.train_dl)
             v_buffer = {}
             index = 0

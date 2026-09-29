@@ -34,7 +34,8 @@ def synchronize(args):
     backup.mkdir(parents=True, exist_ok=True)
     published, counts, complete = [], {}, False
     for phase in ("probes", "formal"):
-        identifier = "ustc_agnews_matched_%s_20260929" % phase
+        identifier = "ustc_agnews_matched_probes_v2_20260929" if phase == "probes" \
+            else "ustc_agnews_matched_formal_20260929"
         summary = REMOTE + "/results/" + identifier + "/summary"
         existence = subprocess.run([*ssh, "test -f " + shlex.quote(summary + "/summary.json")],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -46,7 +47,7 @@ def synchronize(args):
                 run([*scp, "zzkevin@172.16.50.129:" + summary + "/" + name, str(incoming / name)],
                     stdout=subprocess.DEVNULL)
             document = json.loads((incoming / "summary.json").read_text())
-            expected = 4 if phase == "probes" else 18
+            expected = 5 if phase == "probes" else 18
             rounds = 5 if phase == "probes" else 50
             if document["runs_expected"] != expected or document["protocol"]["rounds"] != rounds:
                 raise ValueError("unexpected experiment protocol")
@@ -117,7 +118,7 @@ def synchronize(args):
         run(["git", "add", "--", *published], cwd=REPO)
         changed = subprocess.run(["git", "diff", "--cached", "--quiet", "--", *published], cwd=REPO)
         if changed.returncode == 1:
-            run(["git", "commit", "--only", "-m", "Save matched Non-DP progress (probes %d/4, formal %d/18)" %
+            run(["git", "commit", "--only", "-m", "Save matched Non-DP progress (probes %d/5, formal %d/18)" %
                  (counts.get("probes", 0), counts.get("formal", 0)), "--", *published], cwd=REPO)
         elif changed.returncode:
             raise RuntimeError("cannot inspect staged changes")

@@ -96,6 +96,8 @@ def zo_estimator_multiplier(mode, alpha, beta, dimension):
     """
     if mode == "legacy":
         return 1.0
+    if mode == "isotropic_raw" and float(alpha) == 1.0:
+        return 1.0
     if mode != "isotropic" or float(alpha) != 1.0:
         raise ValueError("isotropic correction requires alpha=1 and no cloud guidance")
     if dimension <= 0 or not math.isfinite(beta) or beta <= 0:
