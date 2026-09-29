@@ -1,78 +1,379 @@
 {
-  "aggregate": {},
+  "aggregate": {
+    "1": {
+      "best_accuracy": {
+        "mean": 0.412109375,
+        "n": 3,
+        "sample_sd": 0.05066844441825331
+      },
+      "final_accuracy": {
+        "mean": 0.40234375,
+        "n": 3,
+        "sample_sd": 0.061732346208121514
+      },
+      "final_loss": {
+        "mean": 1.3538876436650753,
+        "n": 3,
+        "sample_sd": 0.015773487478843405
+      },
+      "final_macro_f1": {
+        "mean": 0.3641963107685261,
+        "n": 3,
+        "sample_sd": 0.1184889066222134
+      },
+      "mean_trajectory_accuracy": {
+        "mean": 0.36328125,
+        "n": 3,
+        "sample_sd": 0.04213344699828192
+      }
+    },
+    "2": {
+      "best_accuracy": {
+        "mean": 0.4361979166666667,
+        "n": 3,
+        "sample_sd": 0.05651701670367371
+      },
+      "final_accuracy": {
+        "mean": 0.4309895833333333,
+        "n": 3,
+        "sample_sd": 0.06071465329184511
+      },
+      "final_loss": {
+        "mean": 1.350420945013563,
+        "n": 3,
+        "sample_sd": 0.024201591855758257
+      },
+      "final_macro_f1": {
+        "mean": 0.3903126329629038,
+        "n": 3,
+        "sample_sd": 0.12966031411100057
+      },
+      "mean_trajectory_accuracy": {
+        "mean": 0.38149739583333336,
+        "n": 3,
+        "sample_sd": 0.038209921057495676
+      }
+    },
+    "4": {
+      "best_accuracy": {
+        "mean": 0.4049479166666667,
+        "n": 3,
+        "sample_sd": 0.06566490292318612
+      },
+      "final_accuracy": {
+        "mean": 0.3971354166666667,
+        "n": 3,
+        "sample_sd": 0.07053819391032215
+      },
+      "final_loss": {
+        "mean": 1.354690705736478,
+        "n": 3,
+        "sample_sd": 0.02040067546707761
+      },
+      "final_macro_f1": {
+        "mean": 0.3597341248577849,
+        "n": 3,
+        "sample_sd": 0.12674214904193898
+      },
+      "mean_trajectory_accuracy": {
+        "mean": 0.36355468750000003,
+        "n": 3,
+        "sample_sd": 0.06506542727639737
+      }
+    },
+    "8": {
+      "best_accuracy": {
+        "mean": 0.4036458333333333,
+        "n": 3,
+        "sample_sd": 0.05808152846273683
+      },
+      "final_accuracy": {
+        "mean": 0.3984375,
+        "n": 3,
+        "sample_sd": 0.061173670950647754
+      },
+      "final_loss": {
+        "mean": 1.358300347502033,
+        "n": 3,
+        "sample_sd": 0.018392725682135687
+      },
+      "final_macro_f1": {
+        "mean": 0.3526557496591757,
+        "n": 3,
+        "sample_sd": 0.12340576662007652
+      },
+      "mean_trajectory_accuracy": {
+        "mean": 0.3615234375,
+        "n": 3,
+        "sample_sd": 0.05736071094109601
+      }
+    }
+  },
   "comparison_limitations": [
     "Three seeds do not establish statistical significance.",
     "DP generation uses float32 and private randomness; v3 comparisons are descriptive.",
     "Shared GPU timing is excluded from method performance claims."
   ],
   "hardware": "USTC shared physical GPU 1, NVIDIA A40",
-  "missing": [
+  "missing": [],
+  "runs": [
     {
-      "epsilon": "8",
+      "best_accuracy": 0.470703125,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -34.1796875,
+      "difference_vs_v3_no_cloud_pp": 19.140625,
+      "difference_vs_v3_public_syn_pp": 4.296875,
+      "epsilon_achieved": 7.9993157580292875,
+      "epsilon_target": 8.0,
+      "final_accuracy": 0.46875,
+      "final_loss": 1.34678890183568,
+      "final_macro_f1": 0.48485833790653,
+      "generator_manifest_sha256": "01410e2459287e5484a438a23a4c700e13af4a7bc4e2e20281189fcd5600f3be",
+      "mean_trajectory_accuracy": 0.4205078125,
+      "metrics_sha256": "a166b79edd859e3db167e8c5d595ba8c34607e8800a465155ac46c2eb1255a13",
+      "noise_multipliers": [
+        0.6866455078125
+      ],
+      "pre_update_accuracy": 0.27734375,
       "run_id": "ustc_agnews_dp_eps8_20260928",
       "seed": 57
     },
     {
-      "epsilon": "8",
+      "best_accuracy": 0.37109375,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -40.234375,
+      "difference_vs_v3_no_cloud_pp": -0.78125,
+      "difference_vs_v3_public_syn_pp": -0.78125,
+      "epsilon_achieved": 7.9993157580292875,
+      "epsilon_target": 8.0,
+      "final_accuracy": 0.357421875,
+      "final_loss": 1.3795126974582672,
+      "final_macro_f1": 0.24050187709938747,
+      "generator_manifest_sha256": "867e587d8539a9246600e9bc4b4edad5ee1f98b0820382c5762115d44bb298e5",
+      "mean_trajectory_accuracy": 0.358125,
+      "metrics_sha256": "2828477fceef2ff23a0684e6a0a3749af9a817435a814827c3f17b1fa01a909d",
+      "noise_multipliers": [
+        0.6866455078125
+      ],
+      "pre_update_accuracy": 0.365234375,
       "run_id": "ustc_agnews_dp_eps8_20260928",
       "seed": 58
     },
     {
-      "epsilon": "8",
+      "best_accuracy": 0.369140625,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -34.5703125,
+      "difference_vs_v3_no_cloud_pp": 15.0390625,
+      "difference_vs_v3_public_syn_pp": -1.171875,
+      "epsilon_achieved": 7.9993157580292875,
+      "epsilon_target": 8.0,
+      "final_accuracy": 0.369140625,
+      "final_loss": 1.3485994432121515,
+      "final_macro_f1": 0.3326070339716095,
+      "generator_manifest_sha256": "dece08c1a5341a8c1e54a9bb400a13f7b75295e3d185bdbc3c97f5e5aea33ef5",
+      "mean_trajectory_accuracy": 0.3059375,
+      "metrics_sha256": "4f634bebddc8f47c16fc109de8d9f1adaf1253e13a7efd9cd5dd505b4b24c768",
+      "noise_multipliers": [
+        0.6866455078125
+      ],
+      "pre_update_accuracy": 0.21875,
       "run_id": "ustc_agnews_dp_eps8_20260928",
       "seed": 59
     },
     {
-      "epsilon": "4",
+      "best_accuracy": 0.48046875,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -33.203125,
+      "difference_vs_v3_no_cloud_pp": 20.1171875,
+      "difference_vs_v3_public_syn_pp": 5.2734375,
+      "epsilon_achieved": 3.9935493850743664,
+      "epsilon_target": 4.0,
+      "final_accuracy": 0.478515625,
+      "final_loss": 1.342416487634182,
+      "final_macro_f1": 0.4904874768390887,
+      "generator_manifest_sha256": "bf35e7cefe01d65537b22be2e7bd05aa93b1c41775be25590afb0b8ae67b726e",
+      "mean_trajectory_accuracy": 0.43125,
+      "metrics_sha256": "8f76552f1cdfc972e9c3fd944634e506eea9413294d7efc8e604a145c1a96115",
+      "noise_multipliers": [
+        0.909423828125
+      ],
+      "pre_update_accuracy": 0.27734375,
       "run_id": "ustc_agnews_dp_eps4_20260928",
       "seed": 57
     },
     {
-      "epsilon": "4",
+      "best_accuracy": 0.373046875,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -40.625,
+      "difference_vs_v3_no_cloud_pp": -1.171875,
+      "difference_vs_v3_public_syn_pp": -1.171875,
+      "epsilon_achieved": 3.9935493850743664,
+      "epsilon_target": 4.0,
+      "final_accuracy": 0.353515625,
+      "final_loss": 1.378240317106247,
+      "final_macro_f1": 0.23742553292353397,
+      "generator_manifest_sha256": "f6a3e51c6fce311b790a3c5a49f916b93d637ca66910881c61afa390edccc0b7",
+      "mean_trajectory_accuracy": 0.3579296875,
+      "metrics_sha256": "93b1970fcb6531e3cca617ef4a1731ab8a83f038c1ea44b2c08c150b2d9703da",
+      "noise_multipliers": [
+        0.909423828125
+      ],
+      "pre_update_accuracy": 0.365234375,
       "run_id": "ustc_agnews_dp_eps4_20260928",
       "seed": 58
     },
     {
-      "epsilon": "4",
+      "best_accuracy": 0.361328125,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -35.546875,
+      "difference_vs_v3_no_cloud_pp": 14.0625,
+      "difference_vs_v3_public_syn_pp": -2.1484375,
+      "epsilon_achieved": 3.9935493850743664,
+      "epsilon_target": 4.0,
+      "final_accuracy": 0.359375,
+      "final_loss": 1.3434153124690056,
+      "final_macro_f1": 0.3512893648107319,
+      "generator_manifest_sha256": "0aeea097bae8b88389c5a390eaaabde5b7b80f7cf0462de7efc04a5ea0feb959",
+      "mean_trajectory_accuracy": 0.301484375,
+      "metrics_sha256": "55bc0b899834111f634d56178c8051951e82a3d36e142bca9c72aaf1759d02e7",
+      "noise_multipliers": [
+        0.909423828125
+      ],
+      "pre_update_accuracy": 0.21875,
       "run_id": "ustc_agnews_dp_eps4_20260928",
       "seed": 59
     },
     {
-      "epsilon": "2",
+      "best_accuracy": 0.47265625,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -33.7890625,
+      "difference_vs_v3_no_cloud_pp": 19.53125,
+      "difference_vs_v3_public_syn_pp": 4.6875,
+      "epsilon_achieved": 1.9917902059328323,
+      "epsilon_target": 2.0,
+      "final_accuracy": 0.47265625,
+      "final_loss": 1.335536751896143,
+      "final_macro_f1": 0.4906467237825547,
+      "generator_manifest_sha256": "f441ad356cbee2fde94d2c0a063951a79eea744153c143c0d29bb4aed16a5e00",
+      "mean_trajectory_accuracy": 0.42546875,
+      "metrics_sha256": "97a94a8cc025e067f3f0cf421e1c34f9c7454ddebc327f61740ded5b0c298f24",
+      "noise_multipliers": [
+        1.259765625
+      ],
+      "pre_update_accuracy": 0.27734375,
       "run_id": "ustc_agnews_dp_eps2_20260928",
       "seed": 57
     },
     {
-      "epsilon": "2",
+      "best_accuracy": 0.37109375,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -39.84375,
+      "difference_vs_v3_no_cloud_pp": -0.390625,
+      "difference_vs_v3_public_syn_pp": -0.390625,
+      "epsilon_achieved": 1.9917902059328323,
+      "epsilon_target": 2.0,
+      "final_accuracy": 0.361328125,
+      "final_loss": 1.3783462699502707,
+      "final_macro_f1": 0.2439083820662768,
+      "generator_manifest_sha256": "12a08990778e9b6fbcda5cac9c2452f9b26f7d40d24f6aebaec7c2201321b0c9",
+      "mean_trajectory_accuracy": 0.36265625,
+      "metrics_sha256": "dc1f74ad9d0162a92a297b9e1177b788bbe56c243305c1872598fd7547edd85e",
+      "noise_multipliers": [
+        1.259765625
+      ],
+      "pre_update_accuracy": 0.365234375,
       "run_id": "ustc_agnews_dp_eps2_20260928",
       "seed": 58
     },
     {
-      "epsilon": "2",
+      "best_accuracy": 0.46484375,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -25.5859375,
+      "difference_vs_v3_no_cloud_pp": 24.0234375,
+      "difference_vs_v3_public_syn_pp": 7.8125,
+      "epsilon_achieved": 1.9917902059328323,
+      "epsilon_target": 2.0,
+      "final_accuracy": 0.458984375,
+      "final_loss": 1.337379813194275,
+      "final_macro_f1": 0.4363827930398799,
+      "generator_manifest_sha256": "5210fcc067ef38587efece3a47a9bf0dcdd0770c737a254b26ab1e5f4b01183f",
+      "mean_trajectory_accuracy": 0.3563671875,
+      "metrics_sha256": "56e39ab37ea179bea8d3525616b7660c2632e245b5367f5c99edbb09a00ad08e",
+      "noise_multipliers": [
+        1.259765625
+      ],
+      "pre_update_accuracy": 0.21875,
       "run_id": "ustc_agnews_dp_eps2_20260928",
       "seed": 59
     },
     {
-      "epsilon": "1",
+      "best_accuracy": 0.46875,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -34.375,
+      "difference_vs_v3_no_cloud_pp": 18.9453125,
+      "difference_vs_v3_public_syn_pp": 4.1015625,
+      "epsilon_achieved": 0.9929987893953421,
+      "epsilon_target": 1.0,
+      "final_accuracy": 0.466796875,
+      "final_loss": 1.346072267740965,
+      "final_macro_f1": 0.4784740658088266,
+      "generator_manifest_sha256": "3d9dde0116e15c8df65c98e9d45e20adcc9abe2b23b2bee2be5c9f9572ffd411",
+      "mean_trajectory_accuracy": 0.4090625,
+      "metrics_sha256": "984fd8377ed0b51a1d76a17fd31976565e24bfc0c80eb159e43eeba87f28060b",
+      "noise_multipliers": [
+        1.953125
+      ],
+      "pre_update_accuracy": 0.27734375,
       "run_id": "ustc_agnews_dp_eps1_20260928",
       "seed": 57
     },
     {
-      "epsilon": "1",
+      "best_accuracy": 0.37109375,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -41.6015625,
+      "difference_vs_v3_no_cloud_pp": -2.1484375,
+      "difference_vs_v3_public_syn_pp": -2.1484375,
+      "epsilon_achieved": 0.9929987893953421,
+      "epsilon_target": 1.0,
+      "final_accuracy": 0.34375,
+      "final_loss": 1.3720428869128227,
+      "final_macro_f1": 0.24190325441279073,
+      "generator_manifest_sha256": "2a9a0bbbea0bd3ec67bee8f1954dba8153581a2d5266ce85e3a360af19081cb7",
+      "mean_trajectory_accuracy": 0.3546484375,
+      "metrics_sha256": "b50891b2104c1de8a6925e524652abda53c710f616dff821358bad7762f7e4a8",
+      "noise_multipliers": [
+        1.953125
+      ],
+      "pre_update_accuracy": 0.365234375,
       "run_id": "ustc_agnews_dp_eps1_20260928",
       "seed": 58
     },
     {
-      "epsilon": "1",
+      "best_accuracy": 0.396484375,
+      "delta": 1e-05,
+      "difference_vs_v3_client_syn_pp": -31.8359375,
+      "difference_vs_v3_no_cloud_pp": 17.7734375,
+      "difference_vs_v3_public_syn_pp": 1.5625,
+      "epsilon_achieved": 0.9929987893953421,
+      "epsilon_target": 1.0,
+      "final_accuracy": 0.396484375,
+      "final_loss": 1.3435477763414383,
+      "final_macro_f1": 0.3722116120839609,
+      "generator_manifest_sha256": "0c8758953f3bd55470c5859035704b68de4cc2db8280a5100809511393a1dadc",
+      "mean_trajectory_accuracy": 0.3261328125,
+      "metrics_sha256": "1223872616a5e87edf05ee00c1742b68ef2b95710f87f71028651c6818f8fdff",
+      "noise_multipliers": [
+        1.953125
+      ],
+      "pre_update_accuracy": 0.21875,
       "run_id": "ustc_agnews_dp_eps1_20260928",
       "seed": 59
     }
   ],
-  "runs": [],
-  "runs_completed": 0,
+  "runs_completed": 12,
   "runs_expected": 12,
   "schema_version": 1,
   "scope": "Record-level DP generator output; downstream FL updates are Non-DP.",
-  "status": "partial",
-  "updated_at_utc": "2026-09-28T09:18:10.435455+00:00"
+  "status": "complete",
+  "updated_at_utc": "2026-09-28T23:08:35.548479+00:00"
 }
