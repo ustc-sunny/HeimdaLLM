@@ -485,7 +485,8 @@ class ForwardTextClassificationTrainer:
                         
                     # 计算方向导数
                     loss, jvp, loss_delta = calculate_jvp(
-                        f, self.params, final_perturbation
+                        f, self.params, final_perturbation,
+                        h=float(getattr(args, "fd_step", 0.01)),
                     )
                     loss_delta_abs = loss_delta.detach().float().abs().item()
                     finite_difference_steps += 1
@@ -497,10 +498,16 @@ class ForwardTextClassificationTrainer:
                         nonzero_finite_difference_steps += 1
                     
                     # 计算梯度
+                    estimator_scale = zo_estimator_multiplier(
+                        getattr(args, "zo_estimator", "legacy"), float(args.alpha),
+                        float(args.beta), self.trainable_params_number,
+                    )
                     for j, fg in enumerate(self.grad):
-                        fg.add_(jvp * final_perturbation[j])
+                        fg.add_(estimator_scale * jvp * final_perturbation[j])
                         if self.args.var_control and j == self.layer_id_for_check:
-                            self.grad_for_var_check_list.append(jvp * final_perturbation[j])
+                            self.grad_for_var_check_list.append(
+                                estimator_scale * jvp * final_perturbation[j]
+                            )
 
 
                     current_loss = loss.item()

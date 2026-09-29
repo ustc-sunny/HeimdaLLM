@@ -134,6 +134,12 @@ def add_federated_args(parser):
                         help='magnitude of perturbations')
     parser.add_argument('--pool_size', type=int, default=1,
                         help='pool size of perturbations')
+    parser.add_argument('--zo_estimator', choices=['legacy', 'isotropic'], default='legacy',
+                        help='Opt-in dimension correction for alpha=1; preserves query radius')
+    parser.add_argument('--fd_step', type=float, default=0.01,
+                        help='Central finite-difference query step')
+    parser.add_argument('--audit_updates', action='store_true',
+                        help='Log actual trainable-parameter updates for local diagnosis')
 
     # # PipeTransformer related
     parser.add_argument("--run_id", type=int, default=0)

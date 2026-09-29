@@ -45,6 +45,8 @@ cifar-10-batches-py
 !journal_extension/results/agnews_dp_v1_ustc/summary.json
 !journal_extension/results/agnews_dp_v1_ustc/curves.csv
 !journal_extension/results/agnews_dp_v1_ustc/*.png
+!journal_extension/results/agnews_matched_ablation_ustc/*.json
+!journal_extension/results/agnews_matched_ablation_ustc/*.csv
 
 data/cifar10/*-python
 data/cifar100/*-python

@@ -86,6 +86,22 @@ def calculate_jvp(func, params, v, h=0.01):
     jvp = loss_delta / (2 * h)
     return avg_loss, jvp, loss_delta
 
+
+def zo_estimator_multiplier(mode, alpha, beta, dimension):
+    """Opt-in covariance correction for the pure isotropic direction only.
+
+    A direction beta*z/sqrt(d), z~N(0,I), has covariance beta**2/d*I.
+    Multiplying its directional-derivative estimator by d/beta**2 restores
+    the gradient's scale. The historical hybrid estimator stays unchanged.
+    """
+    if mode == "legacy":
+        return 1.0
+    if mode != "isotropic" or float(alpha) != 1.0:
+        raise ValueError("isotropic correction requires alpha=1 and no cloud guidance")
+    if dimension <= 0 or not math.isfinite(beta) or beta <= 0:
+        raise ValueError("invalid isotropic estimator dimension or beta")
+    return float(dimension) / (beta * beta)
+
 def calculate_var(fwdgrad_list):
     n = len(fwdgrad_list)
     # 计算前一半tensor的平均值

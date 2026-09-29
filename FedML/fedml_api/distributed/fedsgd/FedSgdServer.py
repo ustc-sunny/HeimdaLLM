@@ -137,8 +137,28 @@ class FedSGDServer(object):
                 averaged_grads[j] = averaged_grads[j] / float(max(1.0, training_num))
 
             with torch.no_grad():
+                audit = bool(getattr(self.args, "audit_updates", False))
+                delta_squared = 0.0
+                planned_squared = 0.0
+                changed = 0
+                coordinates = 0
                 for p, grad in zip(self.trainer.server_trainer.model.parameters(), averaged_grads):
+                    before = p.detach().clone() if audit and p.requires_grad else None
                     p.data -= learning_rate * grad.to(p.device)
+                    if before is not None:
+                        delta = p.detach() - before
+                        delta_squared += delta.float().pow(2).sum().item()
+                        planned_squared += (learning_rate * grad.float()).pow(2).sum().item()
+                        changed += torch.count_nonzero(delta).item()
+                        coordinates += p.numel()
+                if audit:
+                    logging.info(
+                        "[UPDATE_AUDIT] round=%d estimator=%s lr=%.8g "
+                        "actual_l2=%.8g planned_l2=%.8g changed=%d/%d",
+                        current_round, getattr(self.args, "zo_estimator", "legacy"),
+                        learning_rate, math.sqrt(delta_squared), math.sqrt(planned_squared),
+                        changed, coordinates,
+                    )
 
 
         # #######  老版本：next   ###########################
