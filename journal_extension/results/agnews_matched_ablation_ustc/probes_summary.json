@@ -1,5 +1,10 @@
 {
   "aggregate": {
+    "isotropic_lr001": {
+      "accuracy_mean": 0.2421875,
+      "accuracy_sample_sd": null,
+      "n": 1
+    },
     "isotropic_raw_lr001": {
       "accuracy_mean": 0.27734375,
       "accuracy_sample_sd": null,
@@ -12,10 +17,6 @@
     }
   },
   "missing": [
-    {
-      "arm": "isotropic_lr001",
-      "seed": 57
-    },
     {
       "arm": "isotropic_lr0001",
       "seed": 57
@@ -111,10 +112,22 @@
       "final_macro_f1": 0.20556814567732382,
       "metrics_sha256": "302fff775ac3c76f3e000dadf1851c4cf8981cf7861fb0ad0325bb3624c0658e",
       "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_matched_probes_v2_20260929_isotropic_lr001_seed57.tar.gz",
+        "sha256": "36dddc10136faf8058f2f9574966b2326571947b730966fb6ccbb1f2a596b108"
+      },
+      "arm": "isotropic_lr001",
+      "final_accuracy": 0.2421875,
+      "final_loss": 1.5985634662210941,
+      "final_macro_f1": 0.20161431420054876,
+      "metrics_sha256": "8f56a61c3d07405968af57a7080ea3915812819bfefdeec149f8f8821f7e7b1e",
+      "seed": 57
     }
   ],
-  "runs_completed": 2,
+  "runs_completed": 3,
   "runs_expected": 5,
   "status": "partial",
-  "updated_at": "2026-09-29T07:17:04.408032+00:00"
+  "updated_at": "2026-09-29T07:22:48.562252+00:00"
 }
