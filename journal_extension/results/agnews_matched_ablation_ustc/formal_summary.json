@@ -11,9 +11,9 @@
       "n": 3
     },
     "no_guidance": {
-      "accuracy_mean": 0.34375,
-      "accuracy_sample_sd": null,
-      "n": 1
+      "accuracy_mean": 0.3564453125,
+      "accuracy_sample_sd": 0.017953883116064683,
+      "n": 2
     },
     "ordinary": {
       "accuracy_mean": 0.716796875,
@@ -32,10 +32,6 @@
     }
   },
   "missing": [
-    {
-      "arm": "no_guidance",
-      "seed": 58
-    },
     {
       "arm": "no_guidance",
       "seed": 59
@@ -349,10 +345,22 @@
       "final_macro_f1": 0.23829993212588862,
       "metrics_sha256": "b7f2e9c1e382aeba03b8602b4cbd7fb1668eeec0bf5c8e5a19f8a7d9b6129d23",
       "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_matched_formal_20260929_no_guidance_seed58.tar.gz",
+        "sha256": "e39cd2a93dbf39b707124ff6b7c918d1afb998b27e6096cc97dd7308d385cd04"
+      },
+      "arm": "no_guidance",
+      "final_accuracy": 0.369140625,
+      "final_loss": 1.3580484837293625,
+      "final_macro_f1": 0.25862492326580727,
+      "metrics_sha256": "0bf4e23ff036dfbc4b8ff273fc9a32512061b8031820a7cc6b7877224371ca10",
+      "seed": 58
     }
   ],
-  "runs_completed": 16,
+  "runs_completed": 17,
   "runs_expected": 18,
   "status": "partial",
-  "updated_at": "2026-09-30T03:52:40.437620+00:00"
+  "updated_at": "2026-09-30T04:48:12.211892+00:00"
 }
