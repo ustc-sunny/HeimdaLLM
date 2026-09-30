@@ -45,6 +45,9 @@ def synchronize(args):
             raise ValueError("unexpected bridge protocol")
         if len(document["runs"]) != document["runs_completed"]:
             raise ValueError("summary run count mismatch")
+        if document["runs_completed"] == 0:
+            print("Noise bridge is running; no complete archive yet", flush=True)
+            return False
         with (incoming / "curves.csv").open(newline="") as handle:
             curves = list(csv.DictReader(handle))
         if len(curves) != document["runs_completed"] * 51:
@@ -107,7 +110,7 @@ def synchronize(args):
                 output = target / name
                 shutil.copy2(incoming / name, output)
                 paths.append(str(output.relative_to(REPO)))
-            run(["git", "add", "--", *paths], cwd=REPO)
+            run(["git", "add", "-f", "--", *paths], cwd=REPO)
             changed = subprocess.run(["git", "diff", "--cached", "--quiet", "--", *paths], cwd=REPO)
             if changed.returncode == 1:
                 run(["git", "commit", "--only", "-m",
