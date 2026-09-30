@@ -11,9 +11,9 @@
       "n": 3
     },
     "no_guidance": {
-      "accuracy_mean": 0.3564453125,
-      "accuracy_sample_sd": 0.017953883116064683,
-      "n": 2
+      "accuracy_mean": 0.3307291666666667,
+      "accuracy_sample_sd": 0.04631556357248024,
+      "n": 3
     },
     "ordinary": {
       "accuracy_mean": 0.716796875,
@@ -31,12 +31,7 @@
       "n": 3
     }
   },
-  "missing": [
-    {
-      "arm": "no_guidance",
-      "seed": 59
-    }
-  ],
+  "missing": [],
   "privacy_scope": "All newly trained generators and FL updates are NON-DP.",
   "private_diagnostics_included": false,
   "protocol": {
@@ -357,10 +352,22 @@
       "final_macro_f1": 0.25862492326580727,
       "metrics_sha256": "0bf4e23ff036dfbc4b8ff273fc9a32512061b8031820a7cc6b7877224371ca10",
       "seed": 58
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_matched_formal_20260929_no_guidance_seed59.tar.gz",
+        "sha256": "b3d5c1ec374fd429a4c7b100da490670d1ce031a84642b07e35c8548b5b78d18"
+      },
+      "arm": "no_guidance",
+      "final_accuracy": 0.279296875,
+      "final_loss": 1.3545420225709677,
+      "final_macro_f1": 0.15871771991262182,
+      "metrics_sha256": "6966e6aa66412c4d056298efe2d0e3c019ed8ffd434d9a7afcf765d4fdf6e084",
+      "seed": 59
     }
   ],
-  "runs_completed": 17,
+  "runs_completed": 18,
   "runs_expected": 18,
-  "status": "partial",
-  "updated_at": "2026-09-30T04:48:12.211892+00:00"
+  "status": "complete",
+  "updated_at": "2026-09-30T05:42:05.361339+00:00"
 }

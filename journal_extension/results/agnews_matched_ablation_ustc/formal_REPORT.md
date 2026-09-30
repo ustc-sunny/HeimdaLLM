@@ -1,6 +1,6 @@
 # AG News matched Non-DP ablations
 
-Status: 17/18 runs completed.
+Status: 18/18 runs completed.
 
 All new generator training is Non-DP. Historical DP comparisons are descriptive.
 Official test untouched; only the fixed 512-record dev set is evaluated.
@@ -9,7 +9,7 @@ Official test untouched; only the fixed 512-record dev set is evaluated.
 |---|---:|---:|---:|
 | clipped | 3 | 72.6562 | 0.0000 |
 | fixed_example | 3 | 74.7396 | 1.4659 |
-| no_guidance | 2 | 35.6445 | 1.7954 |
+| no_guidance | 3 | 33.0729 | 4.6316 |
 | ordinary | 3 | 71.6797 | 5.9594 |
 | poisson | 3 | 70.5078 | 1.6688 |
 | public | 3 | 41.6667 | 6.6128 |
