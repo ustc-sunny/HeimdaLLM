@@ -145,3 +145,23 @@ only `REPORT.md`, `summary.json`, and `curves.csv` to the `HeimdaLLM+` branch.
 The local computer must remain awake with the VPN connected. Interrupted syncs
 retry, and a later invocation can collect archives that finished while offline.
 No SSH password or private staging record is included in the published files.
+
+## AG News DP noise bridge (2026-09-30)
+
+`AGNEWS_DP_NOISE_BRIDGE_PLAN.md` fixes a six-run, three-seed comparison of
+Poisson-sampled, per-example-clipped generator training with zero Gaussian
+noise (explicitly **Non-DP**) and the identical code path with epsilon <=8,
+delta=1e-5 Gaussian noise. Both use the same 50-round two-client downstream
+protocol. On the USTC host, the seed-57 pilot command is:
+
+```bash
+python journal_extension/run_ustc_agnews_matched.py \
+  --phase formal --arms zero_noise,dp_eps8 \
+  --run-id ustc_agnews_noise_bridge_20260930 --pilot-only
+```
+
+After validation, repeat with `--resume` in place of `--pilot-only` to run
+the remaining seeds. The runner
+archives each result with SHA-256; `sync_ustc_noise_bridge.py --watch --publish`
+verifies the raw archives locally and pushes only summary/curves/report to the
+`HeimdaLLM+` branch. Raw unnoised synthetic text is never published to GitHub.

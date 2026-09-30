@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate label-conditioned synthetic text with record-level DP LoRA.
+"""Generate label-conditioned synthetic text with DP LoRA or a zero-noise control.
 
 Every selected client gets a fresh base model and LoRA adapter.  Training uses
 independent Poisson sampling, per-example global L2 clipping, Gaussian noise,
@@ -7,9 +7,11 @@ and Opacus' RDP accountant.  Client partitions are required to be disjoint by
 the private staging exporter, so the released collection uses parallel
 composition across clients.
 
-The release contains synthetic text and public accounting metadata only.  It
+The DP release contains synthetic text and public accounting metadata only.  It
 does not publish private examples, per-example losses, gradient norms, clipping
 rates, private label histograms, or private-dependent exact-match diagnostics.
+The opt-in zero-noise control follows the same clipped training loop but is
+explicitly Non-DP and must remain an internal research artifact.
 """
 
 import argparse
@@ -59,6 +61,8 @@ def public_source_provenance(source):
 
 
 def calibrate_noise(get_noise_multiplier, args, sample_rate, total_steps):
+    if args.diagnostic_zero_noise:
+        return 0.0
     if args.target_epsilon is not None:
         noise_multiplier = get_noise_multiplier(
             target_epsilon=args.target_epsilon,
@@ -98,7 +102,7 @@ def dp_train_adapter(
     noise_multiplier = calibrate_noise(
         get_noise_multiplier, args, sample_rate, total_steps
     )
-    accountant = RDPAccountant()
+    accountant = None if args.diagnostic_zero_noise else RDPAccountant()
     optimizer = torch.optim.AdamW(
         trainable, lr=args.learning_rate, weight_decay=args.weight_decay
     )
@@ -108,8 +112,9 @@ def dp_train_adapter(
     # Fresh entropy stays private; only initialization/generation remain seeded.
     sampling_generator.seed()
     noise_device = str(device) if device.type == "cuda" else "cpu"
-    noise_generator = torch.Generator(device=noise_device)
-    noise_generator.seed()
+    noise_generator = None if args.diagnostic_zero_noise else torch.Generator(device=noise_device)
+    if noise_generator is not None:
+        noise_generator.seed()
     accumulators = [
         torch.zeros_like(parameter, dtype=torch.float32, device=device)
         for parameter in trainable
@@ -147,23 +152,27 @@ def dp_train_adapter(
 
         noise_std = noise_multiplier * args.max_grad_norm
         for accumulator, parameter in zip(accumulators, trainable):
-            noise = torch.randn(
-                accumulator.shape,
-                generator=noise_generator,
-                device=device,
-                dtype=torch.float32,
-            )
-            noisy_average = (accumulator + noise * noise_std) / expected_batch_size
+            if args.diagnostic_zero_noise:
+                noisy_average = accumulator / expected_batch_size
+            else:
+                noise = torch.randn(
+                    accumulator.shape,
+                    generator=noise_generator,
+                    device=device,
+                    dtype=torch.float32,
+                )
+                noisy_average = (accumulator + noise * noise_std) / expected_batch_size
             parameter.grad = noisy_average.to(dtype=parameter.dtype)
         optimizer.step()
         optimizer.zero_grad(set_to_none=True)
         for accumulator in accumulators:
             accumulator.zero_()
-        accountant.step(
-            noise_multiplier=noise_multiplier, sample_rate=sample_rate
-        )
+        if accountant is not None:
+            accountant.step(
+                noise_multiplier=noise_multiplier, sample_rate=sample_rate
+            )
 
-    epsilon, best_alpha = accountant.get_privacy_spent(delta=args.delta)
+    epsilon, best_alpha = (None, None) if accountant is None else accountant.get_privacy_spent(delta=args.delta)
     if args.target_epsilon is not None:
         allowed = args.target_epsilon + max(args.epsilon_tolerance, 1e-6)
         if epsilon > allowed:
@@ -183,10 +192,10 @@ def dp_train_adapter(
         "expected_batch_size": expected_batch_size,
         "max_grad_norm": args.max_grad_norm,
         "noise_multiplier": noise_multiplier,
-        "accountant": "opacus_rdp",
-        "epsilon": float(epsilon),
-        "delta": args.delta,
-        "best_alpha": float(best_alpha),
+        "accountant": "none_non_dp_control" if accountant is None else "opacus_rdp",
+        "epsilon": None if epsilon is None else float(epsilon),
+        "delta": None if accountant is None else args.delta,
+        "best_alpha": None if best_alpha is None else float(best_alpha),
     }
 
 
@@ -218,7 +227,7 @@ def validate_args(args):
         raise ValueError("--samples-per-label must be positive")
     if args.target_per_label is not None and args.target_per_label <= 0:
         raise ValueError("--target-per-label must be positive")
-    if args.target_epsilon is None and args.noise_multiplier is None:
+    if not args.diagnostic_zero_noise and args.target_epsilon is None and args.noise_multiplier is None:
         raise ValueError("one privacy target is required")
     if args.target_epsilon is not None and args.target_epsilon <= 0.0:
         raise ValueError("--target-epsilon must be positive")
@@ -262,6 +271,8 @@ def build_parser():
     privacy = parser.add_mutually_exclusive_group(required=True)
     privacy.add_argument("--target-epsilon", type=float)
     privacy.add_argument("--noise-multiplier", type=float)
+    privacy.add_argument("--diagnostic-zero-noise", action="store_true",
+                         help="Non-DP clipped control; never release as DP")
     parser.add_argument("--delta", type=float, default=1e-5)
     parser.add_argument("--max-grad-norm", type=float, default=1.0)
     parser.add_argument("--epsilon-tolerance", type=float, default=0.01)
@@ -328,10 +339,12 @@ def main():
         payload = {
             "schema_version": 1,
             "status": "dry_run",
-            "experiment": "per_client_label_conditioned_record_dp_synthesis",
+            "experiment": ("per_client_label_conditioned_zero_noise_diagnostic" if args.diagnostic_zero_noise
+                           else "per_client_label_conditioned_record_dp_synthesis"),
             "privacy": {
-                "mechanism": "poisson_sampled_gaussian_dp_sgd",
-                "accountant": "opacus_rdp",
+                "mechanism": ("unnoised_poisson_clipped_sgd_non_dp" if args.diagnostic_zero_noise
+                              else "poisson_sampled_gaussian_dp_sgd"),
+                "accountant": "none_non_dp_control" if args.diagnostic_zero_noise else "opacus_rdp",
                 "target_epsilon": args.target_epsilon,
                 "noise_multiplier": args.noise_multiplier,
                 "delta": args.delta,
@@ -476,43 +489,58 @@ def main():
                 raise AssertionError("aggregate target was not met for label %r" % label)
     common.atomic_write_jsonl(synthetic_path, aggregate_rows)
 
-    epsilons = [
-        result["accounting"]["epsilon"] for result in client_results.values()
-    ]
+    epsilons = [result["accounting"]["epsilon"] for result in client_results.values()
+                if not args.diagnostic_zero_noise]
     noise_multipliers = sorted(set(
         result["accounting"]["noise_multiplier"]
         for result in client_results.values()
     ))
+    privacy = ({
+        "mechanism": "unnoised_poisson_clipped_sgd_non_dp",
+        "guarantee": "none",
+        "per_example_global_l2_clipping": True,
+        "max_grad_norm": args.max_grad_norm,
+        "sampling": "independent_poisson",
+        "noise_added_to_clipped_gradient_sum": False,
+        "noise_multipliers": [0.0],
+        "accountant": "none_non_dp_control",
+        "target_epsilon": None,
+        "achieved_epsilon_max": None,
+        "achieved_epsilon_min": None,
+        "delta": None,
+    } if args.diagnostic_zero_noise else {
+        "mechanism": "poisson_sampled_gaussian_dp_sgd",
+        "unit": "one training record within one selected client",
+        "adjacency": "add_or_remove_one_record",
+        "per_example_global_l2_clipping": True,
+        "max_grad_norm": args.max_grad_norm,
+        "sampling": "independent_poisson",
+        "noise_added_to_clipped_gradient_sum": True,
+        "noise_multipliers": noise_multipliers,
+        "accountant": "opacus_rdp",
+        "target_epsilon": args.target_epsilon,
+        "achieved_epsilon_max": max(epsilons),
+        "achieved_epsilon_min": min(epsilons),
+        "delta": args.delta,
+        "composition_across_clients": "parallel_disjoint_partitions",
+        "release_is_postprocessing_of_dp_adapters": True,
+        "secure_rng": False,
+        "dp_randomness": "fresh_private_entropy_not_derived_from_public_seed",
+        "secure_rng_scope": "research measurement; not cryptographic deployment",
+    })
     manifest = {
         "schema_version": 1,
         "status": "complete",
-        "experiment": "per_client_label_conditioned_record_dp_synthesis",
-        "privacy": {
-            "mechanism": "poisson_sampled_gaussian_dp_sgd",
-            "unit": "one training record within one selected client",
-            "adjacency": "add_or_remove_one_record",
-            "per_example_global_l2_clipping": True,
-            "max_grad_norm": args.max_grad_norm,
-            "sampling": "independent_poisson",
-            "noise_added_to_clipped_gradient_sum": True,
-            "noise_multipliers": noise_multipliers,
-            "accountant": "opacus_rdp",
-            "target_epsilon": args.target_epsilon,
-            "achieved_epsilon_max": max(epsilons),
-            "achieved_epsilon_min": min(epsilons),
-            "delta": args.delta,
-            "composition_across_clients": "parallel_disjoint_partitions",
-            "release_is_postprocessing_of_dp_adapters": True,
-            "secure_rng": False,
-            "dp_randomness": "fresh_private_entropy_not_derived_from_public_seed",
-            "secure_rng_scope": "research measurement; not cryptographic deployment",
-        },
-        "is_record_level_dp": True,
+        "experiment": ("per_client_label_conditioned_zero_noise_diagnostic" if args.diagnostic_zero_noise
+                       else "per_client_label_conditioned_record_dp_synthesis"),
+        "privacy": privacy,
+        "is_record_level_dp": not args.diagnostic_zero_noise,
         "client_records_used_for_model_training": True,
         "fresh_base_and_lora_per_client": True,
         "adapter_reuse_between_clients": False,
         "source_split": "train_only",
-        "private_exact_match_filter": "disabled_for_dp_release",
+        "private_exact_match_filter": ("disabled_for_internal_control" if args.diagnostic_zero_noise
+                                       else "disabled_for_dp_release"),
         "private_diagnostics_released": False,
         "label_conditioning": {
             "prompt_template": args.prompt_template,
@@ -571,8 +599,8 @@ def main():
         "manifest": str(manifest_path),
         "records": len(aggregate_rows),
         "label_counts": aggregate_counts,
-        "epsilon": max(epsilons),
-        "delta": args.delta,
+        "epsilon": None if args.diagnostic_zero_noise else max(epsilons),
+        "delta": None if args.diagnostic_zero_noise else args.delta,
     }, ensure_ascii=True, sort_keys=True))
 
 
