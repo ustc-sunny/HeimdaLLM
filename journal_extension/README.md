@@ -161,7 +161,9 @@ python journal_extension/run_ustc_agnews_matched.py \
 ```
 
 After validation, repeat with `--resume` in place of `--pilot-only` to run
-the remaining seeds. The runner
+the remaining seeds. `run_ustc_agnews_noise_bridge_queue.sh` performs the
+pilot checks and continuation automatically; `--follow-existing-pilot` attaches
+to a pilot that is already running. The runner
 archives each result with SHA-256; `sync_ustc_noise_bridge.py --watch --publish`
 verifies the raw archives locally and pushes only summary/curves/report to the
 `HeimdaLLM+` branch. Raw unnoised synthetic text is never published to GitHub.
