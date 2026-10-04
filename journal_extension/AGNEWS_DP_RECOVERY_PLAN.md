@@ -60,6 +60,13 @@ generator training dynamics and aggregate downstream gradient alignment
 locally before altering the method. Do not launch a new epsilon sweep merely
 to repeat the known 1/2/4/8 failure.
 
+For the downstream pilot, use physical A40 GPU2 only while it has at least
+14,000 MiB free and at most 20% utilization immediately before each run.
+All three MPI ranks map to GPU2; record the snapshot per run. Do not switch
+devices between paired arms. At planning time GPU2 had about 18.7 GiB free
+while GPUs 0/1 were saturated. Shared usage may change; a failed guard stops
+the queue without discarding completed runs.
+
 Only after a corrected DP condition beats the public-generator baseline on
 all three fixed seeds should the broader privacy-accuracy curve, client count,
 and dataset extension be run. Keep the official test set untouched until the
