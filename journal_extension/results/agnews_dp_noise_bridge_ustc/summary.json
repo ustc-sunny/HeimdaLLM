@@ -1,0 +1,163 @@
+{
+  "aggregate": {
+    "dp_eps8": {
+      "accuracy_mean": 0.3756510416666667,
+      "accuracy_sample_sd": 0.0476151419354858,
+      "n": 3
+    },
+    "zero_noise": {
+      "accuracy_mean": 0.7291666666666666,
+      "accuracy_sample_sd": 0.008807128423482215,
+      "n": 3
+    }
+  },
+  "missing": [],
+  "privacy_scope": "Only dp_eps8 synthetic generation is record-level DP; zero_noise and all downstream FL updates are Non-DP.",
+  "private_diagnostics_included": false,
+  "protocol": {
+    "baseline_selection": null,
+    "cases": [
+      {
+        "arm": "zero_noise",
+        "seed": 57
+      },
+      {
+        "arm": "dp_eps8",
+        "seed": 57
+      },
+      {
+        "arm": "zero_noise",
+        "seed": 58
+      },
+      {
+        "arm": "dp_eps8",
+        "seed": 58
+      },
+      {
+        "arm": "zero_noise",
+        "seed": 59
+      },
+      {
+        "arm": "dp_eps8",
+        "seed": 59
+      }
+    ],
+    "code_revision": "a66bf3db3e0173b970fd2e893dcf162047457977",
+    "dev_records": 512,
+    "downstream_guided_estimator": "legacy",
+    "downstream_guided_learning_rate": 0.01,
+    "fixed_partition_sha256": "e16e8551a87ba702cc23b4d56d57b9762b77c4fea8bf341b96d5759be7996a6c",
+    "formal_no_guidance_estimator": "isotropic_dimension_over_beta_squared",
+    "generation_dtype": "float32",
+    "generation_filter": "public_only_no_private_match",
+    "generator_modes": {
+      "clipped": "same Poisson draws/dropout as poisson, per-record global clipping C=1",
+      "dp_eps8": "same DP training loop with Gaussian noise; record-level epsilon<=8, delta=1e-5",
+      "fixed_example": "same shuffled batches, record-mean objective",
+      "ordinary": "shuffled batches, token-mean objective",
+      "poisson": "Poisson sampling, record mean, expected batch denominator",
+      "public": "no LoRA or private generator access",
+      "zero_noise": "same DP training loop and Poisson/clipping, Gaussian noise omitted; Non-DP"
+    },
+    "gpu": 1,
+    "logical_clients": [
+      1,
+      21
+    ],
+    "new_dp_training": true,
+    "new_privacy_guarantee": "record_level_synthetic_release_only_for_dp_eps8",
+    "objective_queries_per_run": 3000,
+    "official_test_used": false,
+    "phase": "formal",
+    "probe_extra_objective_queries": null,
+    "probe_summary_sha256": null,
+    "rounds": 50,
+    "schema_version": 1,
+    "seeds": [
+      57,
+      58,
+      59
+    ],
+    "selected_baseline_learning_rate": null,
+    "source_data_sha256": "1474dd264d535b50ad2a7b1cf714bf11e182c2fe5b07f5e982feb31a9b114616",
+    "source_partition_sha256": "fd6196bc2518457856365ec8f8207b1eb4b278d165a829320fc5b9fdd0a67f12"
+  },
+  "runs": [
+    {
+      "archive": {
+        "name": "ustc_agnews_noise_bridge_20260930_zero_noise_seed57.tar.gz",
+        "sha256": "90bfc04665f03646582f851c116ffcf995415491c976715b54ec305027615013"
+      },
+      "arm": "zero_noise",
+      "final_accuracy": 0.728515625,
+      "final_loss": 1.1714001651853323,
+      "final_macro_f1": 0.7200883882616915,
+      "metrics_sha256": "b3622251ce55a53363cbdbc6a3705f31ad1d4186d8ce9e5c8efe17a0195b1e90",
+      "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_noise_bridge_20260930_dp_eps8_seed57.tar.gz",
+        "sha256": "7af1163d8d7554145d59193229d8cf1ac3822fc580f59926e8de2ea02b2495d7"
+      },
+      "arm": "dp_eps8",
+      "final_accuracy": 0.4296875,
+      "final_loss": 1.3485378418117762,
+      "final_macro_f1": 0.4442426655454189,
+      "metrics_sha256": "83a36966eb3e7bfd9f0a773990aadb8ea4540e584fbe9184552f72fbac1e97f4",
+      "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_noise_bridge_20260930_zero_noise_seed58.tar.gz",
+        "sha256": "8558a8e884b03a48a1cd4a7d36ac7aa32148d1a67bb5c708fdfdefaaf3e6bbd3"
+      },
+      "arm": "zero_noise",
+      "final_accuracy": 0.720703125,
+      "final_loss": 1.2559174336493015,
+      "final_macro_f1": 0.7002823065361743,
+      "metrics_sha256": "e1c9cfbb443bf541c2e5f7ea85aa28e954586327be643da94c6d3f956654eab1",
+      "seed": 58
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_noise_bridge_20260930_dp_eps8_seed58.tar.gz",
+        "sha256": "33aa8117d0c457a8ad50e9d389e834f7b139f69927914e5cac1633c0c9b3e52a"
+      },
+      "arm": "dp_eps8",
+      "final_accuracy": 0.33984375,
+      "final_loss": 1.3718531094491482,
+      "final_macro_f1": 0.24675129793681122,
+      "metrics_sha256": "081cd55df418c3a2a4625d3ed1062efd9892e854a437026eabab18a67fabf79d",
+      "seed": 58
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_noise_bridge_20260930_zero_noise_seed59.tar.gz",
+        "sha256": "0761ab1a057a314e3bd8e584c8eefd09bf72f562b60cea8ad59bde9096991a9a"
+      },
+      "arm": "zero_noise",
+      "final_accuracy": 0.73828125,
+      "final_loss": 1.2192436438053846,
+      "final_macro_f1": 0.7275819191756007,
+      "metrics_sha256": "02b5176b254e1ae537a19ae15ae46aad9e7ff818ec923237e4eda376fec39c0b",
+      "seed": 59
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_noise_bridge_20260930_dp_eps8_seed59.tar.gz",
+        "sha256": "50d802888285fe00d04ff7aa0a2041c3a2a359d630ca6015a67add9bf76ce4ce"
+      },
+      "arm": "dp_eps8",
+      "final_accuracy": 0.357421875,
+      "final_loss": 1.354051036760211,
+      "final_macro_f1": 0.3264233371907232,
+      "metrics_sha256": "ca86eb3fe524e3c0c9795a78132714011d97be4a113613a8c66450b0a3fe2ac3",
+      "seed": 59
+    }
+  ],
+  "runs_completed": 6,
+  "runs_expected": 6,
+  "status": "complete",
+  "updated_at": "2026-09-30T13:24:24.953905+00:00"
+}
