@@ -1,0 +1,208 @@
+{
+  "aggregate": {
+    "filtered_dp": {
+      "accuracy_mean": 0.5462239583333334,
+      "accuracy_sample_sd": 0.07570301750078366,
+      "n": 3
+    },
+    "filtered_public": {
+      "accuracy_mean": 0.5546875,
+      "accuracy_sample_sd": 0.04699691177935924,
+      "n": 3
+    },
+    "random_dp": {
+      "accuracy_mean": 0.326171875,
+      "accuracy_sample_sd": 0.06941154548405024,
+      "n": 3
+    }
+  },
+  "missing": [],
+  "privacy_scope": "Filtered/random DP records are postprocessing of the existing epsilon<=8, delta=1e-5 synthetic release; all downstream FL updates are Non-DP.",
+  "private_text_included": false,
+  "protocol": {
+    "arms": [
+      "filtered_dp",
+      "random_dp",
+      "filtered_public"
+    ],
+    "cases": [
+      {
+        "arm": "filtered_dp",
+        "seed": 57
+      },
+      {
+        "arm": "random_dp",
+        "seed": 57
+      },
+      {
+        "arm": "filtered_public",
+        "seed": 57
+      },
+      {
+        "arm": "filtered_dp",
+        "seed": 58
+      },
+      {
+        "arm": "random_dp",
+        "seed": 58
+      },
+      {
+        "arm": "filtered_public",
+        "seed": 58
+      },
+      {
+        "arm": "filtered_dp",
+        "seed": 59
+      },
+      {
+        "arm": "random_dp",
+        "seed": 59
+      },
+      {
+        "arm": "filtered_public",
+        "seed": 59
+      }
+    ],
+    "dev_records": 512,
+    "downstream_guided_estimator": "legacy",
+    "downstream_guided_learning_rate": 0.01,
+    "gpu_preflight_max_utilization_percent": 20,
+    "gpu_preflight_min_free_mib": 14000,
+    "logical_clients": [
+      1,
+      21
+    ],
+    "objective_queries_per_run": 3000,
+    "official_test_used": false,
+    "phase": "formal_pilot_then_continuation",
+    "privacy_scope": "record_level_dp_synthetic_release_only_for_filtered_dp_and_random_dp",
+    "rounds": 50,
+    "run_id": "ustc_agnews_dp_filter_20261004",
+    "runner_sha256": "07abea1befcf566db98d2040ed37455774b141afeec7f5508f69024b56ed58e5",
+    "schema_version": 1,
+    "seeds": [
+      57,
+      58,
+      59
+    ],
+    "selected_gpu": 2,
+    "selection_code_revision": "64ccf96",
+    "selection_records_per_arm": 64,
+    "selection_summary_sha256": "63fba202195fe5424ce516c4a74e3941c2a8ba38bcd4007f18d7188937ed420c",
+    "source_bridge_summary_sha256": "ecc048851affce158b0179139ad27ef662a8dc2df2a48b413da98fe11d060be3"
+  },
+  "runs": [
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_filtered_dp_seed57.tar.gz",
+        "sha256": "d900280d1852a6dff6033f363cb02c7411de21e32768903bf4db6b9eb7842959"
+      },
+      "arm": "filtered_dp",
+      "final_accuracy": 0.60546875,
+      "final_loss": 1.323843065649271,
+      "final_macro_f1": 0.6065059520524002,
+      "metrics_sha256": "0866dca60bd070166a1ac84be2699a05cd922499cf40678de7cb967e9d24dda6",
+      "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_random_dp_seed57.tar.gz",
+        "sha256": "ef229cae6fd5e8b43c6f72833bec6451ba6130c8aeb3b5ea06c82819541cd46f"
+      },
+      "arm": "random_dp",
+      "final_accuracy": 0.369140625,
+      "final_loss": 1.359338890761137,
+      "final_macro_f1": 0.37839674928384603,
+      "metrics_sha256": "bda8d8a85ee9c01894cf5ca2b2d409bee52d701c81f7356b4607f1be8b00ab56",
+      "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_filtered_public_seed57.tar.gz",
+        "sha256": "a9fa48d94b676de369d334515293ece2ad0c8c3f916efe7fd59a7de92cb3c1e4"
+      },
+      "arm": "filtered_public",
+      "final_accuracy": 0.599609375,
+      "final_loss": 1.3113980703055859,
+      "final_macro_f1": 0.5954080226965451,
+      "metrics_sha256": "040f519741d875f3d8d808a8b9495e9dd3b049785cc0d928d598c662669d1167",
+      "seed": 57
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_filtered_dp_seed58.tar.gz",
+        "sha256": "ec422d9445b23234caefb878a2dee5c86c3cb2665b90679372529078942cbf93"
+      },
+      "arm": "filtered_dp",
+      "final_accuracy": 0.572265625,
+      "final_loss": 1.3271290846168995,
+      "final_macro_f1": 0.5524818967484378,
+      "metrics_sha256": "91c482e11bfbe0937e42010cd4d75f48af410cafeeafcf2888e853b3e6dea0bc",
+      "seed": 58
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_random_dp_seed58.tar.gz",
+        "sha256": "4c89d236e352c809fc68be2cefca7ab887d6d11704e3a2bccd9f78ff6a4bbca5"
+      },
+      "arm": "random_dp",
+      "final_accuracy": 0.36328125,
+      "final_loss": 1.3767901007086039,
+      "final_macro_f1": 0.24644660194174756,
+      "metrics_sha256": "aa3784f1a6dae59de4f63257afcf2340aa38e25d71af33d9be96b968079f279a",
+      "seed": 58
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_filtered_public_seed58.tar.gz",
+        "sha256": "b676cd8e378d80d76153db64ca60bb3f316d2be5e2a93937d5fea198989b96e6"
+      },
+      "arm": "filtered_public",
+      "final_accuracy": 0.55859375,
+      "final_loss": 1.3305073603987694,
+      "final_macro_f1": 0.5284166335507725,
+      "metrics_sha256": "7e3e19db9512e37a8c1c5f22ab96958cbddd0b2bc4a2ea01abc10abc87c08118",
+      "seed": 58
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_filtered_dp_seed59.tar.gz",
+        "sha256": "b8c3722cada609f15b414cc9a71ad4ce6ed9e6fc7de772e269054a3cd233a0ac"
+      },
+      "arm": "filtered_dp",
+      "final_accuracy": 0.4609375,
+      "final_loss": 1.3321821559220552,
+      "final_macro_f1": 0.41380772223563816,
+      "metrics_sha256": "71959f45d9c310f8b898d6226efedb3279c73a3e56243d60c2b5f80fb09e17e3",
+      "seed": 59
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_random_dp_seed59.tar.gz",
+        "sha256": "a194a57239da434ca8f090ff4fb7307f2bcf40a5c87eb312b0aeb5832447de02"
+      },
+      "arm": "random_dp",
+      "final_accuracy": 0.24609375,
+      "final_loss": 1.3741500340402126,
+      "final_macro_f1": 0.252659377220463,
+      "metrics_sha256": "4337a83a5835ced2c73c4da17a7c2cdffdb3c8b9673d8bb68802440facfd49bc",
+      "seed": 59
+    },
+    {
+      "archive": {
+        "name": "ustc_agnews_dp_filter_20261004_filtered_public_seed59.tar.gz",
+        "sha256": "8670b0e04382677f256725f418324ccbb688677d53457d4b68a7391ca4781353"
+      },
+      "arm": "filtered_public",
+      "final_accuracy": 0.505859375,
+      "final_loss": 1.326443426311016,
+      "final_macro_f1": 0.47735549188745735,
+      "metrics_sha256": "d6f525a35ca419ac5738415884c1b934e76f721c0bf47b48c5e3b0e02b7c4c76",
+      "seed": 59
+    }
+  ],
+  "runs_completed": 9,
+  "runs_expected": 9,
+  "status": "complete",
+  "updated_at": "2026-10-04T16:23:13.459689+00:00"
+}
