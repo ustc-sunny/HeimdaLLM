@@ -32,7 +32,7 @@ KDD reproduction or an end-to-end FL privacy result.
 If DP texts lose class agreement or converge toward the public generator,
 test a single public-only class-consistency filter as postprocessing of the
 already private `dp_eps8` generator. The initial audit found DP label
-agreement 60.94%, public 62.24%, and zero-noise 74.48%; normalized DP/public
+agreement 60.94% and public 62.24%; normalized DP/public
 exact-text overlap is 65/69/72 out of 128 for seeds 57/58/59. These numbers
 motivated the following filter protocol before any filtered FL outcome exists.
 
