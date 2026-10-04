@@ -77,12 +77,12 @@ def load_dev(data_file, partition_file):
     return rows
 
 
-def classify(texts, tokenizer, model, torch, device, batch_size):
+def classify(texts, tokenizer, model, torch, device, batch_size, max_length):
     predictions, assigned_probabilities, entropies = [], [], []
     for offset in range(0, len(texts), batch_size):
         batch = texts[offset:offset + batch_size]
         inputs = tokenizer(batch, padding=True, truncation=True,
-                           max_length=128, return_tensors="pt")
+                           max_length=max_length, return_tensors="pt")
         inputs = {key: value.to(device) for key, value in inputs.items()}
         with torch.inference_mode():
             probabilities = model(**inputs).logits.softmax(dim=-1).cpu().tolist()
@@ -117,11 +117,12 @@ def main():
     parser.add_argument("--partition-file", type=Path)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--batch-size", type=int, default=16)
+    parser.add_argument("--classifier-max-length", type=int, default=128)
     parser.add_argument("--static-only", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    if args.batch_size < 1:
-        parser.error("batch-size must be positive")
+    if args.batch_size < 1 or args.classifier_max_length < 8:
+        parser.error("batch-size must be positive and classifier-max-length at least 8")
     documents = {
         "bridge": json.loads(args.bridge_summary.read_text()),
         "public": json.loads(args.public_summary.read_text()),
@@ -154,17 +155,25 @@ def main():
             raise ValueError("classifier must have four output classes")
         dev = load_dev(args.data_file, args.partition_file)
         dev_pred, _, _ = classify([text for text, _ in dev], tokenizer, model, torch,
-                                  args.device, args.batch_size)
+                                  args.device, args.batch_size, args.classifier_max_length)
         dev_labels = [label for _, label in dev]
         dev_accuracy = sum(a == b for a, b in zip(dev_labels, dev_pred)) / len(dev)
         result["classifier"] = {"model": MODEL, "revision": REVISION,
                                 "device": args.device, "dev_accuracy": dev_accuracy,
+                                "max_length": args.classifier_max_length,
                                 "dev_records": len(dev),
                                 "valid_for_synthetic_interpretation": dev_accuracy >= 0.85}
         for case in cases.values():
             rows = case["rows"]
+            lengths = [len(ids) for ids in tokenizer(
+                [r["text"] for r in rows], add_special_tokens=True,
+                truncation=False)["input_ids"]]
+            case["static"]["mean_classifier_tokens"] = statistics.mean(lengths)
+            case["static"]["fraction_exceeding_classifier_max"] = sum(
+                length > args.classifier_max_length for length in lengths) / len(lengths)
             pred, probs, entropy = classify([r["text"] for r in rows], tokenizer,
-                                             model, torch, args.device, args.batch_size)
+                                             model, torch, args.device, args.batch_size,
+                                             args.classifier_max_length)
             case["classifier"] = agreement_metrics(rows, pred, probs, entropy)
 
     for arm in ARMS:
@@ -181,6 +190,10 @@ def main():
             for key in ("mean_words", "distinct_2", "duplicates", "prompt_echo_count")
         }
         if not args.static_only:
+            result["aggregate"][arm]["mean_classifier_tokens"] = statistics.mean(
+                r["static"]["mean_classifier_tokens"] for r in runs)
+            result["aggregate"][arm]["fraction_exceeding_classifier_max"] = statistics.mean(
+                r["static"]["fraction_exceeding_classifier_max"] for r in runs)
             result["aggregate"][arm]["label_agreement"] = statistics.mean(
                 r["classifier"]["label_agreement"] for r in runs)
             result["aggregate"][arm]["mean_requested_label_probability"] = statistics.mean(
