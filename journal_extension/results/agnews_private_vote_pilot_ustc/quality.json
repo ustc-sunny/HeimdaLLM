@@ -1,0 +1,43 @@
+{
+  "class_balance": {
+    "1": 16,
+    "2": 16,
+    "3": 16,
+    "4": 16
+  },
+  "classifier_revision": "52ee64de95f38323f136c6f6b05e1af7c433417e",
+  "confusion_requested_by_predicted": [
+    [
+      15,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      16,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      10,
+      6
+    ],
+    [
+      0,
+      0,
+      0,
+      16
+    ]
+  ],
+  "fraction_exceeding_64_tokens": 0.0,
+  "independent_classifier": "textattack/distilbert-base-uncased-ag-news",
+  "label_agreement": 0.890625,
+  "max_length": 64,
+  "max_tokens": 64,
+  "min_tokens": 29,
+  "records": 64,
+  "scope": "aggregate_proxy_only_no_private_text"
+}

@@ -1,0 +1,24 @@
+{
+  "candidates_per_label": 32,
+  "dev_records": 512,
+  "fl": "KDD FedFwd DistilBERT adapter, same historical guided configuration",
+  "generator": "Qwen2.5-3B-Instruct public pretrained, no fine-tuning",
+  "generator_sha256": "2ef6097e3fd87fb1f452acf6600f76c17f4918968f1843aa0b85766491f462ca",
+  "gpu": 2,
+  "guidance_records": 64,
+  "official_test_used": false,
+  "rounds": 50,
+  "run_id": "ustc_agnews_private_vote_pilot_20261009",
+  "runner_sha256": "58c723f51f599a0603849b967f97ff0ad8c03e40fa0e5e93351c2a86d0e5dbab",
+  "schema_version": 1,
+  "seed": 57,
+  "selected_per_client_label": 8,
+  "selection": "one-step private embedding votes without noise; Non-DP",
+  "source_clients": [
+    1,
+    21
+  ],
+  "source_data_sha256": "1474dd264d535b50ad2a7b1cf714bf11e182c2fe5b07f5e982feb31a9b114616",
+  "source_partition_sha256": "fd6196bc2518457856365ec8f8207b1eb4b278d165a829320fc5b9fdd0a67f12",
+  "source_records_per_client": 120
+}
