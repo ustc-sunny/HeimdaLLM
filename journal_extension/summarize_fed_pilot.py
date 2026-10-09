@@ -215,7 +215,7 @@ def main():
             ),
         }[args.condition],
         "evaluation_semantics": (
-            "Rank 1 retains the real SST-2 data and fixed pilot partition; rank 0 "
+            "Rank 1 retains the task's real data and fixed pilot partition; rank 0 "
             "alone switches to the arm-specific cloud H5. Evaluation mode is %s."
             " Logical round -1 is evaluated before any client update when "
             "pre_update_evaluation is true."
