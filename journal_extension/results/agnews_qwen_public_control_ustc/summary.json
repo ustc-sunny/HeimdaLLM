@@ -1,0 +1,62 @@
+{
+  "official_test_used": false,
+  "privacy": "Non-DP",
+  "private_text_included": false,
+  "protocol": {
+    "candidate_records": 128,
+    "candidate_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+    "dev_records": 512,
+    "gpu": 2,
+    "guidance_records": 64,
+    "official_test_used": false,
+    "privacy": "Non-DP",
+    "reference_fixed_partition_sha256": "e16e8551a87ba702cc23b4d56d57b9762b77c4fea8bf341b96d5759be7996a6c",
+    "reference_private_vote_metrics_sha256": "a3d853168a091f6fe42ae51a63c1f76afc675f93184d7f5371132f4f29d14ceb",
+    "reference_real_metrics_sha256": "ba0cd28d35eceba9740da4dd6d2a89595b0f6a7908519f15f6c439b67923d785",
+    "reference_run": "ustc_agnews_private_vote_pilot_20261009",
+    "rounds": 50,
+    "run_id": "ustc_agnews_qwen_public_control_20261013",
+    "runner_sha256": "06cbbcfb89dd55ec3db527433b01d51d8d2b6278257ad9e377f72882b149368a",
+    "schema_version": 1,
+    "seed": 57,
+    "selection": "public_sha256_index_order_v1_no_private_records",
+    "source_clients": [
+      1,
+      21
+    ]
+  },
+  "runs": [
+    {
+      "arm": "private_vote_synthetic",
+      "final_accuracy": 0.75,
+      "final_macro_f1": 0.7454456293689129,
+      "late_mean_accuracy": 0.748046875,
+      "metrics_sha256": "a3d853168a091f6fe42ae51a63c1f76afc675f93184d7f5371132f4f29d14ceb",
+      "reference_run": "ustc_agnews_private_vote_pilot_20261009",
+      "seed": 57
+    },
+    {
+      "arm": "public_random_selection",
+      "final_accuracy": 0.703125,
+      "final_macro_f1": 0.6871500876217895,
+      "late_mean_accuracy": 0.7015625,
+      "metrics_sha256": "d800a27cd3e083d5acf95197cd3d05c5360a9913f4ce92620fd8eb567b76354e",
+      "reference_run": "ustc_agnews_qwen_public_control_20261013",
+      "seed": 57
+    },
+    {
+      "arm": "same_source_real",
+      "final_accuracy": 0.720703125,
+      "final_macro_f1": 0.7064248872653226,
+      "late_mean_accuracy": 0.7158203125,
+      "metrics_sha256": "ba0cd28d35eceba9740da4dd6d2a89595b0f6a7908519f15f6c439b67923d785",
+      "reference_run": "ustc_agnews_private_vote_pilot_20261009",
+      "seed": 57
+    }
+  ],
+  "runs_completed": 3,
+  "runs_expected": 3,
+  "schema_version": 1,
+  "status": "complete",
+  "updated_at": "2026-10-13T13:25:18.523773+00:00"
+}

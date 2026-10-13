@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "scope": "aggregate_only_no_text",
+  "candidate_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "private_selected_sha256": "23a07ecdc0048202b301590f23a7d56df3b919c428883fa996ff233eebc1f6c1",
+  "public_selected_sha256": "79773d11e68e9bd128b1852b6eb942debd23a3add32eb1f329685f43c65fcee3",
+  "selected_text_overlap_by_label": {
+    "1": 7,
+    "2": 8,
+    "3": 9,
+    "4": 7
+  },
+  "selected_text_overlap_total": 31
+}

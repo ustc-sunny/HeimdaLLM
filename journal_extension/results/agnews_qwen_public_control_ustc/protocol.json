@@ -1,0 +1,23 @@
+{
+  "candidate_records": 128,
+  "candidate_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "dev_records": 512,
+  "gpu": 2,
+  "guidance_records": 64,
+  "official_test_used": false,
+  "privacy": "Non-DP",
+  "reference_fixed_partition_sha256": "e16e8551a87ba702cc23b4d56d57b9762b77c4fea8bf341b96d5759be7996a6c",
+  "reference_private_vote_metrics_sha256": "a3d853168a091f6fe42ae51a63c1f76afc675f93184d7f5371132f4f29d14ceb",
+  "reference_real_metrics_sha256": "ba0cd28d35eceba9740da4dd6d2a89595b0f6a7908519f15f6c439b67923d785",
+  "reference_run": "ustc_agnews_private_vote_pilot_20261009",
+  "rounds": 50,
+  "run_id": "ustc_agnews_qwen_public_control_20261013",
+  "runner_sha256": "06cbbcfb89dd55ec3db527433b01d51d8d2b6278257ad9e377f72882b149368a",
+  "schema_version": 1,
+  "seed": 57,
+  "selection": "public_sha256_index_order_v1_no_private_records",
+  "source_clients": [
+    1,
+    21
+  ]
+}
