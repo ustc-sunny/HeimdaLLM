@@ -1,0 +1,105 @@
+{
+  "historical_runs": {
+    "PRIVATE_ZERO": {
+      "archive": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_private_vote_synthetic.tar.gz",
+      "archive_sha256": "6cc0686e9f582e4a732519b753f2f8f0ae4609d1dc9aa3d33c24a3ba4acad29d",
+      "command_sha256": "4b9420dfcdfc149132eb409ea22d460d0553a18387fd046bb64920badfc7bd4c",
+      "final_accuracy_percent": 75.0,
+      "final_loss": 1.213335044682026,
+      "final_macro_f1": 0.7454456293689129,
+      "late_window_accuracy_percent": 74.8046875,
+      "metrics_sha256": "a3d853168a091f6fe42ae51a63c1f76afc675f93184d7f5371132f4f29d14ceb",
+      "normalized_accuracy_auc": 0.651796875,
+      "seed": 57,
+      "thresholds": {
+        "50": {
+          "first_update": 7,
+          "queries_at_first_update": 420,
+          "right_censored": false
+        },
+        "60": {
+          "first_update": 12,
+          "queries_at_first_update": 720,
+          "right_censored": false
+        },
+        "70": {
+          "first_update": 23,
+          "queries_at_first_update": 1380,
+          "right_censored": false
+        }
+      }
+    },
+    "PUB_RANDOM": {
+      "archive": "local_backups/agnews_qwen_public_control_20261013/ustc_agnews_qwen_public_control_20261013.tar.gz",
+      "archive_sha256": "8290f3f21c2eedfd739a04e84d75c2306c1708188fe94d038297672203be37e5",
+      "command_sha256": "47618b2eeb92d5363e9683792610e4c1426e9a1ddb0a4a4ebba36025a59bdc20",
+      "final_accuracy_percent": 70.3125,
+      "final_loss": 1.2371772229671478,
+      "final_macro_f1": 0.6871500876217895,
+      "late_window_accuracy_percent": 70.15625,
+      "metrics_sha256": "d800a27cd3e083d5acf95197cd3d05c5360a9913f4ce92620fd8eb567b76354e",
+      "normalized_accuracy_auc": 0.6216796875,
+      "seed": 57,
+      "thresholds": {
+        "50": {
+          "first_update": 8,
+          "queries_at_first_update": 480,
+          "right_censored": false
+        },
+        "60": {
+          "first_update": 13,
+          "queries_at_first_update": 780,
+          "right_censored": false
+        },
+        "70": {
+          "first_update": 43,
+          "queries_at_first_update": 2580,
+          "right_censored": false
+        }
+      }
+    },
+    "REAL_MATCHED": {
+      "archive": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_same_source_real.tar.gz",
+      "archive_sha256": "d8093d31deb596dfec94d29b74d56f217e4513f7a359af970088819e18e7a362",
+      "command_sha256": "05a32ca40ba5f61b6c1dc99cd0bfc58b81682a6610c9600e13aa002a8d8adf23",
+      "final_accuracy_percent": 72.0703125,
+      "final_loss": 1.180838342756033,
+      "final_macro_f1": 0.7064248872653226,
+      "late_window_accuracy_percent": 71.58203125,
+      "metrics_sha256": "ba0cd28d35eceba9740da4dd6d2a89595b0f6a7908519f15f6c439b67923d785",
+      "normalized_accuracy_auc": 0.66330078125,
+      "seed": 57,
+      "thresholds": {
+        "50": {
+          "first_update": 4,
+          "queries_at_first_update": 240,
+          "right_censored": false
+        },
+        "60": {
+          "first_update": 8,
+          "queries_at_first_update": 480,
+          "right_censored": false
+        },
+        "70": {
+          "first_update": 24,
+          "queries_at_first_update": 1440,
+          "right_censored": false
+        }
+      }
+    }
+  },
+  "source_commit_local": "c1b238c9f48eb73392e0e5d8e6af57cffb462830",
+  "status": "provisional_pending_live_source_and_operator_check",
+  "validation": {
+    "actual_update_operator_verified": false,
+    "all_51_evaluations_each": true,
+    "archive_sidecars": true,
+    "archived_fixed_partition_sha256": "e16e8551a87ba702cc23b4d56d57b9762b77c4fea8bf341b96d5759be7996a6c",
+    "archived_training_flags_equal": true,
+    "completion_flags": true,
+    "live_server_commit_verified": false,
+    "public_nli_rank_assignment_reconstructed": true,
+    "public_random_replayed_byte_identically": true,
+    "source_data_and_partition_rehashed_locally": false
+  }
+}

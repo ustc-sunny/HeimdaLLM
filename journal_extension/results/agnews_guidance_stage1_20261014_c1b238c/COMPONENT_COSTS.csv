@@ -1,0 +1,11 @@
+component,arm,fl_seed,logical_location,measured_device,elapsed_seconds,peak_memory_mib,bytes_sent,measurement_status
+cloud_data_pack,PRIVATE_ZERO,57,server_staging,unverified_historical_host,0.357224,NA,NA,historical_pack_only
+cloud_data_pack,REAL_MATCHED,57,server_staging,unverified_historical_host,0.356493,NA,NA,historical_pack_only
+cloud_data_pack,PUB_RANDOM,57,server_staging,unverified_historical_host,0.521246,NA,NA,historical_pack_only
+generate_public_pool_128,NA,NA,server_public,NA,NA,NA,NA,not_measured
+load_cache_pool,NA,NA,client_or_server_unverified,NA,NA,NA,NA,not_measured
+candidate_downlink,NA,NA,server_to_client,NA,NA,NA,NA,not_measured
+client_encode_vote,NA,NA,client,NA,NA,NA,NA,not_measured
+client_noise_topk,NA,NA,client,NA,NA,NA,NA,not_measured
+selected_id_uplink,NA,NA,client_to_server,NA,NA,NA,NA,not_measured
+cloud_bp,NA,NA,cloud_server,NA,NA,NA,NA,not_measured

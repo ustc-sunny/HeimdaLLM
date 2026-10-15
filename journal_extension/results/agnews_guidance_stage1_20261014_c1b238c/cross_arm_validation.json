@@ -1,0 +1,12 @@
+{
+  "all_15_protocol_matched": false,
+  "archived_fixed_partition_sha256": "e16e8551a87ba702cc23b4d56d57b9762b77c4fea8bf341b96d5759be7996a6c",
+  "archived_training_flags_equal": true,
+  "historical_seed57_reuse_prechecks_passed": true,
+  "live_source_and_single_step_verified": false,
+  "nli_selection_sha256": "52810c8290a47533048d82a33bc92279c50d4df77f3628a1539031ba2905194a",
+  "note": "No new training or GPU preflight; historical reuse remains provisional.",
+  "public_pool_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "random_replay_sha256": "79773d11e68e9bd128b1852b6eb942debd23a3add32eb1f329685f43c65fcee3",
+  "status": "partial"
+}

@@ -1,0 +1,17 @@
+{
+  "candidate_records": 128,
+  "candidate_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "candidates_per_label": 32,
+  "expected_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "gpu_preflight": {
+    "free_mib": 18663,
+    "index": 2,
+    "utilization_percent": 0
+  },
+  "method": "public_only_qwen_replay_no_private_source_access",
+  "official_test_used": false,
+  "private_records_read": false,
+  "schema_version": 1,
+  "seed": 57,
+  "status": "verified"
+}

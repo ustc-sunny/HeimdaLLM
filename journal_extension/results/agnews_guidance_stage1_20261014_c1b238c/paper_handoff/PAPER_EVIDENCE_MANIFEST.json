@@ -1,0 +1,287 @@
+{
+  "claim_record_template": {
+    "claim_id": null,
+    "comparison_unit": null,
+    "eligible_for_paper": false,
+    "english_text": null,
+    "evidence_kind": null,
+    "limitations": [],
+    "protocol_ids": [],
+    "recommended_manuscript_location": null,
+    "source_fields": [],
+    "source_paths": [],
+    "status": "pending",
+    "verified_by_recomputation": false
+  },
+  "claims": [
+    {
+      "claim_id": "historical_seed57_descriptive",
+      "comparison_unit": "one_FL_seed",
+      "eligible_for_paper": false,
+      "english_text": "On one fixed AG News development split and FL seed 57, private-vote guidance reached 75.00% accuracy, versus 70.31% for public random and 72.07% for matched real guidance.",
+      "evidence_kind": "local_archive_recalculation",
+      "limitations": [
+        "No seed replication",
+        "Live server code and one-step audit pending",
+        "Not a DP result"
+      ],
+      "protocol_ids": [
+        "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional"
+      ],
+      "recommended_manuscript_location": "experiments after full validation",
+      "source_fields": [
+        "metrics.json/evaluations[-1]/acc"
+      ],
+      "source_paths": [
+        "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_private_vote_synthetic.tar.gz",
+        "local_backups/agnews_qwen_public_control_20261013/ustc_agnews_qwen_public_control_20261013.tar.gz",
+        "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_same_source_real.tar.gz"
+      ],
+      "status": "historical_provisional",
+      "verified_by_recomputation": true
+    }
+  ],
+  "kind": "PARTIAL_STAGE1_EVIDENCE",
+  "last_updated": "2026-10-14",
+  "privacy": {
+    "adjacency_planned": "replace_one_complete_record_in_one_fixed_client",
+    "adjacency_verified": null,
+    "delta_guarantee_after_review": null,
+    "delta_target": 0.0,
+    "epsilon_guarantee_after_review": null,
+    "epsilon_target": 4.0,
+    "full_fl_transcript_protected": false,
+    "implementation_review_status": "blocked_no_dp_implementation_or_live_review",
+    "joint_release_epsilon_upper_bound": null,
+    "mechanism_planned": "one_shot_histogram_laplace_then_per_class_top_r",
+    "mechanism_verified": null,
+    "noise_sampler_review_path": null,
+    "per_client_sensitivity_verified": null,
+    "raw_votes_or_noise_secrets_in_public_output": false,
+    "redacted_ledger_path": "../PRIVACY_LEDGER_REDACTED.json",
+    "release_ids": [],
+    "scope": "synthetic_guidance_release_only"
+  },
+  "protocol": {
+    "actual_update_operator_verified": false,
+    "cross_arm_validation_passed": false,
+    "cross_arm_validation_path": "../cross_arm_validation.json",
+    "evaluation_split": "fixed_development_not_official_test",
+    "guidance_slots": 64,
+    "pool_id": "qwen_public_pool_128_20261013",
+    "pool_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+    "protocol_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional",
+    "protocol_spec_path": "../FROZEN_PROTOCOL.json",
+    "source_commit": "c1b238c9f48eb73392e0e5d8e6af57cffb462830",
+    "source_group": "AGNews_clients_1_21",
+    "total_updates": 50,
+    "trainable_parameter_set_hash": null,
+    "unique_texts_reported_separately": true,
+    "working_tree_diff_hash": "a11561415e6501967672d8bb7355fd31f22014dbdd8d418e41718874f79d690f"
+  },
+  "publication_and_handoff": {
+    "all_numbers_have_provenance": true,
+    "author_review_required_before_publication": true,
+    "contains_unprotected_private_artifacts": false,
+    "results_for_paper_path": "RESULTS_FOR_PAPER.md",
+    "tables_for_paper_path": "TABLES_FOR_PAPER.csv"
+  },
+  "run_record_template": {
+    "arm": null,
+    "artifact_hashes": {},
+    "client_objective_queries": null,
+    "cloud_bp_sample_visits": null,
+    "completed_updates": 0,
+    "curves_path": null,
+    "failure_or_block_reason": null,
+    "final_dev_accuracy_percent": null,
+    "final_loss": null,
+    "final_macro_f1": null,
+    "fl_seed": null,
+    "guidance_slots": null,
+    "late_window_accuracy_percent": null,
+    "metrics_path": null,
+    "normalized_accuracy_auc": null,
+    "per_class_metrics_path": null,
+    "pool_id": null,
+    "privacy_status": "not_applicable_or_pending",
+    "protocol_id": null,
+    "release_trial_id": null,
+    "reused_from": null,
+    "run_id": null,
+    "selection_id": null,
+    "status": "not_started",
+    "unique_texts": null,
+    "validation_passed": false
+  },
+  "runs": [
+    {
+      "archive_sha256": "8290f3f21c2eedfd739a04e84d75c2306c1708188fe94d038297672203be37e5",
+      "arm": "PUB_RANDOM",
+      "failure_or_block_reason": null,
+      "fl_seed": 57,
+      "privacy_status": "non_dp",
+      "reused_from": "local_backups/agnews_qwen_public_control_20261013/ustc_agnews_qwen_public_control_20261013.tar.gz",
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_RANDOM__s57",
+      "status": "historical_provisional_reuse"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_RANDOM",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_RANDOM__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_RANDOM",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_RANDOM__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_NLI",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 57,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_NLI__s57",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_NLI",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_NLI__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_NLI",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_NLI__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": "6cc0686e9f582e4a732519b753f2f8f0ae4609d1dc9aa3d33c24a3ba4acad29d",
+      "arm": "PRIVATE_ZERO",
+      "failure_or_block_reason": null,
+      "fl_seed": 57,
+      "privacy_status": "non_dp",
+      "reused_from": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_private_vote_synthetic.tar.gz",
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_ZERO__s57",
+      "status": "historical_provisional_reuse"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_ZERO",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_ZERO__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_ZERO",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_ZERO__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": "d8093d31deb596dfec94d29b74d56f217e4513f7a359af970088819e18e7a362",
+      "arm": "REAL_MATCHED",
+      "failure_or_block_reason": null,
+      "fl_seed": 57,
+      "privacy_status": "non_dp",
+      "reused_from": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_same_source_real.tar.gz",
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__REAL_MATCHED__s57",
+      "status": "historical_provisional_reuse"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "REAL_MATCHED",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__REAL_MATCHED__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "REAL_MATCHED",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__REAL_MATCHED__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_DP_E4",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 57,
+      "privacy_status": "not_implemented",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_DP_E4__s57",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_DP_E4",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_implemented",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_DP_E4__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_DP_E4",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_implemented",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_DP_E4__s59",
+      "status": "blocked_not_started"
+    }
+  ],
+  "schema_version": "1.0",
+  "system_measurements": {
+    "component_costs_path": "../COMPONENT_COSTS.csv",
+    "controlled_timing_available": false,
+    "real_edge_device_tested": false,
+    "speedup_claim_permitted": false
+  },
+  "theory": {
+    "conditions_or_open_items": [
+      "Sequential client disjoint selection",
+      "Noise implementation absent",
+      "Live update test absent"
+    ],
+    "covariance_model_matches_code": false,
+    "implementation_map_path": "THEORY_IMPLEMENTATION_MAP.md",
+    "mathematical_assumptions_verified": false,
+    "privacy_proof_path": "../PRIVATE_GUIDANCE_RELEASE_SPEC.md"
+  }
+}

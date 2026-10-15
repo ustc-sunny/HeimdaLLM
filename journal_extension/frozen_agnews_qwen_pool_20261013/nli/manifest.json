@@ -1,0 +1,121 @@
+{
+  "candidate_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "client_counts": {
+    "1": 32,
+    "21": 32
+  },
+  "descriptions": [
+    "world politics and international affairs",
+    "sports",
+    "business and finance",
+    "science and technology"
+  ],
+  "device": "cpu",
+  "hypothesis_template": "This news article is about {}.",
+  "label_counts": {
+    "1": 16,
+    "2": 16,
+    "3": 16,
+    "4": 16
+  },
+  "model": "facebook/bart-large-mnli",
+  "model_revision": "d7645e127eaf1aefc7862fd59a17a5aa8558b8ce",
+  "official_test_used": false,
+  "privacy": "Non-DP",
+  "private_records_read": false,
+  "rank_summary": {
+    "1": {
+      "rejected_target_score_mean": 0.6474591643518055,
+      "selected_indices": [
+        0,
+        3,
+        2,
+        28,
+        26,
+        17,
+        22,
+        10,
+        15,
+        14,
+        6,
+        13,
+        11,
+        20,
+        21,
+        24
+      ],
+      "selected_target_score_mean": 0.8409907975590954
+    },
+    "2": {
+      "rejected_target_score_mean": 0.8750849633936124,
+      "selected_indices": [
+        36,
+        46,
+        49,
+        54,
+        43,
+        57,
+        59,
+        32,
+        33,
+        61,
+        45,
+        37,
+        63,
+        44,
+        53,
+        47
+      ],
+      "selected_target_score_mean": 0.9604416137252739
+    },
+    "3": {
+      "rejected_target_score_mean": 0.6788373779812014,
+      "selected_indices": [
+        89,
+        75,
+        74,
+        95,
+        81,
+        65,
+        93,
+        79,
+        86,
+        69,
+        71,
+        87,
+        68,
+        78,
+        88,
+        83
+      ],
+      "selected_target_score_mean": 0.9036887195592431
+    },
+    "4": {
+      "rejected_target_score_mean": 0.7104251869479996,
+      "selected_indices": [
+        118,
+        98,
+        114,
+        107,
+        105,
+        112,
+        115,
+        110,
+        96,
+        116,
+        99,
+        127,
+        108,
+        124,
+        126,
+        103
+      ],
+      "selected_target_score_mean": 0.9403807238047844
+    }
+  },
+  "schema_version": 1,
+  "selected_records": 64,
+  "selected_sha256": "52810c8290a47533048d82a33bc92279c50d4df77f3628a1539031ba2905194a",
+  "selection": "frozen_public_bart_mnli_top16_interleaved_v1",
+  "status": "complete"
+}

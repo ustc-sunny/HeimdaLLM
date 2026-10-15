@@ -1,0 +1,13 @@
+fl_seed,reference_arm,comparison_arm,status,reference_accuracy_percent,comparison_accuracy_percent,reference_minus_comparison_pp
+57,PRIVATE_ZERO,PUB_RANDOM,historical_provisional_pair,75.0,70.3125,4.6875
+58,PRIVATE_ZERO,PUB_RANDOM,blocked_not_started,NA,NA,NA
+59,PRIVATE_ZERO,PUB_RANDOM,blocked_not_started,NA,NA,NA
+57,PRIVATE_ZERO,REAL_MATCHED,historical_provisional_pair,75.0,72.0703125,2.9296875
+58,PRIVATE_ZERO,REAL_MATCHED,blocked_not_started,NA,NA,NA
+59,PRIVATE_ZERO,REAL_MATCHED,blocked_not_started,NA,NA,NA
+57,PRIVATE_ZERO,PUB_NLI,blocked_not_started,NA,NA,NA
+58,PRIVATE_ZERO,PUB_NLI,blocked_not_started,NA,NA,NA
+59,PRIVATE_ZERO,PUB_NLI,blocked_not_started,NA,NA,NA
+57,PRIVATE_ZERO,PRIVATE_DP_E4,blocked_not_started,NA,NA,NA
+58,PRIVATE_ZERO,PRIVATE_DP_E4,blocked_not_started,NA,NA,NA
+59,PRIVATE_ZERO,PRIVATE_DP_E4,blocked_not_started,NA,NA,NA

@@ -1,0 +1,16 @@
+{
+  "blocked_not_started": 12,
+  "dp_completed": 0,
+  "historical_provisional": 3,
+  "new_completed": 0,
+  "nli_auxiliary_label_agreement_percent": 92.1875,
+  "nli_downstream_accuracy_percent": null,
+  "seed57_final_accuracy_percent": {
+    "PRIVATE_ZERO": 75.0,
+    "PUB_RANDOM": 70.3125,
+    "REAL_MATCHED": 72.0703125
+  },
+  "seed57_private_minus_public_random_pp": 4.6875,
+  "seed57_private_minus_real_pp": 2.9296875,
+  "target_endpoints": 15
+}

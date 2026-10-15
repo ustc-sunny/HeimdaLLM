@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "scope": "local raw backups only; excluded from public Git branch",
+  "count": 51,
+  "total_bytes": 83736622,
+  "archives": [
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_noise_bridge_ustc_20260930/ustc_agnews_noise_bridge_20260930_dp_eps8_seed57.tar.gz",
+      "size_bytes": 756772,
+      "sha256": "7af1163d8d7554145d59193229d8cf1ac3822fc580f59926e8de2ea02b2495d7",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_noise_bridge_ustc_20260930/ustc_agnews_noise_bridge_20260930_dp_eps8_seed58.tar.gz",
+      "size_bytes": 750392,
+      "sha256": "33aa8117d0c457a8ad50e9d389e834f7b139f69927914e5cac1633c0c9b3e52a",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_noise_bridge_ustc_20260930/ustc_agnews_noise_bridge_20260930_dp_eps8_seed59.tar.gz",
+      "size_bytes": 753722,
+      "sha256": "50d802888285fe00d04ff7aa0a2041c3a2a359d630ca6015a67add9bf76ce4ce",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_noise_bridge_ustc_20260930/ustc_agnews_noise_bridge_20260930_zero_noise_seed57.tar.gz",
+      "size_bytes": 713587,
+      "sha256": "90bfc04665f03646582f851c116ffcf995415491c976715b54ec305027615013",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_noise_bridge_ustc_20260930/ustc_agnews_noise_bridge_20260930_zero_noise_seed58.tar.gz",
+      "size_bytes": 708448,
+      "sha256": "8558a8e884b03a48a1cd4a7d36ac7aa32148d1a67bb5c708fdfdefaaf3e6bbd3",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_noise_bridge_ustc_20260930/ustc_agnews_noise_bridge_20260930_zero_noise_seed59.tar.gz",
+      "size_bytes": 711972,
+      "sha256": "0761ab1a057a314e3bd8e584c8eefd09bf72f562b60cea8ad59bde9096991a9a",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_filtered_dp_seed57.tar.gz",
+      "size_bytes": 679630,
+      "sha256": "d900280d1852a6dff6033f363cb02c7411de21e32768903bf4db6b9eb7842959",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_filtered_dp_seed58.tar.gz",
+      "size_bytes": 678319,
+      "sha256": "ec422d9445b23234caefb878a2dee5c86c3cb2665b90679372529078942cbf93",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_filtered_dp_seed59.tar.gz",
+      "size_bytes": 679836,
+      "sha256": "b8c3722cada609f15b414cc9a71ad4ce6ed9e6fc7de772e269054a3cd233a0ac",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_filtered_public_seed57.tar.gz",
+      "size_bytes": 681043,
+      "sha256": "a9fa48d94b676de369d334515293ece2ad0c8c3f916efe7fd59a7de92cb3c1e4",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_filtered_public_seed58.tar.gz",
+      "size_bytes": 677530,
+      "sha256": "b676cd8e378d80d76153db64ca60bb3f316d2be5e2a93937d5fea198989b96e6",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_filtered_public_seed59.tar.gz",
+      "size_bytes": 681657,
+      "sha256": "8670b0e04382677f256725f418324ccbb688677d53457d4b68a7391ca4781353",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_random_dp_seed57.tar.gz",
+      "size_bytes": 678715,
+      "sha256": "ef229cae6fd5e8b43c6f72833bec6451ba6130c8aeb3b5ea06c82819541cd46f",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_random_dp_seed58.tar.gz",
+      "size_bytes": 676800,
+      "sha256": "4c89d236e352c809fc68be2cefca7ab887d6d11704e3a2bccd9f78ff6a4bbca5",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_recovery_20261004/ustc_agnews_dp_filter_20261004_random_dp_seed59.tar.gz",
+      "size_bytes": 681373,
+      "sha256": "a194a57239da434ca8f090ff4fb7307f2bcf40a5c87eb312b0aeb5832447de02",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_v1_ustc_20260928/code-590a20e.tar.gz",
+      "size_bytes": 16085711,
+      "sha256": "034057f853955ced9a9124a7ebf1d01ddb82c2286e850541e0fcfeb02d392da4",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_v1_ustc_20260928/ustc_agnews_dp_eps1_20260928.tar.gz",
+      "size_bytes": 2370429,
+      "sha256": "d08091703fbd65762d57c9f3a56f3f8bf435e2543afd7231fae7232397232a52",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_v1_ustc_20260928/ustc_agnews_dp_eps2_20260928.tar.gz",
+      "size_bytes": 2371728,
+      "sha256": "f8cc7338360b07a536e21f557fa5782e27cdf7ddb8d0c350f9e62fefb2fe0550",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_v1_ustc_20260928/ustc_agnews_dp_eps4_20260928.tar.gz",
+      "size_bytes": 2372973,
+      "sha256": "d77889240484f69d800ca2049f71a136952ebabd328c72e4228738d4d1f3eb5f",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_v1_ustc_20260928/ustc_agnews_dp_eps8_20260928.tar.gz",
+      "size_bytes": 2370560,
+      "sha256": "b01c6b621ee4c4c22fea4501c05f9900439236a307513b2ad7e6fb6458fdb49e",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_dp_v1_ustc_20260928/ustc_agnews_dp_smoke_20260928.tar.gz",
+      "size_bytes": 192398,
+      "sha256": "96aef942863dc47ae2076304e0c2a2c7ff69657c41759046fd3efadeca3280a9",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/cancelled_early_probes/ustc_agnews_matched_probes_20260929_cancelled.tar.gz",
+      "size_bytes": 836039,
+      "sha256": "9d7067a1f78b71a93bfe789c6673825fb8b9330050aaa6f2f44263d3a33e6a4b",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/code_e6c973e.tar.gz",
+      "size_bytes": 16122674,
+      "sha256": "83fe969c2d941b66ef6dc14ea5afe015b913a2efc26b39336a8a8aa46fe1749e",
+      "sidecar_verified": false,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_clipped_seed57.tar.gz",
+      "size_bytes": 711321,
+      "sha256": "67fe571ec9f5f6502b300e8986917a4f1ab343b5d51e5f56c5d639e1cc7efec7",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_clipped_seed58.tar.gz",
+      "size_bytes": 711810,
+      "sha256": "bf388480763f813152fa2ddf4ed5d8cb50da55302d30b6106939fbf2dc7c76e6",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_clipped_seed59.tar.gz",
+      "size_bytes": 709964,
+      "sha256": "7f9165fa7f6c5a4bffe16f345c46308524279a0ae71b5190b01c55286aa8cf0b",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_fixed_example_seed57.tar.gz",
+      "size_bytes": 710244,
+      "sha256": "a5defef0f557482dd2998ded8aff12f6052b1d63b83056cf81aa6ba3b45a5413",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_fixed_example_seed58.tar.gz",
+      "size_bytes": 707548,
+      "sha256": "6871aa7c844a3e5fdcb0a279e1ac0086b3da26ddc6c86d5c468f45bc06952c26",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_fixed_example_seed59.tar.gz",
+      "size_bytes": 712002,
+      "sha256": "e0f0c46200a0191456db89677a246cc7b84b1264b8cc418cc0e43e505a02199a",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_no_guidance_seed57.tar.gz",
+      "size_bytes": 664226,
+      "sha256": "9df3c7b3f00569258350aca8a6c37b7aa0bc9953911f56a2664b8ca7ac2c4851",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_no_guidance_seed58.tar.gz",
+      "size_bytes": 664693,
+      "sha256": "e39cd2a93dbf39b707124ff6b7c918d1afb998b27e6096cc97dd7308d385cd04",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_no_guidance_seed59.tar.gz",
+      "size_bytes": 663585,
+      "sha256": "b3d5c1ec374fd429a4c7b100da490670d1ce031a84642b07e35c8548b5b78d18",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_ordinary_seed57.tar.gz",
+      "size_bytes": 713154,
+      "sha256": "d432eca62bcdd986263e81efaca1cf01c73d698cb6c32b37fc2da38550d787d3",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_ordinary_seed58.tar.gz",
+      "size_bytes": 716700,
+      "sha256": "126f5d39bd6f45cd17a68ea4770d363be8def79da3b3eb9b9df4fa407ce61944",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_ordinary_seed59.tar.gz",
+      "size_bytes": 714775,
+      "sha256": "2b8ea68bc541935c6f7bc8e49b116ec6b1af8d365637c31f7048d45766428de0",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_poisson_seed57.tar.gz",
+      "size_bytes": 712359,
+      "sha256": "455c205b5a6172595184698723bceca3decec084a0171b4386a2a671d64eee65",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_poisson_seed58.tar.gz",
+      "size_bytes": 710364,
+      "sha256": "7be4e2cb34d463f48c63f57e001bf4116f4a12236ff443c2d2c645d35495e0f4",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_poisson_seed59.tar.gz",
+      "size_bytes": 708299,
+      "sha256": "11f9b433e70f1b8089f877c3da8e411ab3e28f4ba5fdb6c8cbb1e1c7c0915426",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_public_seed57.tar.gz",
+      "size_bytes": 752665,
+      "sha256": "894e4f2aae93811148926ffd97a412a89a2c11726b041df08d2742d00622c33b",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_public_seed58.tar.gz",
+      "size_bytes": 748861,
+      "sha256": "1d569466d2f2b4ecf21fb05499002ce510d02a0576c32c93120731dff65857f5",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_formal_20260929_public_seed59.tar.gz",
+      "size_bytes": 756576,
+      "sha256": "5e7512e0079aa50e75a7f44eb6074c0fb0a47af86ed98d11f759d483f48919f6",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_probes_v2_20260929_isotropic_lr00001_seed57.tar.gz",
+      "size_bytes": 414492,
+      "sha256": "4a761f7b3b33ebbc98fb12eda016fe806a30e24b1556dbc29f64b37363593394",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_probes_v2_20260929_isotropic_lr0001_seed57.tar.gz",
+      "size_bytes": 414409,
+      "sha256": "df5c1367bdd947e9dabb226bb86808649bd993e1afc29a4f55e23e57514fa211",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_probes_v2_20260929_isotropic_lr001_seed57.tar.gz",
+      "size_bytes": 414552,
+      "sha256": "36dddc10136faf8058f2f9574966b2326571947b730966fb6ccbb1f2a596b108",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_probes_v2_20260929_isotropic_raw_lr001_seed57.tar.gz",
+      "size_bytes": 415568,
+      "sha256": "7582e4b6da453e5161234b5d47cd22155988ed3cf01ddb8daf6639cf268dfce5",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_matched_ablation_ustc_20260929/ustc_agnews_matched_probes_v2_20260929_legacy_lr001_seed57.tar.gz",
+      "size_bytes": 415339,
+      "sha256": "012885f0379d7b811ffe893d8e2c827a5835a609fe7bc443aa6fbff011a99543",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_nondp_v3_20260921/raw/agnews_nondp_v3_results.tar.gz",
+      "size_bytes": 6708599,
+      "sha256": "ae13bab890ea0ff383b701bc2280f37b735b21ab6b730175cd8daef751cc26b0",
+      "sidecar_verified": false,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_nondp_v3_20260921.tar.gz",
+      "size_bytes": 6933045,
+      "sha256": "ad9f45231031c4e41bbb4df00e5035fdce2949c4f416cfbaddd0aac5eaad9603",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_private_vote_synthetic.tar.gz",
+      "size_bytes": 661046,
+      "sha256": "6cc0686e9f582e4a732519b753f2f8f0ae4609d1dc9aa3d33c24a3ba4acad29d",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_same_source_real.tar.gz",
+      "size_bytes": 659923,
+      "sha256": "d8093d31deb596dfec94d29b74d56f217e4513f7a359af970088819e18e7a362",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    },
+    {
+      "path_relative_to_original_workspace": "local_backups/agnews_qwen_public_control_20261013/ustc_agnews_qwen_public_control_20261013.tar.gz",
+      "size_bytes": 678195,
+      "sha256": "8290f3f21c2eedfd739a04e84d75c2306c1708188fe94d038297672203be37e5",
+      "sidecar_verified": true,
+      "github_uploaded": false
+    }
+  ]
+}

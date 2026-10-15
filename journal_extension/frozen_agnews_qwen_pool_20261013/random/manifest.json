@@ -1,0 +1,22 @@
+{
+  "candidate_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "client_counts": {
+    "1": 32,
+    "21": 32
+  },
+  "label_counts": {
+    "1": 16,
+    "2": 16,
+    "3": 16,
+    "4": 16
+  },
+  "official_test_used": false,
+  "privacy": "Non-DP",
+  "private_records_read": false,
+  "schema_version": 1,
+  "seed": 57,
+  "selected_records": 64,
+  "selected_sha256": "79773d11e68e9bd128b1852b6eb942debd23a3add32eb1f329685f43c65fcee3",
+  "selection": "public_sha256_index_order_v1_no_private_records",
+  "status": "complete"
+}

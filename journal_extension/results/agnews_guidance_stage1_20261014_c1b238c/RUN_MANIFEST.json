@@ -1,0 +1,158 @@
+{
+  "blocked_not_started": 12,
+  "historical_provisional": 3,
+  "new_runs_completed": 0,
+  "protocol_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional",
+  "runs": [
+    {
+      "archive_sha256": "8290f3f21c2eedfd739a04e84d75c2306c1708188fe94d038297672203be37e5",
+      "arm": "PUB_RANDOM",
+      "failure_or_block_reason": null,
+      "fl_seed": 57,
+      "privacy_status": "non_dp",
+      "reused_from": "local_backups/agnews_qwen_public_control_20261013/ustc_agnews_qwen_public_control_20261013.tar.gz",
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_RANDOM__s57",
+      "status": "historical_provisional_reuse"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_RANDOM",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_RANDOM__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_RANDOM",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_RANDOM__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_NLI",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 57,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_NLI__s57",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_NLI",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_NLI__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PUB_NLI",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PUB_NLI__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": "6cc0686e9f582e4a732519b753f2f8f0ae4609d1dc9aa3d33c24a3ba4acad29d",
+      "arm": "PRIVATE_ZERO",
+      "failure_or_block_reason": null,
+      "fl_seed": 57,
+      "privacy_status": "non_dp",
+      "reused_from": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_private_vote_synthetic.tar.gz",
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_ZERO__s57",
+      "status": "historical_provisional_reuse"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_ZERO",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_ZERO__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_ZERO",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_ZERO__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": "d8093d31deb596dfec94d29b74d56f217e4513f7a359af970088819e18e7a362",
+      "arm": "REAL_MATCHED",
+      "failure_or_block_reason": null,
+      "fl_seed": 57,
+      "privacy_status": "non_dp",
+      "reused_from": "local_backups/agnews_private_vote_pilot_20261009/ustc_agnews_private_vote_pilot_20261009_same_source_real.tar.gz",
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__REAL_MATCHED__s57",
+      "status": "historical_provisional_reuse"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "REAL_MATCHED",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__REAL_MATCHED__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "REAL_MATCHED",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_applicable_or_pending",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__REAL_MATCHED__s59",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_DP_E4",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 57,
+      "privacy_status": "not_implemented",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_DP_E4__s57",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_DP_E4",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 58,
+      "privacy_status": "not_implemented",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_DP_E4__s58",
+      "status": "blocked_not_started"
+    },
+    {
+      "archive_sha256": null,
+      "arm": "PRIVATE_DP_E4",
+      "failure_or_block_reason": "SSH closes after password; GPU and live source unverified",
+      "fl_seed": 59,
+      "privacy_status": "not_implemented",
+      "reused_from": null,
+      "run_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional__PRIVATE_DP_E4__s59",
+      "status": "blocked_not_started"
+    }
+  ]
+}

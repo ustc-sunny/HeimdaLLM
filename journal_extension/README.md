@@ -167,3 +167,13 @@ to a pilot that is already running. The runner
 archives each result with SHA-256; `sync_ustc_noise_bridge.py --watch --publish`
 verifies the raw archives locally and pushes only summary/curves/report to the
 `HeimdaLLM+` branch. Raw unnoised synthetic text is never published to GitHub.
+
+## Stage-1 Qwen guidance continuation (2026-10-15)
+
+The latest fixed-pool audit and partial 15-outcome matrix are in
+`results/agnews_guidance_stage1_20261014_c1b238c/`. The public-only replayed
+candidate pool and public random/NLI selections are in
+`frozen_agnews_qwen_pool_20261013/`. The paper handoff inside the result
+directory distinguishes conditional privacy theory, implementation review, and
+completed downstream evidence. For a rented single A40, read
+`NEW_A40_STAGE1_DEPLOYMENT.md` before using the host-specific USTC scripts.

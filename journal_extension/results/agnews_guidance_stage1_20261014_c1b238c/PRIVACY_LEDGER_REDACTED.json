@@ -1,0 +1,10 @@
+{
+  "actual_joint_epsilon": null,
+  "completed_dp_trials": [],
+  "implementation_review_status": "blocked",
+  "planned_epsilon_per_release": 4,
+  "planned_laplace_scale": 0.5,
+  "raw_votes_or_noise_secrets_in_output": false,
+  "release_count": 0,
+  "scope": "synthetic_guidance_release_only"
+}

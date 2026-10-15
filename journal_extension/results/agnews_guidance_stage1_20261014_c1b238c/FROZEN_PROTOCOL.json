@@ -1,0 +1,40 @@
+{
+  "candidate_pool_rows": 128,
+  "candidate_pool_sha256": "7e54c05ce2dc94d754b178218963dedfceb781c491b97ed1d9db5ab9e7d7c54f",
+  "clients": [
+    1,
+    21
+  ],
+  "dev_records": 512,
+  "downstream": {
+    "algorithm": "FedFwd",
+    "alpha": 0.5,
+    "beta": 1,
+    "client_fd_directions_per_update_reported": 30,
+    "client_objective_queries_per_update_reported": 60,
+    "fd_step": 0.01,
+    "learning_rate": 0.01,
+    "model": "DistilBERT adapter",
+    "pool_size": 1,
+    "trainable_dimension_reported": 450340,
+    "zo_estimator": "legacy"
+  },
+  "evaluations": 51,
+  "fl_seeds": [
+    57,
+    58,
+    59
+  ],
+  "guidance_slots": 64,
+  "official_test_allowed": false,
+  "per_client_per_class_slots": 8,
+  "protocol_id": "agnews_qwen_pool128_guidance64_fedfwd_legacy50_c1b238c_provisional",
+  "public_nli_selection_sha256": "52810c8290a47533048d82a33bc92279c50d4df77f3628a1539031ba2905194a",
+  "public_random_selection_sha256": "79773d11e68e9bd128b1852b6eb942debd23a3add32eb1f329685f43c65fcee3",
+  "records_per_client_reported": 120,
+  "source_commit": "c1b238c9f48eb73392e0e5d8e6af57cffb462830",
+  "status": "provisional_historical_protocol; live source and one-step audit blocked",
+  "unique_texts_historical": 64,
+  "updates": 50,
+  "working_tree_clean_at_audit_start": false
+}
