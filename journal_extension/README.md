@@ -177,3 +177,6 @@ candidate pool and public random/NLI selections are in
 directory distinguishes conditional privacy theory, implementation review, and
 completed downstream evidence. For a rented single A40, read
 `NEW_A40_STAGE1_DEPLOYMENT.md` before using the host-specific USTC scripts.
+The read-only `preflight_single_gpu_stage1.py` checks the frozen public inputs,
+data and partition hashes, model files, separate Python environments, MPI and
+GPU readiness on the new host.

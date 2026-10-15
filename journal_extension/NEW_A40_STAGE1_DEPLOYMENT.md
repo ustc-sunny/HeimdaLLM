@@ -24,6 +24,19 @@ nvidia-smi --query-gpu=index,name,memory.free,utilization.gpu --format=csv
 - The original private-vote guidance and same-source real guidance are Non-DP artifacts. Public Git contains their aggregate metrics and curves, not raw selections or client data. Recreate or securely transfer them after validating the source data and partition.
 - The frozen target is 2 logical clients (1 and 21), 120 source records/client, 64 guidance slots, 50 updates and 51 development evaluations, `alpha=0.5`, LR `0.01`, `fd_step=0.01`, legacy estimator, DistilBERT adapter/FedFwd. The Stage-1 report and `FROZEN_PROTOCOL.json` distinguish verified fields from pending single-step checks.
 
+Once the data, models and restricted fixed partition are present, run the read-only readiness check. Point the Python options at the actual separate environments created on the new image; the older Matpool setup names them `heimdallm-kdd` and `heimdallm-ton`.
+
+```bash
+python3 journal_extension/preflight_single_gpu_stage1.py \
+  --work-root /path/on/data-disk \
+  --fixed-partition /path/on/data-disk/protocol/fixed_partition.h5 \
+  --kdd-python /path/to/conda/envs/heimdallm-kdd/bin/python \
+  --ton-python /path/to/conda/envs/heimdallm-ton/bin/python \
+  --gpu-index 0
+```
+
+The checker reports `ready_for_e1=false` and exits 2 whenever an asset is missing, a hash differs, imports fail, or the GPU does not meet the existing 14000 MiB/20% gate. It never launches training and cannot replace the dynamic E0 update-operator audit.
+
 ## Run gate
 
 Before starting any new training, verify actual GPU availability, model/tokenizer and data hashes, fixed partition, MPI mapping for **one** GPU, and the E0 single-step update operator. Do not silently change client count, guidance budget, candidate pool, learning rate, or source/dev split. Then complete missing E1 arms under distinct run IDs. The epsilon-4 private-vote DP selector is **not implemented/audited**; do not run E2 until the zero-noise path is byte-identical to `PRIVATE_ZERO` and the mechanism review passes. The old DP-LoRA workflow is a different experiment.
