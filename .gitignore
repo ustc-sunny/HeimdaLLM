@@ -48,6 +48,12 @@ cifar-10-batches-py
 !journal_extension/results/agnews_matched_ablation_ustc/*.json
 !journal_extension/results/agnews_matched_ablation_ustc/*.csv
 
+# Reviewed Stage-2 aggregate evidence only; keep intermediate snapshots local.
+journal_extension/stage2_20261016/report_initial_snapshot/
+!journal_extension/stage2_20261016/report/*.csv
+!journal_extension/stage2_20261016/report/*.json
+!journal_extension/stage2_20261016/report/paper_handoff/*.csv
+
 data/cifar10/*-python
 data/cifar100/*-python
 data/cinic10/

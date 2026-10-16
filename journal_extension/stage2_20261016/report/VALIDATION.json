@@ -1,0 +1,14 @@
+{
+  "all_21_complete": true,
+  "all_seed_preupdate_metrics_identical": true,
+  "evaluations_per_run": 51,
+  "new_dp_release": false,
+  "objective_queries_per_run": 3000,
+  "official_test_used": false,
+  "privacy_scope": "synthetic_guidance_selection_release_only",
+  "round0_zgr_diagnostic_complete": true,
+  "rounds_per_run": 50,
+  "schema_version": 1,
+  "stage1_reused_endpoints": 15,
+  "stage2_new_endpoints": 6
+}
