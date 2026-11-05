@@ -1,0 +1,12 @@
+{
+  "time": "2026-11-05T12:47:15+08:00",
+  "status": "prepared_local_waiting_for_vpn",
+  "completed_new_endpoints": 0,
+  "planned_new_endpoints": 4,
+  "server_preflight_passed": false,
+  "remote_training_started": false,
+  "blocker": "A40 TCP port1010 timed out; EasyConnect UI control unavailable; VPN reconnect requested",
+  "current_results_commit": "0d21ac0a0c81a487c7228b6e1cae7327c3a3c103",
+  "local_cpu_protocol_checks": "pass",
+  "resource_guard_regressions": "7 process identity cases and 5 runtime policy cases pass"
+}

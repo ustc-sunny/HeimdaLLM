@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "cases": 7,
+  "checks": [
+    "live marked task",
+    "exiting zombie with empty environment",
+    "verified same PID/start-time after environment vanishes",
+    "PID reused by unmarked same-user task",
+    "unrelated active task remains blocked",
+    "dead process is not foreign",
+    "GPU list can retain an already removed PID"
+  ]
+}

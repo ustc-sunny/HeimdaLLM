@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "cases": [
+    "Actual November4 foreign-arrival event does not kill healthy existing training",
+    "Normal exclusive operation continues",
+    "Brief memory pressure does not cause immediate termination",
+    "Sustained low free memory triggers own-task stop",
+    "Recovered memory resets the low-memory timer"
+  ]
+}

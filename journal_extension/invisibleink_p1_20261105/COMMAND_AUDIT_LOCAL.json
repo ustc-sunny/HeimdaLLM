@@ -1,0 +1,43 @@
+{
+  "status": "pass",
+  "endpoints": [
+    {
+      "arm": "REAL_MATCHED",
+      "seed": 57,
+      "command_length": 101,
+      "alpha": "0.5",
+      "client_cohort": "100/101",
+      "expected_partition_sha256": "43d324efaaaf9f2e1e169a328e7b58522d004cbc37441d90c9bc9eb5163933d5",
+      "shared_training_parameters_preserved": true
+    },
+    {
+      "arm": "REAL_MATCHED",
+      "seed": 58,
+      "command_length": 101,
+      "alpha": "0.5",
+      "client_cohort": "100/101",
+      "expected_partition_sha256": "43d324efaaaf9f2e1e169a328e7b58522d004cbc37441d90c9bc9eb5163933d5",
+      "shared_training_parameters_preserved": true
+    },
+    {
+      "arm": "NO_GUIDANCE_TRACE_LEGACY",
+      "seed": 57,
+      "command_length": 89,
+      "alpha": "1.0",
+      "client_cohort": "100/101",
+      "expected_partition_sha256": "43d324efaaaf9f2e1e169a328e7b58522d004cbc37441d90c9bc9eb5163933d5",
+      "shared_training_parameters_preserved": true
+    },
+    {
+      "arm": "NO_GUIDANCE_TRACE_LEGACY",
+      "seed": 58,
+      "command_length": 89,
+      "alpha": "1.0",
+      "client_cohort": "100/101",
+      "expected_partition_sha256": "43d324efaaaf9f2e1e169a328e7b58522d004cbc37441d90c9bc9eb5163933d5",
+      "shared_training_parameters_preserved": true
+    }
+  ],
+  "new_generation": false,
+  "model_execution": false
+}
