@@ -1,0 +1,155 @@
+{
+  "time": "2026-11-05T17:36:00+08:00",
+  "status": "complete",
+  "end": "2026-11-05T17:30:54+08:00",
+  "elapsed_minutes": 181.5219194173813,
+  "new_endpoints": 4,
+  "new_evaluations_recomputed": 204,
+  "total_endpoints_with_reuse": 18,
+  "strict_exit_zero_new_endpoints": 4,
+  "historical_exception": "DP_E4/seed57 has audited full training but unobserved exit code; not a new P1 endpoint",
+  "summary": {
+    "NO_GUIDANCE_TRACE_LEGACY": {
+      "seed57": 0.27734375,
+      "seed58": 0.365234375,
+      "mean_accuracy": 0.3212890625,
+      "mean_macro_f1": 0.22603459194543396,
+      "mean_cross_entropy": 1.3875042852014303
+    },
+    "PUBLIC": {
+      "seed57": 0.646484375,
+      "seed58": 0.57421875,
+      "mean_accuracy": 0.6103515625,
+      "mean_macro_f1": 0.593146375802621,
+      "mean_cross_entropy": 1.2549070809036493
+    },
+    "NONPRIVATE": {
+      "seed57": 0.724609375,
+      "seed58": 0.66796875,
+      "mean_accuracy": 0.6962890625,
+      "mean_macro_f1": 0.680471322852067,
+      "mean_cross_entropy": 1.2182593010365963
+    },
+    "DP_E1": {
+      "seed57": 0.65234375,
+      "seed58": 0.6328125,
+      "mean_accuracy": 0.642578125,
+      "mean_macro_f1": 0.614179904783666,
+      "mean_cross_entropy": 1.228918076492846
+    },
+    "DP_E4": {
+      "seed57": 0.708984375,
+      "seed58": 0.681640625,
+      "mean_accuracy": 0.6953125,
+      "mean_macro_f1": 0.6804817334740014,
+      "mean_cross_entropy": 1.2232784535735846
+    },
+    "DP_E8": {
+      "seed57": 0.599609375,
+      "seed58": 0.564453125,
+      "mean_accuracy": 0.58203125,
+      "mean_macro_f1": 0.5381437745639015,
+      "mean_cross_entropy": 1.2493372736498713
+    },
+    "DP_E12": {
+      "seed57": 0.69921875,
+      "seed58": 0.673828125,
+      "mean_accuracy": 0.6865234375,
+      "mean_macro_f1": 0.664705897205859,
+      "mean_cross_entropy": 1.2179788909852505
+    },
+    "DP_E16": {
+      "seed57": 0.732421875,
+      "seed58": 0.69140625,
+      "mean_accuracy": 0.7119140625,
+      "mean_macro_f1": 0.6978217415115222,
+      "mean_cross_entropy": 1.2373539870604873
+    },
+    "REAL_MATCHED": {
+      "seed57": 0.77734375,
+      "seed58": 0.763671875,
+      "mean_accuracy": 0.7705078125,
+      "mean_macro_f1": 0.7660273271646825,
+      "mean_cross_entropy": 1.1868126606568694
+    }
+  },
+  "new_endpoint_audit": [
+    {
+      "arm": "REAL_MATCHED",
+      "seed": 57,
+      "status": "pass",
+      "evaluations_recomputed": 51,
+      "metrics_sha256": "698d9b68e40bfb30760f94ed26de1de12d67c9956752d176e0ccf11a821a9939",
+      "budget": {
+        "directions": 1500,
+        "queries": 3000,
+        "status": "pass",
+        "updates": 750
+      },
+      "checkpoint_count": 4,
+      "initial_accuracy": 0.27734375,
+      "final_accuracy": 0.77734375,
+      "all_confusion_matrices_identical": false,
+      "trainable_hash_changed": true
+    },
+    {
+      "arm": "REAL_MATCHED",
+      "seed": 58,
+      "status": "pass",
+      "evaluations_recomputed": 51,
+      "metrics_sha256": "cf88418b121fd6a186b9698a3d884b8557c5473bf94e5053bcc7e3468a1f7ca9",
+      "budget": {
+        "directions": 1500,
+        "queries": 3000,
+        "status": "pass",
+        "updates": 750
+      },
+      "checkpoint_count": 4,
+      "initial_accuracy": 0.365234375,
+      "final_accuracy": 0.763671875,
+      "all_confusion_matrices_identical": false,
+      "trainable_hash_changed": true
+    },
+    {
+      "arm": "NO_GUIDANCE_TRACE_LEGACY",
+      "seed": 57,
+      "status": "pass",
+      "evaluations_recomputed": 51,
+      "metrics_sha256": "383cf7768211daf532a2f4c3fddc8148377e22f361304b04f79161b3dfd5acfe",
+      "budget": {
+        "directions": 1500,
+        "queries": 3000,
+        "status": "pass",
+        "updates": 750
+      },
+      "checkpoint_count": 4,
+      "initial_accuracy": 0.27734375,
+      "final_accuracy": 0.27734375,
+      "all_confusion_matrices_identical": true,
+      "trainable_hash_changed": true
+    },
+    {
+      "arm": "NO_GUIDANCE_TRACE_LEGACY",
+      "seed": 58,
+      "status": "pass",
+      "evaluations_recomputed": 51,
+      "metrics_sha256": "61212843cee008d2e11b1cb1eeb3ec7968f9c53c0bfbdd2e1b08e71ecf350971",
+      "budget": {
+        "directions": 1500,
+        "queries": 3000,
+        "status": "pass",
+        "updates": 750
+      },
+      "checkpoint_count": 4,
+      "initial_accuracy": 0.365234375,
+      "final_accuracy": 0.365234375,
+      "all_confusion_matrices_identical": true,
+      "trainable_hash_changed": true
+    }
+  ],
+  "backup_files_verified": 155,
+  "new_generation": false,
+  "new_DP_release": false,
+  "P2_executed": false,
+  "official_test_access": false
+}

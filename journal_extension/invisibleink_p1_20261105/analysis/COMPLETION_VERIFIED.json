@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "time": 1793871134.729751,
+  "files_verified": 155,
+  "mismatched_files": [],
+  "new_endpoint_checks": {
+    "REAL_MATCHED_57": true,
+    "REAL_MATCHED_58": true,
+    "NO_GUIDANCE_TRACE_LEGACY_57": true,
+    "NO_GUIDANCE_TRACE_LEGACY_58": true
+  },
+  "scope": "Completed run checkpoints, code, logs and reports; scratch excluded. Reused baseline artifacts remain in prior verified local backups."
+}
