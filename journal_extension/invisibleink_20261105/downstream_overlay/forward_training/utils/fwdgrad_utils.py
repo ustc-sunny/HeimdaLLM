@@ -1,0 +1,144 @@
+import torch
+import math
+
+from torch.nn import CrossEntropyLoss
+from typing import Callable, Tuple
+from torch.cuda.amp import autocast
+
+def _get_loss(x: torch.Tensor, t: torch.Tensor, num_classes: int = 10) -> torch.Tensor:
+    """Compute cross-entropy loss.
+
+    Args:
+        x (torch.Tensor): Output of the model.
+        t (torch.Tensor): Targets.
+        num_classes (int, optional): Maximum number of classes. Defaults to 10.
+
+    Returns:
+        torch.Tensor: Cross-entropy loss.
+    """
+    loss_fct = CrossEntropyLoss()
+    loss = loss_fct(x.view(-1, num_classes), t.view(-1))
+    return loss
+
+
+def get_loss(
+    model: torch.nn.Module, x: torch.Tensor, t: torch.Tensor, num_classes: int = 10
+) -> torch.Tensor:
+    """Cross-entropy loss. Given a pytorch model, it computes the cross-entropy loss.
+
+    Args:
+        model (torch.nn.Module): PyTorch model.
+        x (torch.Tensor): Input tensor for the PyTorch model.
+        t (torch.Tensor): Targets.
+        num_classes (int, optional): Maximum number of classes. Defaults to 10.
+
+    Returns:
+        torch.Tensor: Cross-entropy loss.
+    """
+    y = model(x)[0]
+    return _get_loss(y, t, num_classes)
+
+
+def functional_get_loss(
+    params: Tuple[torch.nn.Parameter, ...],
+    model: Callable[[Tuple[torch.nn.Parameter, ...], torch.Tensor], torch.Tensor],
+    x: torch.Tensor,
+    t: torch.Tensor,
+    num_classes: int = 10,
+    buffers = None
+) -> torch.Tensor:
+    """Functional cross-entropy loss. Given a functional version of a pytorch model, which can be obtained with
+    `fmodel, params = functorch.make_functional(model)`, it computes the cross-entropy loss.
+
+    Args:
+        params (Tuple[torch.nn.Parameter, ...]): Model parameters obtained by `fmodel, params = fc.make_functional(model)`.
+        model (Callable[[Tuple[torch.nn.Parameter, ...], torch.Tensor], torch.Tensor]): Functional version of a pytorch model,
+            obtained by fmodel, `params = fc.make_functional(model)`
+        x (torch.Tensor): Input tensor for the PyTorch model.
+        t (torch.Tensor): Targets.
+        num_classes (int, optional): Maximum number of classes. Defaults to 10.
+
+    Returns:
+        torch.Tensor: Cross-entropy loss.
+    """
+    y = model(params,buffers, x)[0]
+    return _get_loss(y, t, num_classes)
+
+def calculate_jvp(func, params, v, h=0.01):
+    """
+    Calculations Jacobian-vector product using numerical differentiation
+    """
+    if not math.isfinite(h) or h <= 0.0:
+        raise ValueError("finite-difference step h must be positive and finite")
+    # Parameter perturbations can be much smaller than FP16 resolution. Keep
+    # these two model evaluations in full precision even when the run uses AMP.
+    with autocast(enabled=False):
+        loss_minus = func(tuple([params[i] - h * v[i] for i in range(len(params))]))
+        loss_plus = func(tuple([params[i] + h * v[i] for i in range(len(params))]))
+    loss_delta = loss_plus - loss_minus
+    if not torch.isfinite(loss_minus).all().item():
+        raise FloatingPointError("negative finite-difference loss is non-finite")
+    if not torch.isfinite(loss_plus).all().item():
+        raise FloatingPointError("positive finite-difference loss is non-finite")
+    if not torch.isfinite(loss_delta).all().item():
+        raise FloatingPointError("finite-difference loss delta is non-finite")
+    avg_loss = (loss_plus + loss_minus) / 2
+    jvp = loss_delta / (2 * h)
+    return avg_loss, jvp, loss_delta
+
+
+def zo_estimator_multiplier(mode, alpha, beta, dimension):
+    """Opt-in covariance correction for the pure isotropic direction only.
+
+    A direction beta*z/sqrt(d), z~N(0,I), has covariance beta**2/d*I.
+    Multiplying its directional-derivative estimator by d/beta**2 restores
+    the gradient's scale. The historical hybrid estimator stays unchanged.
+    """
+    if mode == "legacy":
+        return 1.0
+    if mode == "isotropic_raw" and float(alpha) == 1.0:
+        return 1.0
+    if mode != "isotropic" or float(alpha) != 1.0:
+        raise ValueError("isotropic correction requires alpha=1 and no cloud guidance")
+    if dimension <= 0 or not math.isfinite(beta) or beta <= 0:
+        raise ValueError("invalid isotropic estimator dimension or beta")
+    return float(dimension) / (beta * beta)
+
+def calculate_var(fwdgrad_list):
+    n = len(fwdgrad_list)
+    # 计算前一半tensor的平均值
+    first_half_mean = torch.mean(torch.stack(fwdgrad_list[:n//2]), dim=0)
+
+    # 计算后一半tensor的平均值
+    second_half_mean = torch.mean(torch.stack(fwdgrad_list[n//2:]), dim=0)
+
+    # 计算两个平均值之间的方差
+    var = torch.var(torch.stack([first_half_mean, second_half_mean]), dim=0).mean()
+
+    return var
+
+def calculate_cos_sim(A,target_grad,device):
+    batch_size = 1000
+
+    # 计算总批次数
+    num_batches = math.ceil(A.size(0) / batch_size)
+
+    # 创建一个空的结果张量
+    result = torch.empty(A.size(0))
+
+    # 逐批次计算余弦相似度
+    for i in range(num_batches):
+        # 获取当前批次的起始索引和结束索引
+        start_idx = i * batch_size
+        end_idx = min((i + 1) * batch_size, A.size(0))
+
+        # 提取当前批次的向量
+        batch = A[start_idx:end_idx].to(device)
+
+        # 计算当前批次的余弦相似度
+        similarity = torch.cosine_similarity(batch, target_grad, dim=-1)
+
+        # 将结果保存到结果张量的对应位置
+        result[start_idx:end_idx] = similarity
+
+    return similarity

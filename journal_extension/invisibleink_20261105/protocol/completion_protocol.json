@@ -1,0 +1,68 @@
+{
+  "protocol_id": "invink_e16_completion_20261105",
+  "status": "frozen_pre_execution",
+  "generator": "Qwen2.5-3B-Instruct",
+  "source_clients": [
+    100,
+    101
+  ],
+  "fixed_private_slots_per_client": 120,
+  "used_per_client": 96,
+  "records_per_group": 3,
+  "groups_per_client": 32,
+  "guide_count": 64,
+  "class_schedule": "i mod 4 + 1, independent of private labels",
+  "max_new_tokens": 96,
+  "max_private_reference_tokens": 160,
+  "temperature": 1,
+  "topk": 100,
+  "adjacency": "replace_one_full_record_fixed_slots",
+  "epsilon_theory": [
+    1,
+    4,
+    8,
+    12,
+    16
+  ],
+  "delta_theory": 1e-05,
+  "dp_randomness": "fresh OS secret bits, no persisted seed or state",
+  "arms": [
+    "DP_E16"
+  ],
+  "reference": "Reuse twelve complete endpoints; train only epsilon16 seeds57/58 from original initialization",
+  "fl_seeds": [
+    57,
+    58
+  ],
+  "rounds": 50,
+  "max_new_endpoints": 2,
+  "official_test_access": false,
+  "auto_push": false,
+  "manuscript_edit": false,
+  "private_outputs": "restricted research artifacts, not DP certified publication",
+  "upstream_commit": "2141ee265094612e85202b9e2745962b548b11b5",
+  "gpu_requested": 0,
+  "resource_approval": "Existing GPU0 authorization and explicit user instruction to finish only epsilon16",
+  "reroll": false,
+  "generation_replicates_per_new_budget": 1,
+  "curve_scope": "FL-seed variability conditional on one generated artifact per budget",
+  "derived_support_rule": "topk remains100; public top-k+ threshold changes with calibrated C/B by unchanged mechanism",
+  "generator_changes": false,
+  "new_generation_budgets": [],
+  "generation_reused": [
+    1,
+    4,
+    8,
+    12,
+    16
+  ],
+  "deferred_budgets": [
+    20
+  ],
+  "excluded_budget": [
+    20,
+    32
+  ],
+  "epsilon16_history": "Reuse immutable64-record artifact generated in wide run; preserve old interrupted seed57 as incomplete; no new generation",
+  "previous_completed_run": null
+}

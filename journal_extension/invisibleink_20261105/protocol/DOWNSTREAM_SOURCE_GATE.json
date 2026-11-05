@@ -1,0 +1,11 @@
+{
+  "sha256": {
+    "FedML/fedml_api/distributed/fedsgd/FedSgdServer.py": "8700c3629543fba92b9d403bdcb3f08fe5b7daf8853b5338e7842931c80d0741",
+    "data_manager/text_classification_data_manager.py": "a001b6873ff2c7f688dd86861bdb4e0d8e39809767fd3f46019a6ff5c5f67240",
+    "experiments/distributed/transformer_exps/run_tc_exps/fedavg_main_tc.py": "6491e95d81f641e79b26111731e8f277665419ace9d209b46e3ed3e25204cacb",
+    "FedML/fedml_api/distributed/fedsgd/FedSgdCloud.py": "786d7308cf6e4c7e54a93fa70e3084cbe81e2f46c506fd37c79c514e1d399c86",
+    "forward_training/tc_transformer_trainer_distribute.py": "5594a1ce89cd141f388d7aaeb7d59f6ce693b0cd64b65875f33b68fb6dbadf9f",
+    "forward_training/utils/fwdgrad_utils.py": "7d41e51876c090ab427b88248a5981b634f6aaf5977b5d7a8bf1911a516a2665"
+  },
+  "base_commit": "04cb83d5ebb5cfb05e1851629d2578855f2f3906"
+}

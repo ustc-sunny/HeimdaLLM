@@ -1,0 +1,362 @@
+{
+  "time": "2026-11-05T12:35:36+08:00",
+  "complete_endpoints": 14,
+  "strict_clean_exit_endpoints": 13,
+  "historical_teardown_exception": "DP_E4_seed57; training evidence complete, exit code unobserved",
+  "recomputed_evaluation_points": 714,
+  "summary": {
+    "PUBLIC": {
+      "dev_accuracy": 0.6103515625,
+      "macro_f1": 0.593146375802621,
+      "dev_ce": 1.2549070809036493,
+      "accuracy_auc": 0.535078125,
+      "last10_accuracy": 0.60927734375,
+      "by_seed": {
+        "57": 0.646484375,
+        "58": 0.57421875
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.4716796875,
+        "25": 0.5537109375,
+        "50": 0.6103515625
+      },
+      "mean_class_recalls_model_index_order": [
+        0.91796875,
+        0.296875,
+        0.7890625,
+        0.4375
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": 0.0
+    },
+    "NONPRIVATE": {
+      "dev_accuracy": 0.6962890625,
+      "macro_f1": 0.680471322852067,
+      "dev_ce": 1.2182593010365963,
+      "accuracy_auc": 0.61623046875,
+      "last10_accuracy": 0.69365234375,
+      "by_seed": {
+        "57": 0.724609375,
+        "58": 0.66796875
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.5361328125,
+        "25": 0.65234375,
+        "50": 0.6962890625
+      },
+      "mean_class_recalls_model_index_order": [
+        0.8515625,
+        0.4296875,
+        0.95703125,
+        0.546875
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": 8.59375,
+      "delta_nonprivate_pp": 0.0
+    },
+    "DP_E1": {
+      "dev_accuracy": 0.642578125,
+      "macro_f1": 0.614179904783666,
+      "dev_ce": 1.228918076492846,
+      "accuracy_auc": 0.579072265625,
+      "last10_accuracy": 0.64150390625,
+      "by_seed": {
+        "57": 0.65234375,
+        "58": 0.6328125
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.53515625,
+        "25": 0.611328125,
+        "50": 0.642578125
+      },
+      "mean_class_recalls_model_index_order": [
+        0.90625,
+        0.21484375,
+        0.828125,
+        0.62109375
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": 3.22265625,
+      "delta_nonprivate_pp": -5.37109375
+    },
+    "DP_E4": {
+      "dev_accuracy": 0.6953125,
+      "macro_f1": 0.6804817334740014,
+      "dev_ce": 1.2232784535735846,
+      "accuracy_auc": 0.626591796875,
+      "last10_accuracy": 0.69462890625,
+      "by_seed": {
+        "57": 0.708984375,
+        "58": 0.681640625
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.564453125,
+        "25": 0.6669921875,
+        "50": 0.6953125
+      },
+      "mean_class_recalls_model_index_order": [
+        0.8671875,
+        0.4453125,
+        0.9375,
+        0.53125
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": 8.49609375,
+      "delta_nonprivate_pp": -0.09765625
+    },
+    "DP_E8": {
+      "dev_accuracy": 0.58203125,
+      "macro_f1": 0.5381437745639015,
+      "dev_ce": 1.2493372736498713,
+      "accuracy_auc": 0.518251953125,
+      "last10_accuracy": 0.5806640624999999,
+      "by_seed": {
+        "57": 0.599609375,
+        "58": 0.564453125
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.443359375,
+        "25": 0.5283203125,
+        "50": 0.58203125
+      },
+      "mean_class_recalls_model_index_order": [
+        0.828125,
+        0.25,
+        0.94921875,
+        0.30078125
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": -2.83203125,
+      "delta_nonprivate_pp": -11.42578125
+    },
+    "DP_E12": {
+      "dev_accuracy": 0.6865234375,
+      "macro_f1": 0.664705897205859,
+      "dev_ce": 1.2179788909852505,
+      "accuracy_auc": 0.611875,
+      "last10_accuracy": 0.6849609375,
+      "by_seed": {
+        "57": 0.69921875,
+        "58": 0.673828125
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.5439453125,
+        "25": 0.6357421875,
+        "50": 0.6865234375
+      },
+      "mean_class_recalls_model_index_order": [
+        0.84375,
+        0.359375,
+        0.96484375,
+        0.578125
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": 7.6171875,
+      "delta_nonprivate_pp": -0.9765625
+    },
+    "DP_E16": {
+      "dev_accuracy": 0.7119140625,
+      "macro_f1": 0.6978217415115222,
+      "dev_ce": 1.2373539870604873,
+      "accuracy_auc": 0.63736328125,
+      "last10_accuracy": 0.71201171875,
+      "by_seed": {
+        "57": 0.732421875,
+        "58": 0.69140625
+      },
+      "mean_accuracy_by_completed_round": {
+        "0": 0.3212890625,
+        "10": 0.5771484375,
+        "25": 0.6884765625,
+        "50": 0.7119140625
+      },
+      "mean_class_recalls_model_index_order": [
+        0.85546875,
+        0.4140625,
+        0.921875,
+        0.65625
+      ],
+      "class_order": [
+        "World",
+        "Sci/Tech",
+        "Sports",
+        "Business"
+      ],
+      "delta_public_pp": 10.15625,
+      "delta_nonprivate_pp": 1.5625
+    }
+  },
+  "endpoint_audit": [
+    {
+      "arm": "PUBLIC",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "b13fe2b0428204c137b44959487c10674b5af6e27773de1f2cbbaccc8fa52edd"
+    },
+    {
+      "arm": "NONPRIVATE",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "c29ad4c3d38b8d9f9a2a206ab9a9ab797b63ae70372fd12aac76489f6e807a76"
+    },
+    {
+      "arm": "DP_E1",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "14e023470264a5ff761f103922230dec7b731ce202d0aa2c1a8133f54a86e601"
+    },
+    {
+      "arm": "DP_E4",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "completed_training_teardown_unobserved",
+      "metrics_sha256": "14654cbced4c1f7c06ed53a4c14c2f3e2e16550ddb0932276768f67ec7868eca"
+    },
+    {
+      "arm": "DP_E8",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "23005b93dcdcea9feeabe25a0128d51fbe8a93e7fd87385e1261fc3cd33d1f33"
+    },
+    {
+      "arm": "DP_E12",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "a9e9424e96d47eda4eb2371fdc913c8bd458e06684662999c0814d62fb907c35"
+    },
+    {
+      "arm": "DP_E16",
+      "seed": 57,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "8bdf19bc9a7d22c860cbb212f1988798a697de44dd0c14f5ae3ecb959940489e"
+    },
+    {
+      "arm": "PUBLIC",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "b6eb67daa62ac7929c2b1b717e3b297f6df88375d7030fc880b6a243adb7b080"
+    },
+    {
+      "arm": "NONPRIVATE",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "be7714cdcce4ff1afd009f0d65bb2de80bbcc3e2b6a1831128108ada764d5e70"
+    },
+    {
+      "arm": "DP_E1",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "93b083579a8b29fc0b9a927ba55c52109b39a43202ee33da0eb720935e070350"
+    },
+    {
+      "arm": "DP_E4",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "59f858aab7a9383b589860eb067ae1bf5b946025b970651382b7135fd662fede"
+    },
+    {
+      "arm": "DP_E8",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "15bd29866e1f6b2875d1d24904565bf30519ab06ce5ee3864bc885e79979bfd6"
+    },
+    {
+      "arm": "DP_E12",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "991f3a9536fdb99662342083dab71f6181d74296bb3280d973194e461970b411"
+    },
+    {
+      "arm": "DP_E16",
+      "seed": 58,
+      "evaluations_recomputed": 51,
+      "status": "complete",
+      "metrics_sha256": "efee9f52696cb03e0c291f125b5707c9a91fcfe5526e6505eca599311067b471"
+    }
+  ],
+  "independent_generation_replicates_per_arm": 1,
+  "fl_seeds_per_artifact": 2,
+  "actual_release_accounting": {
+    "delta": 1e-05,
+    "excluded_unattempted_epsilon": [
+      20,
+      32
+    ],
+    "new_generation_in_this_completion": 0,
+    "scope": "Ideal synthetic-release channel only; excludes NONPRIVATE, raw records, FL, metrics and checkpoints",
+    "historical_file_preserved": "PRIOR_GENERATION_LEDGER.json includes obsolete planned epsilon20 totals; actual totals below supersede those planned totals only",
+    "completed_five_artifacts": {
+      "components": [
+        1,
+        4,
+        8,
+        12,
+        16
+      ],
+      "rho": 6.918045147787806,
+      "epsilon": 24.767071804698816
+    },
+    "including_historical_partial16_conservatively": {
+      "components": [
+        1,
+        4,
+        8,
+        12,
+        16,
+        16
+      ],
+      "rho": 10.348713246256047,
+      "epsilon": 32.179330668811545
+    }
+  },
+  "new_experiments_executed_by_analysis": false,
+  "official_test_access": false
+}

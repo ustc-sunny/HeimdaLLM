@@ -1,0 +1,41 @@
+{
+  "protocol_id": "invink_qwen3b_a40_gpu3_20261103",
+  "status": "frozen_pre_execution",
+  "generator": "Qwen2.5-3B-Instruct",
+  "source_clients": [
+    100,
+    101
+  ],
+  "fixed_private_slots_per_client": 120,
+  "used_per_client": 96,
+  "records_per_group": 3,
+  "groups_per_client": 32,
+  "guide_count": 64,
+  "class_schedule": "i mod 4 + 1, independent of private labels",
+  "max_new_tokens": 96,
+  "max_private_reference_tokens": 160,
+  "temperature": 1,
+  "topk": 100,
+  "adjacency": "replace_one_full_record_fixed_slots",
+  "epsilon_theory": 8,
+  "delta_theory": 1e-05,
+  "dp_randomness": "fresh OS secret bits, no persisted seed or state",
+  "arms": [
+    "PUBLIC",
+    "NONPRIVATE",
+    "DP_E8"
+  ],
+  "reference": "historical REAL_MATCHED seed57 from Stage3; hardware/software differences documented",
+  "fl_seeds": [
+    57
+  ],
+  "rounds": 50,
+  "max_new_endpoints": 3,
+  "official_test_access": false,
+  "auto_push": false,
+  "manuscript_edit": false,
+  "private_outputs": "restricted research artifacts, not DP certified publication",
+  "upstream_commit": "2141ee265094612e85202b9e2745962b548b11b5",
+  "rho": 1.0491362012233167,
+  "clip": 0.22176171768892614
+}

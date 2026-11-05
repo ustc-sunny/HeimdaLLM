@@ -1,0 +1,94 @@
+{
+  "status": "analysis_complete",
+  "paper_source": "IEEE_ToN/bare_jrnl.tex",
+  "paper_mechanism": "private generator fitting with clipped gradients and Gaussian noise",
+  "executed_mechanism": "Frozen Qwen2.5-3B-Instruct; private reference inference, DClip and public top-k+; no generator training",
+  "required_alignment": [
+    "Introduction and Challenge3",
+    "Overview supply phase",
+    "Algorithm2",
+    "SectionIV privacy theorem and accountant",
+    "SectionIV utility link and inference cost",
+    "Appendix privacy proof",
+    "Evaluation control definitions",
+    "Related work credit for InvisibleInk"
+  ],
+  "retain": [
+    "KDD ZGR Algorithm1",
+    "SPC/DTC design",
+    "Conditional fixed-state guidance analysis after adapting output distributions"
+  ],
+  "public_control_audit": {
+    "base_public_support_calibration_epsilon": 8,
+    "each_dp_support_depends_on_its_epsilon": true,
+    "same_generator_prompts_topk_temperature_budget": true,
+    "strict_zero_private_control_matched_to_every_budget": false,
+    "implication": "Algorithm-level outcomes are comparable; causal attribution solely to private references needs a matched-support public control"
+  },
+  "historical_REAL_MATCHED": {
+    "same_client_partition_hash": true,
+    "same_initial_hashes_seeds57_58": true,
+    "same_nonpath_training_arguments": true,
+    "same_source_recovery_archive": true,
+    "hardware_changed": "RTX A6000 to A40",
+    "environment_parity": "not identical; numpy1.23.5 vs1.24.4; same torch1.13.1+cu116 and transformers4.21.3; hardware differs",
+    "current_use": "historical reference, not silently added to the new complete matrix",
+    "recommendation": "Keep as historical reference; two current-environment REAL_MATCHED endpoints for strict paired primary comparison. Never accept/reject reuse based on favorable accuracy.",
+    "core_environment": {
+      "adapter-transformers": {
+        "stage3": "3.1.0",
+        "current": "3.1.0"
+      },
+      "numpy": {
+        "stage3": "1.23.5",
+        "current": "1.24.4"
+      },
+      "h5py": {
+        "stage3": "3.7.0",
+        "current": "3.8.0"
+      },
+      "mpi4py": {
+        "stage3": "3.1.6",
+        "current": "3.1.6"
+      },
+      "scikit-learn": {
+        "stage3": "1.2.0",
+        "current": "1.2.2"
+      },
+      "scipy": {
+        "stage3": "1.9.3",
+        "current": "1.10.1"
+      },
+      "tokenizers": {
+        "stage3": "0.12.1",
+        "current": "0.12.1"
+      },
+      "torch": {
+        "stage3": "1.13.1+cu116",
+        "current": null
+      },
+      "pandas": {
+        "stage3": "1.5.2",
+        "current": "1.5.3"
+      }
+    }
+  },
+  "historical_NO_GUIDANCE_TRACE_LEGACY": {
+    "client_ids": [
+      1,
+      21
+    ],
+    "current_client_ids": [
+      100,
+      101
+    ],
+    "strict_reuse": false,
+    "reason": "Different private cohort; nominal trace-scaled legacy ablation, not a tuned unbiased ZOO baseline"
+  },
+  "new_experiments_authorized_in_this_review": false,
+  "paper_edited_in_this_review": false,
+  "paper_file": "IEEE_ToN/bare_jrnl.tex",
+  "paper_sha256_at_analysis": "5bb6ad3f15b1a7da3092d210dcace7ab990528d470f7ef47199738671b58d6da",
+  "paper_modified_by_this_task": false,
+  "time": "2026-11-05T12:35:36+08:00"
+}

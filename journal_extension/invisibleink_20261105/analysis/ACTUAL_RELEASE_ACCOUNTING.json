@@ -1,0 +1,33 @@
+{
+  "delta": 1e-05,
+  "excluded_unattempted_epsilon": [
+    20,
+    32
+  ],
+  "new_generation_in_this_completion": 0,
+  "scope": "Ideal synthetic-release channel only; excludes NONPRIVATE, raw records, FL, metrics and checkpoints",
+  "historical_file_preserved": "PRIOR_GENERATION_LEDGER.json includes obsolete planned epsilon20 totals; actual totals below supersede those planned totals only",
+  "completed_five_artifacts": {
+    "components": [
+      1,
+      4,
+      8,
+      12,
+      16
+    ],
+    "rho": 6.918045147787806,
+    "epsilon": 24.767071804698816
+  },
+  "including_historical_partial16_conservatively": {
+    "components": [
+      1,
+      4,
+      8,
+      12,
+      16,
+      16
+    ],
+    "rho": 10.348713246256047,
+    "epsilon": 32.179330668811545
+  }
+}

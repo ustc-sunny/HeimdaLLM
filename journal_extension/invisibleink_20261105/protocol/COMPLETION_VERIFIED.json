@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "time": 1793851747.217536,
+  "files_verified": 97,
+  "mismatched_files": [],
+  "new_endpoint_checks": {
+    "DP_E16_57": true,
+    "DP_E16_58": true
+  },
+  "scope": "Completed run checkpoints, code, logs and reports; scratch excluded. Reused baseline artifacts remain in prior verified local backups."
+}
