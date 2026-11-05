@@ -1,6 +1,6 @@
 {
-  "time": "2026-11-05T12:47:15+08:00",
-  "status": "prepared_not_executed",
+  "time": "2026-11-05T14:31:29+08:00",
+  "status": "server_preflight_passed_training_started",
   "files": {
     "COMMAND_AUDIT_LOCAL.json": {
       "sha256": "c7f1101e2d204afef7d26039e8f8a6657032bdcbaf30d2df752e28b5705b6f0d",
@@ -11,16 +11,16 @@
       "bytes": 1920
     },
     "README.md": {
-      "sha256": "423247570f18777dba66f9bc0c5b915812de3e877b1523f8cbecb0c82acc8c0f",
-      "bytes": 2423
+      "sha256": "53f0b4177602f56432749ffd9dea7b67a1948137a2fdd2de06f2ec723b925718",
+      "bytes": 2683
     },
     "SCOPE.json": {
       "sha256": "c79b1260840129943116e6e04de1da03196b278fd4cf36e01499074584255642",
       "bytes": 802
     },
     "STATUS.json": {
-      "sha256": "72321985c704739b610fca97fe846acb2e9fae1a78e42fecd588b36bef212b16",
-      "bytes": 529
+      "sha256": "abd645ff2750cc470d914e5c431160dac704d288f8060daeb85fa4d7e5e33b92",
+      "bytes": 804
     },
     "code/PROCESS_GUARD_TESTS.json": {
       "sha256": "24e7ddbcc7283e33bb0fbdb390a590ee4c47c5f488a307bd0173051fe415b1a7",
@@ -43,8 +43,8 @@
       "bytes": 7401
     },
     "code/preflight.py": {
-      "sha256": "e9a33dc0dcd52f3258f7b70e6f58df1b841a99ce9ccc93f4667e065f35c409ca",
-      "bytes": 3386
+      "sha256": "9931be34ea56a0040b32a822686718538e7346f6e82374873de8654f065f5457",
+      "bytes": 3680
     },
     "code/report.py": {
       "sha256": "6c955b99dfab7ee1ffa9adfafd362f4f13411b306bbd69de1b9031fac08f315a",

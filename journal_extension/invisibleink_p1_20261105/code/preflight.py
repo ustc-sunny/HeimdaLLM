@@ -25,11 +25,15 @@ def main():
     # Both arms use exactly the fixed local/dev record indices; no official test loading.
     import h5py
     with h5py.File(fixed,'r') as f:
-        groups=f['pilot_uniform_2']['partition_data'];counts={}
-        assert len(groups)==2
+        method=f['pilot_uniform_2'];groups=method['partition_data'];counts={}
+        # The frozen file retains three development shards; only 0/1 train.
+        assert set(groups)=={'0','1','2'}
+        assert list(map(int,json.loads(method.attrs['source_client_ids_json'])))==[100,101]
         train=[];dev=[]
         for cid,g in groups.items():
-            tr=list(map(int,g['train'][()]));te=list(map(int,g['test'][()]));assert len(tr)==120
+            tr=list(map(int,g['train'][()]));te=list(map(int,g['test'][()]))
+            assert len(tr)==(120 if cid in ['0','1'] else 0)
+            assert len(te)=={'0':171,'1':171,'2':170}[cid]
             counts[cid]={'train':len(tr),'dev':len(te)};train+=tr;dev+=te
         assert len(set(train))==240 and len(set(dev))==512 and not set(train)&set(dev)
     command_audit=audit_reference_commands(ROOT/'references')
